@@ -4,44 +4,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ShoppingList.MainPage"
              xmlns:viewmodel="clr-namespace:ShoppingList.ViewModel"
+             xmlns:models="clr-namespace:ShoppingList.Models"
              x:DataType="viewmodel:MainViewModel"
              Title="Your tasks">
 
     <Grid RowDefinitions="Auto, Auto, *"
           ColumnDefinitions=".75*, .25*"
           Padding="10"
-          RowSpacing="10">
+          RowSpacing="10"
+          ColumnSpacing="10">
 
         <Image Grid.ColumnSpan="2"
-               Grid.RowSpan="3"
+               Grid.RowSpan="5"
                Source="turbo_task_snail.png"
-               BackgroundColor="Transparent" 
+               BackgroundColor="Transparent"
                Aspect="AspectFit"
                HorizontalOptions="FillAndExpand"
-               VerticalOptions="FillAndExpand"/>
+               VerticalOptions="FillAndExpand" />
 
-        <Entry Placeholder="Enter task"
-               Text="{Binding NewTask}"
-               Grid.Row="0" 
-               FontSize="16"/>
+        <Entry Placeholder="Enter item"
+               Text="{Binding NewItem.Title}"
+               Grid.Row="0"
+               FontSize="16" />
 
         <Button Text="Add"
-                Command="{Binding AddCommand}"
-                Grid.Row="0"
+                Command="{Binding AddItemCommand}"
+                Grid.Row="1"
                 Grid.Column="2" />
 
-        <CollectionView Grid.Row="2"
+        <CollectionView Grid.Row="3"
                         Grid.ColumnSpan="2"
-                        ItemsSource="{Binding Tasks}"
+                        ItemsSource="{Binding Items}"
                         SelectionMode="None">
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="{x:Type x:String}">
+                <DataTemplate x:DataType="{x:Type models:Item}">
                     <SwipeView>
                         <SwipeView.RightItems>
                             <SwipeItems>
                                 <SwipeItem Text="Delete"
                                            BackgroundColor="MediumVioletRed"
-                                           Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=RemoveCommand}"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=RemoveItemCommand}"
                                            CommandParameter="{Binding .}" />
                             </SwipeItems>
                         </SwipeView.RightItems>
@@ -50,10 +52,10 @@
                                    BorderColor="LightGrey">
                                 <Frame.GestureRecognizers>
                                     <TapGestureRecognizer
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=TapCommand}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=TapItemCommand}"
                                         CommandParameter="{Binding .}" />
                                 </Frame.GestureRecognizers>
-                                <Label Text="{Binding .}"
+                                <Label Text="{Binding Title}"
                                        FontSize="16" />
                             </Frame>
                         </Grid>

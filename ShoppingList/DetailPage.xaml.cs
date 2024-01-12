@@ -1,12 +1,13 @@
-﻿using ShoppingList.ViewModel;
+﻿using ShoppingList.Models;
+using ShoppingList.ViewModel;
 
 namespace ShoppingList;
 
 public partial class DetailPage : ContentPage
 {
-    public DetailPage(DetailViewModel viewModel)
+    public DetailPage(Item item)
     {
         InitializeComponent();
-        BindingContext = viewModel;
+        BindingContext = new DetailViewModel(item);;
     }
 }

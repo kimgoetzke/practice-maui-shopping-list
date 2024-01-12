@@ -5,16 +5,41 @@
              x:Class="ShoppingList.DetailPage"
              xmlns:viewModel="clr-namespace:ShoppingList.ViewModel"
              x:DataType="viewModel:DetailViewModel"
-             Title="Task details">
+             Title="Item details">
 
     <StackLayout Padding="10">
 
-        <Label Text="{Binding Task}"
+        <Label Text="{Binding Item.Title}"
+               Style="{StaticResource Headline}"
                FontSize="25"
                VerticalOptions="Center"
-               HorizontalOptions="Center" 
-               Padding="10"/>
+               HorizontalOptions="Center"
+               Padding="10" />
         
+        <Label Text="{Binding Item.IsImportant, StringFormat='Important: {0}'}"
+               FontSize="16"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"
+               Padding="10" />
+
+        <Label Text="{Binding Item.Quantity, StringFormat='Quantity: {0}'}"
+               FontSize="16"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"
+               Padding="10" />
+
+        <Label Text="{Binding Item.Where, StringFormat='From: {0}'}"
+               FontSize="16"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"
+               Padding="10" />
+
+        <Label Text="{Binding Item.CreatedAt, StringFormat='Added: {0}'}"
+               FontSize="16"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"
+               Padding="10, 10, 10, 40" />
+
         <Button Text="Go Back"
                 Command="{Binding GoBackCommand}" />
 
