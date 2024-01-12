@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ShoppingList.DetailPage"
+             xmlns:viewModel="clr-namespace:ShoppingList.ViewModel"
+             x:DataType="viewModel:DetailViewModel"
+             Title="Task details">
+
+    <StackLayout Padding="10">
+
+        <Label Text="{Binding Task}"
+               FontSize="25"
+               VerticalOptions="Center"
+               HorizontalOptions="Center" 
+               Padding="10"/>
+        
+        <Button Text="Go Back"
+                Command="{Binding GoBackCommand}" />
+
+    </StackLayout>
+
+</ContentPage>
