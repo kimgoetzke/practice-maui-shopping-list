@@ -52,33 +52,4 @@ public partial class MainViewModel : ObservableObject
     {
         await Shell.Current.Navigation.PushAsync(new DetailPage(i));
     }
-
-    // Tasks
-    [RelayCommand]
-    private async Task Add()
-    {
-        if (string.IsNullOrWhiteSpace(NewTask))
-            return;
-
-        if (connectivity.NetworkAccess != NetworkAccess.Internet)
-        {
-            await Shell.Current.DisplayAlert("Uh Oh!", "No Internet", "OK");
-            return;
-        }
-
-        Tasks.Add(NewTask);
-        NewTask = string.Empty;
-    }
-
-    [RelayCommand]
-    private void Remove(string s)
-    {
-        Tasks.Remove(s);
-    }
-
-    [RelayCommand]
-    private async Task Tap(string s)
-    {
-        await Shell.Current.GoToAsync($"{nameof(DetailPage)}?Task={s}");
-    }
 }
