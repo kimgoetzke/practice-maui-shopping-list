@@ -6,15 +6,15 @@
              xmlns:viewmodel="clr-namespace:ShoppingList.ViewModel"
              xmlns:models="clr-namespace:ShoppingList.Models"
              x:DataType="viewmodel:MainViewModel"
-             Title="Your tasks">
+             Title="Your shopping list">
 
     <Grid RowDefinitions="Auto, Auto, *"
-          ColumnDefinitions=".75*, .25*"
+          ColumnDefinitions=".375*, .375*, .25*"
           Padding="10"
           RowSpacing="10"
           ColumnSpacing="10">
 
-        <Image Grid.ColumnSpan="2"
+        <Image Grid.ColumnSpan="3"
                Grid.RowSpan="5"
                Source="turbo_task_snail.png"
                BackgroundColor="Transparent"
@@ -22,18 +22,46 @@
                HorizontalOptions="FillAndExpand"
                VerticalOptions="FillAndExpand" />
 
-        <Entry Placeholder="Enter item"
+        <Entry Placeholder="Enter item name"
                Text="{Binding NewItem.Title}"
                Grid.Row="0"
+               Grid.Column="0"
+               Grid.ColumnSpan="2"
                FontSize="16" />
 
         <Button Text="Add"
                 Command="{Binding AddItemCommand}"
-                Grid.Row="1"
+                Grid.Row="0"
                 Grid.Column="2" />
 
+        <Grid Grid.Row="1" Grid.Column="0" RowDefinitions="Auto, Auto" ColumnDefinitions="1*" RowSpacing="0">
+            <Label Text="From" Grid.Row="0" FontSize="10" HorizontalTextAlignment="Start" Padding="3, 0 " />
+            <Picker Title="From"
+                    SelectedItem="{Binding NewItem.From}"
+                    ItemsSource="{Binding StoreOptions}"
+                    Grid.Row="1"
+                    Grid.Column="0" />
+        </Grid>
+        
+        <Grid Grid.Row="1" Grid.Column="1" RowDefinitions="Auto, Auto" ColumnDefinitions="1*" RowSpacing="0">
+            <Label Text="{Binding NewItem.Quantity, StringFormat='Quantity: {0}'}" 
+                   Grid.Row="0" 
+                   FontSize="10"
+                   HorizontalTextAlignment="Center" />
+            <Stepper Minimum="1"
+                     Maximum="99"
+                     Increment="1"
+                     Value="{Binding NewItem.Quantity}"
+                     Grid.Row="1"/>
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="2" RowDefinitions="Auto, Auto" ColumnDefinitions="1*" RowSpacing="0">
+            <Label Text="Priority" Grid.Row="0" FontSize="10" HorizontalTextAlignment="Center" />
+            <CheckBox IsChecked="{Binding NewItem.IsImportant}" Grid.Row="1" />
+        </Grid>
+
         <CollectionView Grid.Row="3"
-                        Grid.ColumnSpan="2"
+                        Grid.ColumnSpan="3"
                         ItemsSource="{Binding Items}"
                         SelectionMode="None">
             <CollectionView.ItemTemplate>

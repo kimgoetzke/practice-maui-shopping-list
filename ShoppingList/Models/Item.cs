@@ -2,8 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ShoppingList.Models;
 
-[INotifyPropertyChanged]
-public partial class Item
+public partial class Item : ObservableObject
 {
     [ObservableProperty] string title = string.Empty;
 
@@ -11,7 +10,7 @@ public partial class Item
 
     [ObservableProperty] bool isImportant;
 
-    [ObservableProperty] Store where = Store.Lidl;
+    [ObservableProperty] Store from = Store.Anywhere;
 
-    [ObservableProperty] DateTime createdAt = DateTime.Now;
+    [ObservableProperty] DateTime addedOn = DateTime.Now;
 }

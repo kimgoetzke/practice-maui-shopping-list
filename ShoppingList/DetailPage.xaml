@@ -28,13 +28,13 @@
                HorizontalOptions="Center"
                Padding="10" />
 
-        <Label Text="{Binding Item.Where, StringFormat='From: {0}'}"
+        <Label Text="{Binding Item.From, StringFormat='From: {0}'}"
                FontSize="16"
                VerticalOptions="Center"
                HorizontalOptions="Center"
                Padding="10" />
 
-        <Label Text="{Binding Item.CreatedAt, StringFormat='Added: {0}'}"
+        <Label Text="{Binding Item.AddedOn, StringFormat='Added on: {0}'}"
                FontSize="16"
                VerticalOptions="Center"
                HorizontalOptions="Center"

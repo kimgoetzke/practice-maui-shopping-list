@@ -13,11 +13,13 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] string newTask;
     IConnectivity connectivity;
 
+    public List<Store> StoreOptions { get; } = Enum.GetValues(typeof(Store)).Cast<Store>().ToList();
+
     public MainViewModel(IConnectivity connectivity)
     {
         Tasks = [];
         Items = [];
-        NewItem = new Item();
+        NewItem = new Item { From = Store.Anywhere };
         this.connectivity = connectivity;
     }
 
