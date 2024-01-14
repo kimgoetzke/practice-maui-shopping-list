@@ -32,7 +32,7 @@
         <Grid Margin="5"
               RowDefinitions="1*"
               ColumnDefinitions=".5*, .5*">
-            <Label Text="{Binding Item.Quantity,  Mode=TwoWay, StringFormat='Quantity: {0}'}"
+            <Label Text="{Binding Item.Quantity, StringFormat='Quantity: {0}'}"
                    Grid.Column="0"
                    FontSize="16"
                    VerticalTextAlignment="Center"
@@ -49,7 +49,7 @@
         <Grid Margin="5"
               RowDefinitions="1*"
               ColumnDefinitions=".5*, .5*">
-            <Label Text="{Binding Item.From,  Mode=TwoWay, StringFormat='From: {0}'}"
+            <Label Text="{Binding Item.From, StringFormat='From: {0}'}"
                    Grid.Column="0"
                    FontSize="16"
                    VerticalTextAlignment="Center"
@@ -69,7 +69,7 @@
                Margin="5"
                Padding="10, 10, 10, 40" />
 
-        <Button Text="Go back"
+        <Button Text="Save changes"
                 Command="{Binding GoBackCommand}" />
 
     </StackLayout>

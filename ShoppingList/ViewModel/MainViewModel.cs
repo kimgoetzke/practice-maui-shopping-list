@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ShoppingList.Data;
 using ShoppingList.Models;
 
 namespace ShoppingList.ViewModel;
@@ -9,15 +10,17 @@ public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty] ObservableCollection<Item> items;
     [ObservableProperty] Item newItem;
-    IConnectivity connectivity;
+    private readonly IConnectivity _connectivity;
+    private readonly ItemDatabase _database;
 
     public List<Store> StoreOptions { get; } = Enum.GetValues(typeof(Store)).Cast<Store>().ToList();
 
-    public MainViewModel(IConnectivity connectivity)
+    public MainViewModel(IConnectivity connectivity, ItemDatabase database)
     {
-        Items = [];
         NewItem = new Item { From = Store.Anywhere };
-        this.connectivity = connectivity;
+        Items = [];
+        _database = database;
+        _connectivity = connectivity;
     }
 
     // Items
@@ -27,42 +30,53 @@ public partial class MainViewModel : ObservableObject
         if (string.IsNullOrWhiteSpace(NewItem.Title))
             return;
 
-        if (connectivity.NetworkAccess != NetworkAccess.Internet)
+        if (_connectivity.NetworkAccess != NetworkAccess.Internet)
         {
             await Shell.Current.DisplayAlert("Uh Oh!", "No Internet", "OK");
             return;
         }
 
         Items.Add(NewItem);
+        await _database.SaveItemAsync(NewItem);
         NewItem = new Item();
         SortItems();
         OnPropertyChanged(nameof(NewItem));
     }
 
     [RelayCommand]
-    private void RemoveItem(Item i)
+    private async Task RemoveItem(Item i)
     {
         Items.Remove(i);
+        await _database.DeleteItemAsync(i);
     }
 
     [RelayCommand]
-    private void TogglePriority(Item i)
+    private async Task TogglePriority(Item i)
     {
         i.IsImportant = !i.IsImportant;
+        await _database.SaveItemAsync(i);
         SortItems();
     }
 
     [RelayCommand]
-    private static async Task TapItem(Item i)
+    private async Task TapItem(Item i)
     {
-        await Shell.Current.Navigation.PushAsync(new DetailPage(i));
+        await Shell.Current.Navigation.PushAsync(new DetailPage(i, _database));
     }
 
-    private void SortItems()
+    public void SortItems()
     {
         Items = new ObservableCollection<Item>(Items
             .OrderByDescending(i => i.From.ToString())
             .ThenByDescending(i => i.IsImportant)
             .ThenByDescending(i => i.Title));
+    }
+
+    public async Task LoadItemsFromDatabase()
+    {
+        var loadedItems = await _database.GetItemsAsync();
+        Items.Clear();
+        foreach (var i in loadedItems)
+            Items.Add(i);
     }
 }

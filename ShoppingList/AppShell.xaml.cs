@@ -9,9 +9,8 @@ public partial class AppShell : Shell
     }
     
     // TODO: Beginner: Add copy to clipboard button.
-    // TODO: Beginner: Add options menu button with sections for 1) stores, 2) dark mode, and 3) more...
     // TODO: Beginner: Make adding items form a collapsible menu.
-    // TODO: Intermediate: Store notes permanently on device.
+    // TODO: Intermediate: Add options menu button with sections for 1) stores, 2) dark mode, and 3) more...
     // TODO: Intermediate: Make Store configurable (adding removing stores).
     // TODO: Advanced: Store Items in clouds and enable reusing between devices.
 }

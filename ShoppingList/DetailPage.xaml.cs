@@ -1,14 +1,15 @@
-﻿using ShoppingList.Models;
+﻿using ShoppingList.Data;
+using ShoppingList.Models;
 using ShoppingList.ViewModel;
 
 namespace ShoppingList;
 
 public partial class DetailPage : ContentPage
 {
-    public DetailPage(Item item)
+    public DetailPage(Item item, ItemDatabase database)
     {
         InitializeComponent();
-        BindingContext = new DetailViewModel(item);
+        BindingContext = new DetailViewModel(item, database);
     }
     
     protected override void OnAppearing()

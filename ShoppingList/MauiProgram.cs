@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using ShoppingList.Data;
 using ShoppingList.ViewModel;
 
 namespace ShoppingList;
@@ -23,6 +24,10 @@ public static class MauiProgram
 
         builder.Services.AddTransient<DetailPage>();
         builder.Services.AddTransient<DetailViewModel>();
+        
+        builder.Services.AddSingleton<ItemDatabase>();
+        
+        builder.Services.AddLogging();
 
 #if DEBUG
         builder.Logging.AddDebug();

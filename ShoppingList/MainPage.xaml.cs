@@ -10,13 +10,21 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
     }
-    
+
+    protected override async void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        var vm = (MainViewModel)BindingContext;
+        await vm.LoadItemsFromDatabase();
+        vm.SortItems();
+    }
+
     protected override void OnAppearing()
     {
         base.OnAppearing();
         ((MainViewModel)BindingContext).NewItem = new Item { From = Store.Anywhere };
     }
-    
+
     private void OnEntryUnfocused(object sender, FocusEventArgs e)
     {
         AddButton.Focus();
