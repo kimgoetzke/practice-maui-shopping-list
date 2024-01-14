@@ -18,16 +18,17 @@
 
     <Grid RowDefinitions="Auto, Auto, Auto, *">
 
-        <!-- Background for first two rows -->
-        <BoxView Grid.RowSpan="2" Color="{StaticResource OffWhite}"
-                 BackgroundColor="Transparent" />
-
-        <!-- Horizontal line below that -->
-        <BoxView Grid.Row="2" HeightRequest="1.5" BackgroundColor="{StaticResource Neutral}"
+        <!-- Horizontal line below title (if applicable) -->
+        <BoxView Grid.Row="0" HeightRequest="1.5" BackgroundColor="{StaticResource Neutral}"
                  HorizontalOptions="FillAndExpand" />
 
+        <!-- Background for first two rows -->
+        <BoxView Grid.Row="1" Grid.RowSpan="2" Color="{StaticResource OffWhite}"
+                 BackgroundColor="Transparent" />
+
         <!-- Menu to add items -->
-        <Grid ColumnDefinitions=".375*, .375*, .25*"
+        <Grid Grid.Row="1"
+              ColumnDefinitions=".375*, .375*, .25*"
               RowDefinitions="Auto, Auto"
               Padding="5"
               RowSpacing="5">
@@ -85,6 +86,10 @@
                 <CheckBox IsChecked="{Binding NewItem.IsImportant}" Grid.Row="1" />
             </Grid>
         </Grid>
+
+        <!-- Horizontal line below that -->
+        <BoxView Grid.Row="2" HeightRequest="1.5" BackgroundColor="{StaticResource Neutral}"
+                 HorizontalOptions="FillAndExpand" />
 
         <!-- List of added items -->
         <Grid Grid.Row="3" Padding="5">
@@ -171,6 +176,7 @@
                                                FontAttributes="Italic"
                                                HorizontalOptions="End"
                                                VerticalOptions="Center"
+                                               Padding="0,0,5,0"
                                                Grid.Column="1" />
                                     </Grid>
 
