@@ -9,15 +9,12 @@ public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty] ObservableCollection<Item> items;
     [ObservableProperty] Item newItem;
-    [ObservableProperty] ObservableCollection<string> tasks;
-    [ObservableProperty] string newTask;
     IConnectivity connectivity;
 
     public List<Store> StoreOptions { get; } = Enum.GetValues(typeof(Store)).Cast<Store>().ToList();
 
     public MainViewModel(IConnectivity connectivity)
     {
-        Tasks = [];
         Items = [];
         NewItem = new Item { From = Store.Anywhere };
         this.connectivity = connectivity;
@@ -38,6 +35,7 @@ public partial class MainViewModel : ObservableObject
 
         Items.Add(NewItem);
         NewItem = new Item();
+        SortItems();
         OnPropertyChanged(nameof(NewItem));
     }
 
@@ -48,8 +46,23 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task TapItem(Item i)
+    private void TogglePriority(Item i)
+    {
+        i.IsImportant = !i.IsImportant;
+        SortItems();
+    }
+
+    [RelayCommand]
+    private static async Task TapItem(Item i)
     {
         await Shell.Current.Navigation.PushAsync(new DetailPage(i));
+    }
+
+    private void SortItems()
+    {
+        Items = new ObservableCollection<Item>(Items
+            .OrderByDescending(i => i.From.ToString())
+            .ThenByDescending(i => i.IsImportant)
+            .ThenByDescending(i => i.Title));
     }
 }

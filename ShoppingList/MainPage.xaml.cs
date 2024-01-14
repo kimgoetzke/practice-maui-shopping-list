@@ -16,4 +16,9 @@ public partial class MainPage : ContentPage
         base.OnAppearing();
         ((MainViewModel)BindingContext).NewItem = new Item { From = Store.Anywhere };
     }
+    
+    private void OnEntryUnfocused(object sender, FocusEventArgs e)
+    {
+        AddButton.Focus();
+    }
 }
