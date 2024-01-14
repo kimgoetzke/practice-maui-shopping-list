@@ -9,38 +9,67 @@
 
     <StackLayout Padding="10">
 
-        <Label Text="{Binding Item.Title}"
-               Style="{StaticResource Headline}"
+        <Entry Text="{Binding Item.Title, Mode=TwoWay}"
                FontSize="25"
                VerticalOptions="Center"
-               HorizontalOptions="Center"
-               Padding="10" />
-        
-        <Label Text="{Binding Item.IsImportant, StringFormat='Important: {0}'}"
-               FontSize="16"
-               VerticalOptions="Center"
-               HorizontalOptions="Center"
-               Padding="10" />
+               HorizontalOptions="Center" />
 
-        <Label Text="{Binding Item.Quantity, StringFormat='Quantity: {0}'}"
-               FontSize="16"
-               VerticalOptions="Center"
-               HorizontalOptions="Center"
-               Padding="10" />
+        <Grid Margin="5"
+              RowDefinitions="1*"
+              ColumnDefinitions=".5*, .5*">
+            <Label Text="{Binding Item.IsImportant, StringFormat='Priority: {0}'}"
+                   Grid.Column="0"
+                   FontSize="16"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Start"
+                   Padding="10" />
+            <Switch IsToggled="{Binding Item.IsImportant, Mode=TwoWay}"
+                    Grid.Column="1"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center" />
+        </Grid>
 
-        <Label Text="{Binding Item.From, StringFormat='From: {0}'}"
-               FontSize="16"
-               VerticalOptions="Center"
-               HorizontalOptions="Center"
-               Padding="10" />
+        <Grid Margin="5"
+              RowDefinitions="1*"
+              ColumnDefinitions=".5*, .5*">
+            <Label Text="{Binding Item.Quantity,  Mode=TwoWay, StringFormat='Quantity: {0}'}"
+                   Grid.Column="0"
+                   FontSize="16"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Start"
+                   Padding="10" />
+            <Stepper Value="{Binding Item.Quantity}"
+                     Grid.Column="1"
+                     Minimum="1"
+                     Maximum="99"
+                     Increment="1"
+                     HorizontalOptions="Center" />
+        </Grid>
+
+        <Grid Margin="5"
+              RowDefinitions="1*"
+              ColumnDefinitions=".5*, .5*">
+            <Label Text="{Binding Item.From,  Mode=TwoWay, StringFormat='From: {0}'}"
+                   Grid.Column="0"
+                   FontSize="16"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Start"
+                   Padding="10" />
+            <Picker Title="Change store"
+                    SelectedItem="{Binding Item.From, Mode=TwoWay}"
+                    ItemsSource="{Binding StoreOptions}"
+                    Grid.Column="1"
+                    HorizontalOptions="Center" />
+        </Grid>
 
         <Label Text="{Binding Item.AddedOn, StringFormat='Added on: {0}'}"
                FontSize="16"
                VerticalOptions="Center"
-               HorizontalOptions="Center"
+               HorizontalOptions="Start"
+               Margin="5"
                Padding="10, 10, 10, 40" />
 
-        <Button Text="Go Back"
+        <Button Text="Go back"
                 Command="{Binding GoBackCommand}" />
 
     </StackLayout>

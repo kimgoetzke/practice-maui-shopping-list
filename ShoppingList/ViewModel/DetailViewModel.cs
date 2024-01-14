@@ -9,13 +9,15 @@ public partial class DetailViewModel : ObservableObject
 {
     [ObservableProperty] Item item;
     
+    public List<Store> StoreOptions { get; }  = Enum.GetValues(typeof(Store)).Cast<Store>().ToList();
+    
     public DetailViewModel(Item item)
     {
         Item = item;
     }
 
     [RelayCommand]
-    async Task GoBack()
+    private static async Task GoBack()
     {
         await Shell.Current.GoToAsync("..");
     }

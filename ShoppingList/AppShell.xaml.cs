@@ -7,8 +7,7 @@ public partial class AppShell : Shell
         InitializeComponent();
         Routing.RegisterRoute(nameof(DetailPage), typeof(DetailPage));
     }
-
-    // TODO: Beginner: Allow changing item details in details view.
+    
     // TODO: Beginner: Add copy to clipboard button.
     // TODO: Beginner: Add options menu button with sections for 1) stores, 2) dark mode, and 3) more...
     // TODO: Beginner: Make adding items form a collapsible menu.
