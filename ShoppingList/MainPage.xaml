@@ -19,7 +19,7 @@
     <Grid RowDefinitions="Auto, Auto, Auto, *">
 
         <!-- Horizontal line below title (if applicable) -->
-        <BoxView Grid.Row="0" HeightRequest="1.5" BackgroundColor="{StaticResource Neutral}"
+        <BoxView Grid.Row="0" HeightRequest="1" BackgroundColor="{StaticResource Neutral}"
                  HorizontalOptions="FillAndExpand" />
 
         <!-- Background for first two rows -->
@@ -88,27 +88,28 @@
         </Grid>
 
         <!-- Horizontal line below that -->
-        <BoxView Grid.Row="2" HeightRequest="1.5" BackgroundColor="{StaticResource Neutral}"
+        <BoxView Grid.Row="2" HeightRequest="1" BackgroundColor="{StaticResource Neutral}"
                  HorizontalOptions="FillAndExpand" />
 
         <!-- List of added items -->
-        <Grid Grid.Row="3" Padding="5">
+        <Grid Grid.Row="3" Padding="0, 5, 0, 5">
             <CollectionView
                 ItemsSource="{Binding Items}"
                 SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type models:Item}">
-                        <SwipeView android:SwipeView.SwipeTransitionMode="Drag">
+                        <SwipeView HeightRequest="50" Margin="0,3,0,3">
                             <SwipeView.LeftItems>
                                 <SwipeItems Mode="Execute">
                                     <SwipeItem
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=RemoveItemCommand}"
                                         CommandParameter="{Binding .}"
-                                        BackgroundColor="Transparent" />
+                                        IconImageSource="done_white.png"
+                                        BackgroundColor="{StaticResource Green}" />
                                 </SwipeItems>
                             </SwipeView.LeftItems>
                             <SwipeView.RightItems>
-                                <SwipeItems>
+                                <SwipeItems android:SwipeView.SwipeTransitionMode="Drag">
                                     <SwipeItemView
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=TogglePriorityCommand}"
                                         CommandParameter="{Binding .}">
@@ -118,7 +119,7 @@
                                                VerticalOptions="Center"
                                                HeightRequest="100"
                                                WidthRequest="100">
-                                            <Image Source="priority_white.png"
+                                            <Image Source="star_icon_white.png"
                                                    Aspect="AspectFit"
                                                    WidthRequest="35"
                                                    HeightRequest="35"
@@ -128,8 +129,8 @@
                                     </SwipeItemView>
                                 </SwipeItems>
                             </SwipeView.RightItems>
-                            <Grid Padding="3,3">
-                                <Frame CornerRadius="5" HasShadow="True">
+                            <Grid Padding="5">
+                                <Frame CornerRadius="3" HasShadow="True" HeightRequest="50">
                                     <Frame.Triggers>
                                         <DataTrigger TargetType="Frame"
                                                      Binding="{Binding IsImportant}"
@@ -149,12 +150,11 @@
                                     </Frame.GestureRecognizers>
 
                                     <!-- Contents of list -->
-                                    <Grid ColumnDefinitions="*,*">
+                                    <Grid ColumnDefinitions="*,*" HeightRequest="50">
                                         <StackLayout Orientation="Horizontal"
                                                      Grid.Column="0">
                                             <Label Text="{Binding Title}"
                                                    FontSize="16"
-                                                   FontAttributes="Bold"
                                                    HorizontalOptions="Start"
                                                    VerticalOptions="Center" />
                                             <Label x:Name="QuantityLabel"
@@ -173,7 +173,7 @@
                                         </StackLayout>
                                         <Label Text="{Binding From}"
                                                FontSize="10"
-                                               FontAttributes="Italic"
+                                               TextColor="{StaticResource Neutral}"
                                                HorizontalOptions="End"
                                                VerticalOptions="Center"
                                                Padding="0,0,5,0"
