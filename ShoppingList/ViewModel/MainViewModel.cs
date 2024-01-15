@@ -64,6 +64,15 @@ public partial class MainViewModel : ObservableObject
         await Shell.Current.Navigation.PushAsync(new DetailPage(i, _database));
     }
 
+    [RelayCommand]
+    internal void CopyToClipboard()
+    {
+        var itemTitles = Items.Select(item => item.Title);
+        var clipboardText = string.Join("," + Environment.NewLine, itemTitles);
+        Clipboard.SetTextAsync(clipboardText);
+        LogHandler.Log("Copied to clipboard: " + clipboardText.Replace(Environment.NewLine, ""));
+    }
+
     public void SortItems()
     {
         Items = new ObservableCollection<Item>(Items

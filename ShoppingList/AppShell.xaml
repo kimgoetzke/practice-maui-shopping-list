@@ -5,14 +5,18 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:ShoppingList"
+    Title="Shopping List"
     Shell.FlyoutBehavior="Disabled"
-    Shell.TitleColor="{StaticResource White}"
-    Title="ShoppingList" BackgroundColor="{StaticResource Tertiary}">
+    Shell.TitleColor="{StaticResource OffWhite}"
+    Shell.ForegroundColor="{StaticResource OffWhite}"
+    Shell.BackgroundColor="{StaticResource Tertiary}"
+    Shell.Background="{StaticResource Tertiary}">
 
-    <maui:ShellContent
-        Title="Turbo Tasks"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage"
-        xmlns:maui="http://schemas.microsoft.com/dotnet/2021/maui" />
+    <ShellContent IsVisible="True"
+                  Title="List"
+                  Icon="done_white.png"
+                  ContentTemplate="{DataTemplate local:MainPage}"
+                  Route="MainPage"
+                  xmlns:maui="http://schemas.microsoft.com/dotnet/2021/maui" />
 
 </Shell>

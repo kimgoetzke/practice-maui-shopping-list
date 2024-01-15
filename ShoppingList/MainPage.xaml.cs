@@ -29,4 +29,10 @@ public partial class MainPage : ContentPage
     {
         AddButton.Focus();
     }
+
+    private void CopyOnClicked(object? sender, EventArgs e)
+    {
+        var vm = (MainViewModel)BindingContext;
+        vm.CopyToClipboard();
+    }
 }

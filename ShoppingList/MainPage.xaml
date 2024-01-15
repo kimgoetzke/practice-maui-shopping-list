@@ -16,6 +16,14 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem 
+            Text="Copy to Clipboard" 
+            IconImageSource="copy_white.png"
+            Order="Primary" 
+            Clicked="CopyOnClicked" />
+    </ContentPage.ToolbarItems>
+
     <Grid RowDefinitions="Auto, Auto, Auto, *">
 
         <!-- Horizontal line below title (if applicable) -->
@@ -32,14 +40,6 @@
               RowDefinitions="Auto, Auto"
               Padding="5"
               RowSpacing="5">
-
-            <!-- <Image Grid.ColumnSpan="3" -->
-            <!--        Grid.RowSpan="5" -->
-            <!--        Source="turbo_task_snail.png" -->
-            <!--        BackgroundColor="Transparent" -->
-            <!--        Aspect="AspectFit" -->
-            <!--        HorizontalOptions="FillAndExpand" -->
-            <!--        VerticalOptions="FillAndExpand" /> -->
 
             <Entry Placeholder="Enter item name"
                    Text="{Binding NewItem.Title}"
