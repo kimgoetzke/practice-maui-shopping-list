@@ -17,10 +17,10 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem 
-            Text="Copy to Clipboard" 
+        <ToolbarItem
+            Text="Copy to Clipboard"
             IconImageSource="copy_white.png"
-            Order="Primary" 
+            Order="Primary"
             Clicked="CopyOnClicked" />
     </ContentPage.ToolbarItems>
 
@@ -101,18 +101,29 @@
                         <SwipeView HeightRequest="40" Margin="0,2,0,2">
                             <SwipeView.LeftItems>
                                 <SwipeItems Mode="Execute">
-                                    <SwipeItem
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=RemoveItemCommand}"
-                                        CommandParameter="{Binding .}"
-                                        IconImageSource="done_white.png"
-                                        BackgroundColor="{StaticResource Green}" />
+                                    <SwipeItemView android:SwipeView.SwipeTransitionMode="Reveal"
+                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=RemoveItemCommand}"
+                                                   CommandParameter="{Binding .}"
+                                                   BackgroundColor="{StaticResource Green}"
+                                                   WidthRequest="300">
+                                        <Grid HorizontalOptions="Fill" Background="{StaticResource Green}">
+                                            <Grid HorizontalOptions="Start">
+                                                <Image Source="done_white.png"
+                                                       Aspect="AspectFit"
+                                                       WidthRequest="25"
+                                                       HeightRequest="25"
+                                                       Margin="30, 5, 5 ,5"
+                                                       VerticalOptions="Center" />
+                                            </Grid>
+                                        </Grid>
+                                    </SwipeItemView>
                                 </SwipeItems>
                             </SwipeView.LeftItems>
                             <SwipeView.RightItems>
-                                <SwipeItems android:SwipeView.SwipeTransitionMode="Drag">
-                                    <SwipeItemView
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=TogglePriorityCommand}"
-                                        CommandParameter="{Binding .}">
+                                <SwipeItems>
+                                    <SwipeItemView android:SwipeView.SwipeTransitionMode="Drag"
+                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=TogglePriorityCommand}"
+                                                   CommandParameter="{Binding .}">
                                         <Frame BackgroundColor="{StaticResource Red}"
                                                BorderColor="Transparent"
                                                Padding="0"
@@ -121,8 +132,8 @@
                                                WidthRequest="100">
                                             <Image Source="star_icon_white.png"
                                                    Aspect="AspectFit"
-                                                   WidthRequest="35"
-                                                   HeightRequest="35"
+                                                   WidthRequest="25"
+                                                   HeightRequest="25"
                                                    HorizontalOptions="Center"
                                                    VerticalOptions="Center" />
                                         </Frame>
