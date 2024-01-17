@@ -124,7 +124,7 @@
                                     <SwipeItemView android:SwipeView.SwipeTransitionMode="Drag"
                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=TogglePriorityCommand}"
                                                    CommandParameter="{Binding .}">
-                                        <Frame BackgroundColor="{StaticResource Red}"
+                                        <Frame BackgroundColor="{StaticResource Pink}"
                                                BorderColor="Transparent"
                                                Padding="0"
                                                VerticalOptions="Center"
