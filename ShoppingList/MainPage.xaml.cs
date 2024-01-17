@@ -1,5 +1,6 @@
 ﻿using ShoppingList.Models;
 using ShoppingList.ViewModel;
+using CommunityToolkit.Maui.Alerts;
 
 namespace ShoppingList;
 
@@ -34,5 +35,9 @@ public partial class MainPage : ContentPage
     {
         var vm = (MainViewModel)BindingContext;
         vm.CopyToClipboard();
+
+        var cancellationTokenSource = new CancellationTokenSource();
+        var toast = Toast.Make("List copied to clipboard");
+        toast.Show(cancellationTokenSource.Token);
     }
 }

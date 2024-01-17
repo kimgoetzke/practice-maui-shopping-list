@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ShoppingList.Data;
 using ShoppingList.Models;
@@ -23,6 +24,9 @@ public partial class DetailViewModel : ObservableObject
     private async Task GoBack()
     {
         await _database.SaveItemAsync(Item);
+        var cancellationTokenSource = new CancellationTokenSource();
+        var toast = Toast.Make("Updated: " + Item.Title);
         await Shell.Current.GoToAsync("..");
+        await toast.Show(cancellationTokenSource.Token);
     }
 }
