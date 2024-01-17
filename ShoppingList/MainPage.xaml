@@ -50,11 +50,13 @@
                    FontSize="16"
                    Unfocused="OnEntryUnfocused" />
 
-            <Button Text="Add"
+            <Button Text="ADD"
+                    FontAttributes="Bold"
                     x:Name="AddButton"
                     Command="{Binding AddItemCommand}"
                     Grid.Row="0"
                     Grid.Column="2"
+                    Background="{StaticResource StandardGradient}"
                     Margin="5" />
 
             <Grid Margin="5" Grid.Row="1" Grid.Column="0" RowDefinitions="Auto, Auto" ColumnDefinitions="1*"
@@ -92,13 +94,13 @@
                  HorizontalOptions="FillAndExpand" />
 
         <!-- List of added items -->
-        <Grid Grid.Row="3" Padding="0, 10, 0, 10">
+        <Grid Grid.Row="3" Padding="0, 0, 0, 10">
             <CollectionView
                 ItemsSource="{Binding Items}"
                 SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type models:Item}">
-                        <SwipeView HeightRequest="40" Margin="0,2,0,2">
+                        <SwipeView HeightRequest="44" Margin="0,0,0,0">
                             <SwipeView.LeftItems>
                                 <SwipeItems Mode="Execute">
                                     <SwipeItemView android:SwipeView.SwipeTransitionMode="Reveal"
@@ -140,18 +142,20 @@
                                     </SwipeItemView>
                                 </SwipeItems>
                             </SwipeView.RightItems>
-                            <Grid Padding="10">
-                                <Frame CornerRadius="3" HeightRequest="40">
+                            <Grid Padding="0">
+                                <Frame CornerRadius="0" HeightRequest="44">
                                     <Frame.Triggers>
                                         <DataTrigger TargetType="Frame"
                                                      Binding="{Binding IsImportant}"
                                                      Value="True">
-                                            <Setter Property="BorderColor" Value="{StaticResource Red}" />
+                                            <Setter Property="BackgroundColor" Value="{StaticResource OffWhite}" />
+                                            <Setter Property="BorderColor" Value="{StaticResource Gray100}" />
                                         </DataTrigger>
                                         <DataTrigger TargetType="Frame"
                                                      Binding="{Binding IsImportant}"
                                                      Value="False">
-                                            <Setter Property="BorderColor" Value="{StaticResource Neutral}" />
+                                            <Setter Property="BackgroundColor" Value="{StaticResource White}" />
+                                            <Setter Property="BorderColor" Value="{StaticResource OffWhite}" />
                                         </DataTrigger>
                                     </Frame.Triggers>
                                     <Frame.GestureRecognizers>
