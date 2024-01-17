@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Globalization;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ShoppingList.Data;
@@ -35,12 +37,18 @@ public partial class MainViewModel : ObservableObject
             await Shell.Current.DisplayAlert("Uh Oh!", "No Internet", "OK");
             return;
         }
+        
+        var textInfo = new CultureInfo("en-US", false).TextInfo;
+        NewItem.Title = textInfo.ToTitleCase(NewItem.Title.ToLower());
 
         Items.Add(NewItem);
         await _database.SaveItemAsync(NewItem);
         NewItem = new Item();
         SortItems();
         OnPropertyChanged(nameof(NewItem));
+        var cancellationTokenSource = new CancellationTokenSource();
+        var toast = Toast.Make("Added: " + Items.Last().Title);
+        await toast.Show(cancellationTokenSource.Token);
     }
 
     [RelayCommand]
