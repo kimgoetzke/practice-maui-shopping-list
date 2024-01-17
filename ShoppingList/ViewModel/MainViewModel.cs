@@ -77,8 +77,7 @@ public partial class MainViewModel : ObservableObject
     {
         Items = new ObservableCollection<Item>(Items
             .OrderByDescending(i => i.From.ToString())
-            .ThenByDescending(i => i.IsImportant)
-            .ThenByDescending(i => i.Title));
+            .ThenByDescending(i => i.AddedOn));
     }
 
     public async Task LoadItemsFromDatabase()
