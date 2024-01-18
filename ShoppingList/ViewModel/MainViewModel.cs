@@ -11,6 +11,7 @@ namespace ShoppingList.ViewModel;
 public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty] private ObservableCollection<Item> _items;
+    [ObservableProperty] private ObservableCollection<ConfigurableStore> _stores;
     [ObservableProperty] private Item _newItem;
     private readonly IConnectivity _connectivity;
     private readonly ItemDatabase _database;
@@ -66,6 +67,13 @@ public partial class MainViewModel : ObservableObject
     {
         Items.Remove(i);
         await _database.DeleteItemAsync(i);
+    }
+    
+    [RelayCommand]
+    private async Task RemoveAllItems()
+    {
+        Items.Clear();
+        await _database.DeleteAllItemsAsync();
     }
 
     [RelayCommand]

@@ -43,6 +43,13 @@ public partial class MainPage
         var toast = Toast.Make("Copied list to clipboard");
         toast.Show(cancellationTokenSource.Token);
     }
+    
+    private void NotImplementedOnClicked(object? sender, EventArgs e)
+    {
+        var cancellationTokenSource = new CancellationTokenSource();
+        var toast = Toast.Make("Not implemented yet");
+        toast.Show(cancellationTokenSource.Token);
+    }
 
     private async void OnTapSettings(object sender, EventArgs e)
     {

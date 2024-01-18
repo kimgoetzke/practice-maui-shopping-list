@@ -1,5 +1,7 @@
+
 using CommunityToolkit.Mvvm.ComponentModel;
 using SQLite;
+using SQLiteNetExtensions.Attributes;
 
 namespace ShoppingList.Models;
 
@@ -7,13 +9,15 @@ public partial class Item : ObservableObject
 {
     [PrimaryKey, AutoIncrement] public int Id { get; set; }
 
-    [ObservableProperty] string title = string.Empty;
+    [ObservableProperty] private string title = string.Empty;
 
-    [ObservableProperty] int quantity = 1;
+    [ObservableProperty] private int quantity = 1;
 
-    [ObservableProperty] bool isImportant;
+    [ObservableProperty] private bool isImportant;
 
-    [ObservableProperty] Store from = Store.Anywhere;
+    [ObservableProperty] private Store from = Store.Anywhere;
 
-    [ObservableProperty] DateTime addedOn = DateTime.Now;
+    [ObservableProperty] private DateTime addedOn = DateTime.Now;
+    
+    // [ManyToOne("Id")] public ConfigurableStore ConfigurableStore { get; set; }
 }
