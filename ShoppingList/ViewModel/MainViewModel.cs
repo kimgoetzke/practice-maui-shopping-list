@@ -74,6 +74,9 @@ public partial class MainViewModel : ObservableObject
     {
         Items.Clear();
         await _database.DeleteAllItemsAsync();
+        var cancellationTokenSource = new CancellationTokenSource();
+        var toast = Toast.Make("Removed all items from list");
+        toast.Show(cancellationTokenSource.Token);
     }
 
     [RelayCommand]
