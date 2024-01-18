@@ -1,11 +1,10 @@
 ﻿using ShoppingList.Models;
 using ShoppingList.ViewModel;
 using CommunityToolkit.Maui.Alerts;
-using Microsoft.Maui.Animations;
 
 namespace ShoppingList;
 
-public partial class MainPage : ContentPage
+public partial class MainPage
 {
     private const uint AnimationDuration = 400u;
 

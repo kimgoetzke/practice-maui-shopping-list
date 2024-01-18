@@ -3,8 +3,8 @@ namespace ShoppingList;
 public static class Constants
 {
     public const string LoggerTag = "ShoppingList";
-    
-    public const string DatabaseFilename = "ShoppingList.db3";
+
+    private const string DatabaseFilename = "ShoppingList.db3";
 
     public const SQLite.SQLiteOpenFlags Flags =
         SQLite.SQLiteOpenFlags.ReadWrite |

@@ -10,8 +10,8 @@ namespace ShoppingList.ViewModel;
 
 public partial class MainViewModel : ObservableObject
 {
-    [ObservableProperty] ObservableCollection<Item> items;
-    [ObservableProperty] Item newItem;
+    [ObservableProperty] private ObservableCollection<Item> _items;
+    [ObservableProperty] private Item _newItem;
     private readonly IConnectivity _connectivity;
     private readonly ItemDatabase _database;
 

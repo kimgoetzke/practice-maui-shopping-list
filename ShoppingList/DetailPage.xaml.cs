@@ -4,7 +4,7 @@ using ShoppingList.ViewModel;
 
 namespace ShoppingList;
 
-public partial class DetailPage : ContentPage
+public partial class DetailPage
 {
     public DetailPage(Item item, ItemDatabase database)
     {
