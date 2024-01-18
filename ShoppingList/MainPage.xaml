@@ -7,6 +7,7 @@
              xmlns:viewmodel="clr-namespace:ShoppingList.ViewModel"
              xmlns:models="clr-namespace:ShoppingList.Models"
              xmlns:converters="clr-namespace:ShoppingList.Converters"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:DataType="viewmodel:MainViewModel"
              Title="">
 
@@ -15,6 +16,9 @@
             <converters:QuantityGreaterThanOneConverter x:Key="QuantityGreaterThanOneConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="{StaticResource Primary}" StatusBarStyle="LightContent" />
+    </ContentPage.Behaviors>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem
@@ -36,8 +40,8 @@
         <Grid x:Name="SettingsMenuGrid" IgnoreSafeArea="True">
             <Grid.Background>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
-                    <GradientStop Color="{StaticResource Tertiary}" Offset="0.1" />
-                    <GradientStop Color="{StaticResource Primary}" Offset="1.0" />
+                    <GradientStop Color="{StaticResource Primary}" Offset="0.1" />
+                    <GradientStop Color="{StaticResource Tertiary}" Offset="1.0" />
                 </LinearGradientBrush>
             </Grid.Background>
 
@@ -47,24 +51,30 @@
 
             <VerticalStackLayout
                 Margin="0,52,24,0"
-                HorizontalOptions="End"
-                Spacing="20">
+                HorizontalOptions="End">
 
                 <Label Style="{StaticResource MenuHeader}"
                        Text="Settings menu"
                        HorizontalOptions="End" />
 
-                <Label Style="{StaticResource MenuLabel}"
-                       Text="Add store"
-                       HorizontalOptions="End" />
+                <BoxView HeightRequest="1" BackgroundColor="{StaticResource OffWhite}"
+                         HorizontalOptions="FillAndExpand"
+                         Margin="0,10,0, 30" />
 
-                <Label Style="{StaticResource MenuLabel}"
-                       Text="Remove store"
-                       HorizontalOptions="End" />
+                <Button Style="{StaticResource MenuButton}"
+                        Text="Add store"
+                        HorizontalOptions="End"
+                        x:Name="AddStoreButton"/>
+                
+                <Button Style="{StaticResource MenuButton}"
+                        Text="Remove store"
+                        HorizontalOptions="End"
+                        x:Name="RemoveStoreButton"/>
 
-                <Label Style="{StaticResource MenuLabel}"
-                       Text="Clear all stores"
-                       HorizontalOptions="End" />
+                <Button Style="{StaticResource MenuButton}"
+                        Text="Clear all stores"
+                        HorizontalOptions="End"
+                        x:Name="ClearAllStoresButton"/>
 
             </VerticalStackLayout>
         </Grid>
@@ -72,10 +82,6 @@
         <!-- Page content -->
         <Grid RowDefinitions="Auto, Auto, Auto, *" x:Name="PageContentGrid" VerticalOptions="Fill"
               IgnoreSafeArea="True">
-
-            <!-- Horizontal line below title (if applicable) -->
-            <BoxView Grid.Row="0" HeightRequest="1" BackgroundColor="{StaticResource Neutral}"
-                     HorizontalOptions="FillAndExpand" />
 
             <!-- Background for first two rows -->
             <BoxView Grid.Row="1" Grid.RowSpan="2" Color="{StaticResource OffWhite}"
@@ -135,7 +141,7 @@
             </Grid>
 
             <!-- Horizontal line below that -->
-            <BoxView Grid.Row="2" HeightRequest="1" BackgroundColor="{StaticResource Neutral}"
+            <BoxView Grid.Row="2" HeightRequest="2" BackgroundColor="{StaticResource Primary}"
                      HorizontalOptions="FillAndExpand" />
 
             <!-- List of added items -->

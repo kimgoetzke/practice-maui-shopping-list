@@ -7,7 +7,6 @@
              x:DataType="viewModel:DetailViewModel"
              Title="Item details">
 
-
     <StackLayout Padding="0">
 
         <BoxView HeightRequest="1" BackgroundColor="{StaticResource Neutral}"

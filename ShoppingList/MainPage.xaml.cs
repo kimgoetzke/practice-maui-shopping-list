@@ -7,7 +7,6 @@ namespace ShoppingList;
 public partial class MainPage
 {
     private const uint AnimationDuration = 400u;
-
     private bool _isMenuOpen;
 
     public MainPage(MainViewModel viewModel)
