@@ -50,11 +50,12 @@
             </Grid.GestureRecognizers>
 
             <VerticalStackLayout
-                Margin="0,52,24,0"
+                Margin="0,52,16,0"
                 HorizontalOptions="End">
 
                 <Label Style="{StaticResource MenuHeader}"
-                       Text="Settings menu"
+                       Text="Settings"
+                       WidthRequest="200"
                        HorizontalOptions="End" />
 
                 <BoxView HeightRequest="1" BackgroundColor="{StaticResource OffWhite}"

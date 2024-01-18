@@ -27,7 +27,7 @@
     <Style TargetType="Button" x:Key="MenuButton" BasedOn="{StaticResource StandardButton}">
         <Setter Property="BorderColor" Value="{StaticResource OffWhite}" />
         <Setter Property="BorderWidth" Value="1" />
-        <Setter Property="WidthRequest" Value="155" />
+        <Setter Property="WidthRequest" Value="140" />
     </Style>
     
     <!-- Default styles -->
