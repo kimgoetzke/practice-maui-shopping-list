@@ -11,9 +11,9 @@ public partial class DetailViewModel : ObservableObject
 {
     [ObservableProperty] Item item;
     private readonly ItemDatabase _database;
-    
-    public List<Store> StoreOptions { get; }  = Enum.GetValues(typeof(Store)).Cast<Store>().ToList();
-    
+
+    public List<Store> StoreOptions { get; } = Enum.GetValues(typeof(Store)).Cast<Store>().ToList();
+
     public DetailViewModel(Item item, ItemDatabase database)
     {
         Item = item;
@@ -26,7 +26,9 @@ public partial class DetailViewModel : ObservableObject
         await _database.SaveItemAsync(Item);
         var cancellationTokenSource = new CancellationTokenSource();
         var toast = Toast.Make("Updated: " + Item.Title);
-        await Shell.Current.GoToAsync("..");
-        await toast.Show(cancellationTokenSource.Token);
+#pragma warning disable CS4014
+        toast.Show(cancellationTokenSource.Token);
+#pragma warning restore CS4014
+        await Shell.Current.GoToAsync("..", true);
     }
 }

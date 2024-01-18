@@ -8,7 +8,7 @@
              xmlns:models="clr-namespace:ShoppingList.Models"
              xmlns:converters="clr-namespace:ShoppingList.Converters"
              x:DataType="viewmodel:MainViewModel"
-             Title="Your shopping list">
+             Title="">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -22,240 +22,288 @@
             IconImageSource="copy_white.png"
             Order="Primary"
             Clicked="CopyOnClicked" />
+
+        <ToolbarItem
+            Text="Copy to Clipboard"
+            IconImageSource="settings_icon_white.png"
+            Order="Primary"
+            Clicked="OnTapSettings" />
     </ContentPage.ToolbarItems>
 
-    <Grid RowDefinitions="Auto, Auto, Auto, *">
+    <Grid IgnoreSafeArea="True">
 
-        <!-- Horizontal line below title (if applicable) -->
-        <BoxView Grid.Row="0" HeightRequest="1" BackgroundColor="{StaticResource Neutral}"
-                 HorizontalOptions="FillAndExpand" />
+        <!-- Settings menu -->
+        <Grid x:Name="SettingsMenuGrid" IgnoreSafeArea="True">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
+                    <GradientStop Color="{StaticResource Tertiary}" Offset="0.1" />
+                    <GradientStop Color="{StaticResource Primary}" Offset="1.0" />
+                </LinearGradientBrush>
+            </Grid.Background>
 
-        <!-- Background for first two rows -->
-        <BoxView Grid.Row="1" Grid.RowSpan="2" Color="{StaticResource OffWhite}"
-                 BackgroundColor="Transparent" />
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnTapGridArea" />
+            </Grid.GestureRecognizers>
 
-        <!-- Menu to add items -->
-        <Grid Grid.Row="1"
-              ColumnDefinitions=".375*, .375*, .25*"
-              RowDefinitions="Auto, Auto"
-              Padding="5"
-              RowSpacing="5">
+            <VerticalStackLayout
+                Margin="0,52,24,0"
+                HorizontalOptions="End"
+                Spacing="20">
 
-            <Entry Placeholder="Enter item name"
-                   Text="{Binding NewItem.Title}"
-                   Grid.Row="0"
-                   Grid.Column="0"
-                   Grid.ColumnSpan="2"
-                   Margin="5"
-                   FontSize="16"
-                   Unfocused="OnEntryUnfocused" />
+                <Label Style="{StaticResource MenuHeader}"
+                       Text="Settings menu"
+                       HorizontalOptions="End" />
 
-            <Button Text="ADD"
-                    FontAttributes="Bold"
-                    x:Name="AddButton"
-                    Command="{Binding AddItemCommand}"
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    Background="{StaticResource StandardGradient}"
-                    Margin="5" />
+                <Label Style="{StaticResource MenuLabel}"
+                       Text="Add store"
+                       HorizontalOptions="End" />
 
-            <Grid Margin="5" Grid.Row="1" Grid.Column="0" RowDefinitions="Auto, Auto" ColumnDefinitions="1*"
-                  RowSpacing="0">
-                <Label Text="From" Grid.Row="0" FontSize="10" HorizontalTextAlignment="Start" Padding="3, 0 " />
-                <Picker Title="From"
-                        SelectedItem="{Binding NewItem.From}"
-                        ItemsSource="{Binding StoreOptions}"
-                        Grid.Row="1"
-                        Grid.Column="0" />
-            </Grid>
+                <Label Style="{StaticResource MenuLabel}"
+                       Text="Remove store"
+                       HorizontalOptions="End" />
 
-            <Grid Margin="5" Grid.Row="1" Grid.Column="1" RowDefinitions="Auto, Auto" ColumnDefinitions="1*"
-                  RowSpacing="0">
-                <Label Text="{Binding NewItem.Quantity, StringFormat='Quantity: {0}'}"
-                       Grid.Row="0"
-                       FontSize="10"
-                       HorizontalTextAlignment="Center" />
-                <Stepper Minimum="1"
-                         Maximum="99"
-                         Increment="1"
-                         Value="{Binding NewItem.Quantity}"
-                         Grid.Row="1" />
-            </Grid>
+                <Label Style="{StaticResource MenuLabel}"
+                       Text="Clear all stores"
+                       HorizontalOptions="End" />
 
-            <Grid Margin="5" Grid.Row="1" Grid.Column="2" RowDefinitions="Auto, Auto" ColumnDefinitions="1*"
-                  RowSpacing="0">
-                <Label Text="Priority" Grid.Row="0" FontSize="10" HorizontalTextAlignment="Center" />
-                <CheckBox IsChecked="{Binding NewItem.IsImportant}" Grid.Row="1" Scale="1.3" />
-            </Grid>
+            </VerticalStackLayout>
         </Grid>
 
-        <!-- Horizontal line below that -->
-        <BoxView Grid.Row="2" HeightRequest="1" BackgroundColor="{StaticResource Neutral}"
-                 HorizontalOptions="FillAndExpand" />
+        <!-- Page content -->
+        <Grid RowDefinitions="Auto, Auto, Auto, *" x:Name="PageContentGrid" VerticalOptions="Fill"
+              IgnoreSafeArea="True">
 
-        <!-- List of added items -->
-        <Grid Grid.Row="3" Padding="0, 0, 0, 10">
-            <CollectionView
-                ItemsSource="{Binding Items}"
-                SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="{x:Type models:Item}">
-                        <Grid RowDefinitions="Auto, Auto">
-                            <SwipeView Margin="0,0,0,0" Grid.Row="0">
-                                <SwipeView.LeftItems>
-                                    <SwipeItems Mode="Execute">
-                                        <SwipeItemView android:SwipeView.SwipeTransitionMode="Reveal"
-                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=RemoveItemCommand}"
-                                                       CommandParameter="{Binding .}"
-                                                       BackgroundColor="{StaticResource Green}"
-                                                       WidthRequest="300">
-                                            <Grid HorizontalOptions="Fill" Background="{StaticResource Green}">
-                                                <Grid HorizontalOptions="Start">
-                                                    <Image Source="done_white.png"
+            <!-- Horizontal line below title (if applicable) -->
+            <BoxView Grid.Row="0" HeightRequest="1" BackgroundColor="{StaticResource Neutral}"
+                     HorizontalOptions="FillAndExpand" />
+
+            <!-- Background for first two rows -->
+            <BoxView Grid.Row="1" Grid.RowSpan="2" Color="{StaticResource OffWhite}"
+                     BackgroundColor="Transparent" />
+
+            <!-- Menu to add items -->
+            <Grid Grid.Row="1"
+                  ColumnDefinitions=".375*, .375*, .25*"
+                  RowDefinitions="Auto, Auto"
+                  Padding="5"
+                  RowSpacing="5">
+
+                <Entry Placeholder="Enter item name"
+                       Text="{Binding NewItem.Title}"
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="2"
+                       Margin="5"
+                       FontSize="16"
+                       Unfocused="OnEntryUnfocused" />
+
+                <Button Text="Add"
+                        Style="{StaticResource StandardButton}"
+                        x:Name="AddButton"
+                        Command="{Binding AddItemCommand}"
+                        Grid.Row="0"
+                        Grid.Column="2" />
+
+                <Grid Margin="5" Grid.Row="1" Grid.Column="0" RowDefinitions="Auto, Auto" ColumnDefinitions="1*"
+                      RowSpacing="0">
+                    <Label Text="From" Grid.Row="0" FontSize="10" HorizontalTextAlignment="Start" Padding="3, 0 " />
+                    <Picker Title="From"
+                            SelectedItem="{Binding NewItem.From}"
+                            ItemsSource="{Binding StoreOptions}"
+                            Grid.Row="1"
+                            Grid.Column="0" />
+                </Grid>
+
+                <Grid Margin="5" Grid.Row="1" Grid.Column="1" RowDefinitions="Auto, Auto" ColumnDefinitions="1*"
+                      RowSpacing="0">
+                    <Label Text="{Binding NewItem.Quantity, StringFormat='Quantity: {0}'}"
+                           Grid.Row="0"
+                           FontSize="10"
+                           HorizontalTextAlignment="Center" />
+                    <Stepper Minimum="1"
+                             Maximum="99"
+                             Increment="1"
+                             Value="{Binding NewItem.Quantity}"
+                             Grid.Row="1" />
+                </Grid>
+
+                <Grid Margin="5" Grid.Row="1" Grid.Column="2" RowDefinitions="Auto, Auto" ColumnDefinitions="1*"
+                      RowSpacing="0">
+                    <Label Text="Priority" Grid.Row="0" FontSize="10" HorizontalTextAlignment="Center" />
+                    <CheckBox IsChecked="{Binding NewItem.IsImportant}" Grid.Row="1" Scale="1.3" />
+                </Grid>
+            </Grid>
+
+            <!-- Horizontal line below that -->
+            <BoxView Grid.Row="2" HeightRequest="1" BackgroundColor="{StaticResource Neutral}"
+                     HorizontalOptions="FillAndExpand" />
+
+            <!-- List of added items -->
+            <Grid Grid.Row="3" Padding="0">
+                <CollectionView
+                    ItemsSource="{Binding Items}"
+                    SelectionMode="None"
+                    VerticalOptions="Fill"
+                    BackgroundColor="White">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type models:Item}">
+                            <Grid RowDefinitions="Auto, Auto">
+                                <SwipeView Margin="0,0,0,0" Grid.Row="0" android:SwipeView.SwipeTransitionMode="Reveal">
+                                    <SwipeView.LeftItems>
+                                        <SwipeItems Mode="Execute">
+                                            <SwipeItemView
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=RemoveItemCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="{StaticResource Green}"
+                                                WidthRequest="300">
+                                                <Grid HorizontalOptions="Fill" Background="{StaticResource Green}">
+                                                    <Grid HorizontalOptions="Start">
+                                                        <Image Source="done_white.png"
+                                                               Aspect="AspectFit"
+                                                               WidthRequest="25"
+                                                               HeightRequest="25"
+                                                               Margin="30, 5, 5 ,5"
+                                                               VerticalOptions="Center" />
+                                                    </Grid>
+                                                </Grid>
+                                            </SwipeItemView>
+                                        </SwipeItems>
+                                    </SwipeView.LeftItems>
+                                    <SwipeView.RightItems>
+                                        <SwipeItems SwipeBehaviorOnInvoked="Close">
+                                            <SwipeItemView
+                                                Invoked="SwipeItemView_OnInvoked"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=TogglePriorityCommand}"
+                                                CommandParameter="{Binding .}">
+                                                <Frame BackgroundColor="{StaticResource Pink}"
+                                                       BorderColor="Transparent"
+                                                       Padding="0"
+                                                       VerticalOptions="Center"
+                                                       HeightRequest="100"
+                                                       WidthRequest="100">
+                                                    <Image Source="star_icon_white.png"
                                                            Aspect="AspectFit"
                                                            WidthRequest="25"
                                                            HeightRequest="25"
-                                                           Margin="30, 5, 5 ,5"
+                                                           HorizontalOptions="Center"
                                                            VerticalOptions="Center" />
-                                                </Grid>
+                                                </Frame>
+                                            </SwipeItemView>
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+
+                                    <Grid Padding="0" RowDefinitions="Auto, Auto">
+                                        <Frame CornerRadius="0" HeightRequest="44" BorderColor="White">
+                                            <Frame.Triggers>
+                                                <DataTrigger TargetType="Frame"
+                                                             Binding="{Binding IsImportant}"
+                                                             Value="True">
+                                                    <Setter Property="BackgroundColor"
+                                                            Value="{StaticResource White}" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Frame"
+                                                             Binding="{Binding IsImportant}"
+                                                             Value="False">
+                                                    <Setter Property="BackgroundColor" Value="{StaticResource White}" />
+                                                </DataTrigger>
+                                            </Frame.Triggers>
+                                            <Frame.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=TapItemCommand}"
+                                                    CommandParameter="{Binding .}" />
+                                            </Frame.GestureRecognizers>
+
+                                            <!-- Contents of list -->
+                                            <Grid ColumnDefinitions="*,*" HeightRequest="40">
+                                                <StackLayout Orientation="Horizontal"
+                                                             Grid.Column="0">
+                                                    <Label Text="{Binding Title}"
+                                                           FontSize="16"
+                                                           HorizontalOptions="Start"
+                                                           VerticalOptions="Center">
+                                                        <Label.Triggers>
+                                                            <DataTrigger TargetType="Label"
+                                                                         Binding="{Binding IsImportant}"
+                                                                         Value="True">
+                                                                <Setter Property="TextColor"
+                                                                        Value="{StaticResource Pink}" />
+                                                            </DataTrigger>
+                                                        </Label.Triggers>
+                                                    </Label>
+                                                    <Label x:Name="QuantityLabel"
+                                                           FontSize="16"
+                                                           HorizontalOptions="Start"
+                                                           VerticalOptions="Center">
+                                                        <Label.Triggers>
+                                                            <DataTrigger TargetType="Label"
+                                                                         Binding="{Binding Quantity, Converter={StaticResource QuantityGreaterThanOneConverter}}"
+                                                                         Value="True">
+                                                                <Setter Property="Text"
+                                                                        Value="{Binding Quantity, StringFormat=' ({0})'}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger TargetType="Label"
+                                                                         Binding="{Binding IsImportant}"
+                                                                         Value="True">
+                                                                <Setter Property="TextColor"
+                                                                        Value="{StaticResource Pink}" />
+                                                            </DataTrigger>
+                                                        </Label.Triggers>
+                                                    </Label>
+                                                </StackLayout>
+                                                <Label Text="{Binding From}"
+                                                       FontSize="10"
+                                                       TextColor="{StaticResource Neutral}"
+                                                       HorizontalOptions="End"
+                                                       VerticalOptions="Center"
+                                                       Padding="0,0,5,0"
+                                                       Grid.Column="1">
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label"
+                                                                     Binding="{Binding IsImportant}"
+                                                                     Value="True">
+                                                            <Setter Property="TextColor"
+                                                                    Value="{StaticResource PinkLight}" />
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
                                             </Grid>
-                                        </SwipeItemView>
-                                    </SwipeItems>
-                                </SwipeView.LeftItems>
-                                <SwipeView.RightItems>
-                                    <SwipeItems>
-                                        <SwipeItemView android:SwipeView.SwipeTransitionMode="Reveal"
-                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=TogglePriorityCommand}"
-                                                       CommandParameter="{Binding .}">
-                                            <Frame BackgroundColor="{StaticResource Pink}"
-                                                   BorderColor="Transparent"
-                                                   Padding="0"
-                                                   VerticalOptions="Center"
-                                                   HeightRequest="100"
-                                                   WidthRequest="100">
-                                                <Image Source="star_icon_white.png"
-                                                       Aspect="AspectFit"
-                                                       WidthRequest="25"
-                                                       HeightRequest="25"
-                                                       HorizontalOptions="Center"
-                                                       VerticalOptions="Center" />
-                                            </Frame>
-                                        </SwipeItemView>
-                                    </SwipeItems>
-                                </SwipeView.RightItems>
 
-                                <Grid Padding="0" RowDefinitions="Auto, Auto">
-                                    <Frame CornerRadius="0" HeightRequest="44" BorderColor="Transparent">
-                                        <Frame.Triggers>
-                                            <DataTrigger TargetType="Frame"
-                                                         Binding="{Binding IsImportant}"
-                                                         Value="True">
-                                                <Setter Property="BackgroundColor"
-                                                        Value="{StaticResource White}" />
-                                                <Setter Property="BorderColor"
-                                                        Value="{StaticResource OffWhite}" />
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Frame"
-                                                         Binding="{Binding IsImportant}"
-                                                         Value="False">
-                                                <Setter Property="BackgroundColor" Value="{StaticResource White}" />
-                                                <Setter Property="BorderColor" Value="{StaticResource White}" />
-                                            </DataTrigger>
-                                        </Frame.Triggers>
-                                        <Frame.GestureRecognizers>
-                                            <TapGestureRecognizer
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=TapItemCommand}"
-                                                CommandParameter="{Binding .}" />
-                                        </Frame.GestureRecognizers>
+                                        </Frame>
+                                    </Grid>
+                                </SwipeView>
+                                <BoxView Grid.Row="1"
+                                         HeightRequest="1"
+                                         BackgroundColor="{StaticResource Gray100}"
+                                         HorizontalOptions="FillAndExpand" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <ContentView BackgroundColor="{StaticResource OffWhite}">
+                            <StackLayout HorizontalOptions="CenterAndExpand"
+                                         VerticalOptions="CenterAndExpand">
+                                <Label Text=":)"
+                                       FontSize="48"
+                                       TextColor="{StaticResource Gray200}"
+                                       HorizontalOptions="Fill"
+                                       HorizontalTextAlignment="Center" />
+                                <Label Text="Nothing to buy"
+                                       Margin="10"
+                                       FontSize="18"
+                                       TextColor="{StaticResource Gray200}"
+                                       HorizontalOptions="Fill"
+                                       HorizontalTextAlignment="Center" />
+                                <Label Text="Add items to populate your list"
+                                       FontSize="12"
+                                       HorizontalOptions="Fill"
+                                       TextColor="{StaticResource Neutral}"
+                                       HorizontalTextAlignment="Center" />
+                            </StackLayout>
+                        </ContentView>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </Grid>
 
-                                        <!-- Contents of list -->
-                                        <Grid ColumnDefinitions="*,*" HeightRequest="40">
-                                            <StackLayout Orientation="Horizontal"
-                                                         Grid.Column="0">
-                                                <Label Text="{Binding Title}"
-                                                       FontSize="16"
-                                                       HorizontalOptions="Start"
-                                                       VerticalOptions="Center">
-                                                    <Label.Triggers>
-                                                        <DataTrigger TargetType="Label"
-                                                                     Binding="{Binding IsImportant}"
-                                                                     Value="True">
-                                                            <Setter Property="TextColor" Value="{StaticResource Pink}" />
-                                                        </DataTrigger>
-                                                    </Label.Triggers>
-                                                </Label>
-                                                <Label x:Name="QuantityLabel"
-                                                       FontSize="16"
-                                                       HorizontalOptions="Start"
-                                                       VerticalOptions="Center">
-                                                    <Label.Triggers>
-                                                        <DataTrigger TargetType="Label"
-                                                                     Binding="{Binding Quantity, Converter={StaticResource QuantityGreaterThanOneConverter}}"
-                                                                     Value="True">
-                                                            <Setter Property="Text"
-                                                                    Value="{Binding Quantity, StringFormat=' ({0})'}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger TargetType="Label"
-                                                                     Binding="{Binding IsImportant}"
-                                                                     Value="True">
-                                                            <Setter Property="TextColor" Value="{StaticResource Pink}" />
-                                                        </DataTrigger>
-                                                    </Label.Triggers>
-                                                </Label>
-                                            </StackLayout>
-                                            <Label Text="{Binding From}"
-                                                   FontSize="10"
-                                                   TextColor="{StaticResource Neutral}"
-                                                   HorizontalOptions="End"
-                                                   VerticalOptions="Center"
-                                                   Padding="0,0,5,0"
-                                                   Grid.Column="1">
-                                                <Label.Triggers>
-                                                    <DataTrigger TargetType="Label"
-                                                                 Binding="{Binding IsImportant}"
-                                                                 Value="True">
-                                                        <Setter Property="TextColor" Value="{StaticResource PinkLight}" />
-                                                    </DataTrigger>
-                                                </Label.Triggers>
-                                            </Label>
-                                        </Grid>
-
-                                    </Frame>
-                                </Grid>
-                            </SwipeView>
-                            <BoxView Grid.Row="1"
-                                     HeightRequest="1"
-                                     BackgroundColor="{StaticResource Gray100}"
-                                     HorizontalOptions="FillAndExpand" />
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-                <CollectionView.EmptyView>
-                    <ContentView BackgroundColor="{StaticResource OffWhite}">
-                        <StackLayout HorizontalOptions="CenterAndExpand"
-                                     VerticalOptions="CenterAndExpand">
-                            <Label Text=":)"
-                                   FontSize="48"
-                                   TextColor="{StaticResource Gray200}"
-                                   HorizontalOptions="Fill"
-                                   HorizontalTextAlignment="Center" />
-                            <Label Text="Nothing to buy"
-                                   Margin="10"
-                                   FontSize="18"
-                                   TextColor="{StaticResource Gray200}"
-                                   HorizontalOptions="Fill"
-                                   HorizontalTextAlignment="Center" />
-                            <Label Text="Add items to populate your list"
-                                   FontSize="12"
-                                   HorizontalOptions="Fill"
-                                   TextColor="{StaticResource Neutral}"
-                                   HorizontalTextAlignment="Center" />
-                        </StackLayout>
-                    </ContentView>
-                </CollectionView.EmptyView>
-            </CollectionView>
         </Grid>
-
     </Grid>
-
 </ContentPage>

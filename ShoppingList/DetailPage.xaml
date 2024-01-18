@@ -76,8 +76,7 @@
                    Padding="10, 10, 10, 40" />
 
             <Button Text="SAVE CHANGES"
-                    FontAttributes="Bold"
-                    Background="{StaticResource StandardGradient}"
+                    Style="{StaticResource StandardButton}"
                     Command="{Binding GoBackCommand}" />
 
         </StackLayout>
