@@ -29,25 +29,35 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task AddItem()
     {
+        // Don't add empty items
         if (string.IsNullOrWhiteSpace(NewItem.Title))
             return;
 
+        // Don't add items if there's no internet
         if (_connectivity.NetworkAccess != NetworkAccess.Internet)
         {
             await Shell.Current.DisplayAlert("Uh Oh!", "No Internet", "OK");
             return;
         }
-        
+
+        // Capitalise first letter of each word
         var textInfo = new CultureInfo("en-US", false).TextInfo;
         NewItem.Title = textInfo.ToTitleCase(NewItem.Title.ToLower());
 
+        // Prepare toast
+        var cancellationTokenSource = new CancellationTokenSource();
+        var toast = Toast.Make("Added: " + NewItem.Title);
+        
+        // Add to list and database
         Items.Add(NewItem);
         await _database.SaveItemAsync(NewItem);
+
+        // Make sure the UI is reset/updated
         NewItem = new Item();
         SortItems();
         OnPropertyChanged(nameof(NewItem));
-        var cancellationTokenSource = new CancellationTokenSource();
-        var toast = Toast.Make("Added: " + Items.Last().Title);
+
+        // Show toast
         await toast.Show(cancellationTokenSource.Token);
     }
 

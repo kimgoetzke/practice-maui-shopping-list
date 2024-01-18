@@ -19,6 +19,7 @@
     <Color x:Key="Yellow">#D4CF29</Color>
     <Color x:Key="Green">#59D42A</Color>
     <Color x:Key="Pink">#C62191</Color>
+    <Color x:Key="PinkLight">#F3B8E0</Color>
     <Color x:Key="OffBlack">#1F1F1F</Color>
     <Color x:Key="OffWhite">#F4F4F4</Color>
     <Color x:Key="Neutral">#C8C8C8</Color>

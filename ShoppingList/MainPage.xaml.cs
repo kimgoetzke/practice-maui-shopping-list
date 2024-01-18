@@ -37,7 +37,7 @@ public partial class MainPage : ContentPage
         vm.CopyToClipboard();
 
         var cancellationTokenSource = new CancellationTokenSource();
-        var toast = Toast.Make("List copied to clipboard");
+        var toast = Toast.Make("Copied list to clipboard");
         toast.Show(cancellationTokenSource.Token);
     }
 }
