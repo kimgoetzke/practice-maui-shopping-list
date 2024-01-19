@@ -1,4 +1,3 @@
-
 using CommunityToolkit.Mvvm.ComponentModel;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
@@ -19,5 +18,7 @@ public partial class Item : ObservableObject
 
     [ObservableProperty] private DateTime addedOn = DateTime.Now;
     
-    // [ManyToOne("Id")] public ConfigurableStore ConfigurableStore { get; set; }
+    [ForeignKey(typeof(ConfigurableStore))]
+    [ManyToOne("Id")]
+    public ConfigurableStore ConfigurableStore { get; set; }
 }

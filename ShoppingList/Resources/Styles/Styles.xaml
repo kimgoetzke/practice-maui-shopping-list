@@ -28,6 +28,7 @@
         <Setter Property="BorderColor" Value="{StaticResource OffWhite}" />
         <Setter Property="BorderWidth" Value="1" />
         <Setter Property="WidthRequest" Value="140" />
+        <Setter Property="Shadow" Value="True" />
     </Style>
     
     <!-- Default styles -->

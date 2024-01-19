@@ -1,34 +1,36 @@
-﻿using CommunityToolkit.Maui.Alerts;
+﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ShoppingList.Data;
 using ShoppingList.Models;
+using ShoppingList.Services;
 
 namespace ShoppingList.ViewModel;
 
 [QueryProperty("Item", "Item")]
 public partial class DetailViewModel : ObservableObject
 {
+    public ObservableCollection<ConfigurableStore> StoreOptions => _storesViewModel.Stores;
     [ObservableProperty] private Item _item;
-    private readonly ItemDatabase _database;
+    private readonly ItemService _itemService;
+    private readonly StoresViewModel _storesViewModel;
 
-    public List<Store> StoreOptions { get; } = Enum.GetValues(typeof(Store)).Cast<Store>().ToList();
-
-    public DetailViewModel(Item item, ItemDatabase database)
+    public DetailViewModel(Item item, StoresViewModel storesViewModel, ItemService itemService)
     {
         Item = item;
-        _database = database;
+        _storesViewModel = storesViewModel;
+        _itemService = itemService;
     }
 
     [RelayCommand]
     private async Task GoBack()
     {
-        await _database.SaveItemAsync(Item);
-        var cancellationTokenSource = new CancellationTokenSource();
-        var toast = Toast.Make("Updated: " + Item.Title);
+        await _itemService.SaveItemAsync(Item);
+
 #pragma warning disable CS4014
-        toast.Show(cancellationTokenSource.Token);
+        NotificationService.ShowToast("Updated: " + Item.Title);
 #pragma warning restore CS4014
+
         await Shell.Current.GoToAsync("..", true);
     }
 }

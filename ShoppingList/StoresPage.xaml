@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
+             x:Class="ShoppingList.StoresPage"
+             xmlns:viewmodel="clr-namespace:ShoppingList.ViewModel"
+             xmlns:models="clr-namespace:ShoppingList.Models"
+             x:DataType="viewmodel:StoresViewModel"
+             Title="Manage stores">
+    
+    <ContentPage.Content>
+        <VerticalStackLayout Padding="0, 10">
+            <Label Text="Configured stores" Style="{StaticResource Headline}" Padding="0, 10, 0,10" />
+            <BoxView HeightRequest="1" BackgroundColor="{StaticResource Gray100}" />
+            <CollectionView
+                ItemsSource="{Binding Stores}"
+                SelectionMode="None"
+                VerticalOptions="Fill"
+                BackgroundColor="White">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type models:ConfigurableStore}">
+                        <Grid RowDefinitions="Auto">
+                            <SwipeView android:SwipeView.SwipeTransitionMode="Reveal">
+                                <SwipeView.RightItems>
+                                    <SwipeItems SwipeBehaviorOnInvoked="Close">
+                                        <SwipeItemView
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoresViewModel}}, Path=RemoveStoreCommand}"
+                                            CommandParameter="{Binding .}"
+                                            HeightRequest="44">
+                                            <Frame BackgroundColor="{StaticResource Pink}"
+                                                   BorderColor="Transparent"
+                                                   Padding="0"
+                                                   VerticalOptions="Center"
+                                                   HeightRequest="100"
+                                                   WidthRequest="100">
+                                                <Image Source="bin_white.png"
+                                                       Aspect="AspectFit"
+                                                       WidthRequest="25"
+                                                       HeightRequest="25"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center" />
+                                            </Frame>
+                                        </SwipeItemView>
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                <Grid>
+                                    <VerticalStackLayout HeightRequest="45">
+                                        <Label Text="{Binding Name}"
+                                               HeightRequest="44"
+                                               VerticalOptions="Fill"
+                                               Background="{StaticResource White}"
+                                               VerticalTextAlignment="Center"
+                                               HorizontalTextAlignment="Center" />
+                                        <BoxView HeightRequest="1"
+                                                 BackgroundColor="{StaticResource Gray100}"
+                                                 HorizontalOptions="FillAndExpand" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </SwipeView>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <VerticalStackLayout Padding="50,20">
+                <Grid ColumnDefinitions="*, Auto" Margin="0, 20">
+                    <Entry Placeholder="Enter store name"
+                           Grid.Column="0"
+                           Text="{Binding NewStore.Name}"
+                           Margin="5"
+                           FontSize="16"
+                           Unfocused="OnEntryUnfocused" />
+                    <Button Text="Add Store"
+                            Grid.Column="1"
+                            x:Name="AddStoreButton"
+                            Style="{StaticResource StandardButton}"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoresViewModel}}, Path=AddStoreCommand}"
+                            CommandParameter="{Binding .}" />
+                </Grid>
+                <Button Text="Reset stores"
+                        Margin="0, 20"
+                        Style="{StaticResource StandardButton}"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoresViewModel}}, Path=ResetStoresCommand}"
+                        CommandParameter="{Binding .}" />
+
+                <Button Text="Back"
+                        Margin="0, 20"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoresViewModel}}, Path=GoBackCommand}"
+                        Style="{StaticResource StandardButton}" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -9,22 +9,49 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
-        var builder = MauiApp.CreateBuilder();
-        builder.UseMauiApp<App>().ConfigureFonts(fonts =>
-        {
-            fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-            fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-        }).UseMauiCommunityToolkit();
+        return MauiApp
+            .CreateBuilder()
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            })
+            .UseMauiCommunityToolkit()
+            .RegisterServices()
+            .RegisterViewModels()
+            .RegisterViews()
+            .Build();
+    }
+
+    private static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
+    {
         builder.Services.AddSingleton<IConnectivity>(Connectivity.Current);
-        builder.Services.AddSingleton<MainPage>();
-        builder.Services.AddSingleton<MainViewModel>();
-        builder.Services.AddTransient<DetailPage>();
-        builder.Services.AddTransient<DetailViewModel>();
-        builder.Services.AddSingleton<ItemDatabase>();
+        builder.Services.AddSingleton<StoreService>();
+        builder.Services.AddSingleton<ItemService>();
+        builder.Services.AddSingleton<DbProvider>();
         builder.Services.AddLogging();
+
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-        return builder.Build();
+
+        return builder;
+    }
+
+    private static MauiAppBuilder RegisterViewModels(this MauiAppBuilder builder)
+    {
+        builder.Services.AddSingleton<MainViewModel>();
+        builder.Services.AddSingleton<StoresViewModel>();
+        builder.Services.AddTransient<DetailViewModel>();
+        return builder;
+    }
+
+    private static MauiAppBuilder RegisterViews(this MauiAppBuilder builder)
+    {
+        builder.Services.AddSingleton<MainPage>();
+        builder.Services.AddSingleton<StoresPage>();
+        builder.Services.AddTransient<DetailPage>();
+        return builder;
     }
 }

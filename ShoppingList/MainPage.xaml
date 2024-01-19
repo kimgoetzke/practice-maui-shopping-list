@@ -16,19 +16,20 @@
             <converters:QuantityGreaterThanOneConverter x:Key="QuantityGreaterThanOneConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
+
     <ContentPage.Behaviors>
         <toolkit:StatusBarBehavior StatusBarColor="{StaticResource Primary}" StatusBarStyle="LightContent" />
     </ContentPage.Behaviors>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem
-            Text="Copy to Clipboard"
+            Text="Copy to clipboard"
             IconImageSource="copy_white.png"
             Order="Primary"
             Clicked="CopyOnClicked" />
 
         <ToolbarItem
-            Text="Copy to Clipboard"
+            Text="Open settings"
             IconImageSource="settings_icon_white.png"
             Order="Primary"
             Clicked="OnTapSettings" />
@@ -55,7 +56,7 @@
 
                 <Label Style="{StaticResource MenuHeader}"
                        Text="Settings"
-                       WidthRequest="200"
+                       Padding="0,0,20,0"
                        HorizontalOptions="End" />
 
                 <BoxView HeightRequest="1" BackgroundColor="{StaticResource OffWhite}"
@@ -65,8 +66,9 @@
                 <Button Style="{StaticResource MenuButton}"
                         Text="Manage stores"
                         HorizontalOptions="End"
-                        Clicked="NotImplementedOnClicked"
-                        x:Name="AddStoreButton" />
+                        x:Name="ManageStoresButton"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=ManageStoresCommand}"
+                        CommandParameter="{Binding .}" />
 
                 <Button Style="{StaticResource MenuButton}"
                         Text="Clear list"
@@ -113,7 +115,7 @@
                       RowSpacing="0">
                     <Label Text="From" Grid.Row="0" FontSize="10" HorizontalTextAlignment="Start" Padding="3, 0 " />
                     <Picker Title="From"
-                            SelectedItem="{Binding NewItem.From}"
+                            SelectedItem="{Binding NewItem.ConfigurableStore}"
                             ItemsSource="{Binding StoreOptions}"
                             Grid.Row="1"
                             Grid.Column="0" />
@@ -272,7 +274,6 @@
                                                     </Label.Triggers>
                                                 </Label>
                                             </Grid>
-
                                         </Frame>
                                     </Grid>
                                 </SwipeView>

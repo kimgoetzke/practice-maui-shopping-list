@@ -1,29 +1,37 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
-using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ShoppingList.Data;
 using ShoppingList.Models;
+using ShoppingList.Services;
 
 namespace ShoppingList.ViewModel;
 
 public partial class MainViewModel : ObservableObject
 {
+    public DbProvider Database { get; }
     [ObservableProperty] private ObservableCollection<Item> _items;
     [ObservableProperty] private ObservableCollection<ConfigurableStore> _stores;
     [ObservableProperty] private Item _newItem;
     private readonly IConnectivity _connectivity;
-    private readonly ItemDatabase _database;
+    private readonly StoresViewModel _storesViewModel;
+    private readonly StoreService _storeService;
+    private readonly ItemService _itemService;
 
-    public List<Store> StoreOptions { get; } = Enum.GetValues(typeof(Store)).Cast<Store>().ToList();
+    public ObservableCollection<ConfigurableStore> StoreOptions => _storesViewModel.Stores;
 
-    public MainViewModel(IConnectivity connectivity, ItemDatabase database)
+    public MainViewModel(IConnectivity connectivity, DbProvider database, StoreService storeService,
+        ItemService itemService, StoresViewModel storesViewModel)
     {
-        NewItem = new Item { From = Store.Anywhere };
         Items = [];
-        _database = database;
+        Stores = [];
+        Database = database;
         _connectivity = connectivity;
+        _storeService = storeService;
+        _itemService = itemService;
+        _storesViewModel = storesViewModel;
+        NewItem = new Item { From = Store.Anywhere };
     }
 
     // Items
@@ -45,52 +53,52 @@ public partial class MainViewModel : ObservableObject
         var textInfo = new CultureInfo("en-US", false).TextInfo;
         NewItem.Title = textInfo.ToTitleCase(NewItem.Title.ToLower());
 
-        // Prepare toast
-        var cancellationTokenSource = new CancellationTokenSource();
-        var toast = Toast.Make("Added: " + NewItem.Title);
-        
         // Add to list and database
         Items.Add(NewItem);
-        await _database.SaveItemAsync(NewItem);
+        await _itemService.SaveItemAsync(NewItem);
 
         // Make sure the UI is reset/updated
         NewItem = new Item();
         SortItems();
         OnPropertyChanged(nameof(NewItem));
 
-        // Show toast
-        await toast.Show(cancellationTokenSource.Token);
+        // Show toast on success
+        await NotificationService.ShowToast("Added: " + NewItem.Title);
     }
 
     [RelayCommand]
     private async Task RemoveItem(Item i)
     {
         Items.Remove(i);
-        await _database.DeleteItemAsync(i);
+        await _itemService.DeleteItemAsync(i);
     }
-    
+
     [RelayCommand]
     private async Task RemoveAllItems()
     {
         Items.Clear();
-        await _database.DeleteAllItemsAsync();
-        var cancellationTokenSource = new CancellationTokenSource();
-        var toast = Toast.Make("Removed all items from list");
-        toast.Show(cancellationTokenSource.Token);
+        await _itemService.DeleteAllItemsAsync();
+        NotificationService.ShowToast("Removed all items from list");
     }
 
     [RelayCommand]
     private async Task TogglePriority(Item i)
     {
         i.IsImportant = !i.IsImportant;
-        await _database.SaveItemAsync(i);
+        await _itemService.SaveItemAsync(i);
         SortItems();
     }
 
     [RelayCommand]
     private async Task TapItem(Item i)
     {
-        await Shell.Current.Navigation.PushAsync(new DetailPage(i, _database));
+        await Shell.Current.GoToAsync(nameof(DetailPage), true);
+    }
+    
+    [RelayCommand]
+    private async Task ManageStores()
+    {
+        await Shell.Current.GoToAsync(nameof(StoresPage), true);
     }
 
     [RelayCommand]
@@ -100,6 +108,7 @@ public partial class MainViewModel : ObservableObject
         var clipboardText = string.Join("," + Environment.NewLine, itemTitles);
         Clipboard.SetTextAsync(clipboardText);
         LogHandler.Log("Copied to clipboard: " + clipboardText.Replace(Environment.NewLine, ""));
+        NotificationService.ShowToast("Copied list to clipboard");
     }
 
     public void SortItems()
@@ -111,9 +120,17 @@ public partial class MainViewModel : ObservableObject
 
     public async Task LoadItemsFromDatabase()
     {
-        var loadedItems = await _database.GetItemsAsync();
+        var loadedItems = await _itemService.GetItemsAsync();
         Items.Clear();
         foreach (var i in loadedItems)
             Items.Add(i);
+    }
+
+    public async Task LoadStoresFromDatabase()
+    {
+        var loadedStores = await _storeService.GetStoresAsync();
+        Stores.Clear();
+        foreach (var s in loadedStores)
+            Stores.Add(s);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using ShoppingList.Models;
 using ShoppingList.ViewModel;
-using CommunityToolkit.Maui.Alerts;
 
 namespace ShoppingList;
 
@@ -18,9 +17,12 @@ public partial class MainPage
     protected override async void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
-        var vm = (MainViewModel)BindingContext;
-        await vm.LoadItemsFromDatabase();
-        vm.SortItems();
+        var mvm = (MainViewModel)BindingContext;
+        var loadItems = mvm.LoadItemsFromDatabase();
+        var loadStores = mvm.LoadStoresFromDatabase();
+        await Task.WhenAll(loadItems, loadStores);
+        mvm.SortItems();
+        
     }
 
     protected override void OnAppearing()
@@ -36,19 +38,14 @@ public partial class MainPage
 
     private void CopyOnClicked(object? sender, EventArgs e)
     {
-        var vm = (MainViewModel)BindingContext;
-        vm.CopyToClipboard();
-
-        var cancellationTokenSource = new CancellationTokenSource();
-        var toast = Toast.Make("Copied list to clipboard");
-        toast.Show(cancellationTokenSource.Token);
+        ((MainViewModel)BindingContext).CopyToClipboard();
     }
     
-    private void NotImplementedOnClicked(object? sender, EventArgs e)
+    private void OnTapManageStores(object? sender, EventArgs e)
     {
-        var cancellationTokenSource = new CancellationTokenSource();
-        var toast = Toast.Make("Not implemented yet");
-        toast.Show(cancellationTokenSource.Token);
+        var db = ((MainViewModel)BindingContext).Database;
+        // Navigation.PushModalAsync(typeof(StoresPage));
+        Shell.Current.GoToAsync(nameof(StoresPage)); 
     }
 
     private async void OnTapSettings(object sender, EventArgs e)
