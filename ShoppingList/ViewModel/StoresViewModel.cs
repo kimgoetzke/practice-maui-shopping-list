@@ -35,7 +35,7 @@ public partial class StoresViewModel : ObservableObject
         // Only allow unique store names
         if (Stores.Any(store => store.Name == NewStore.Name))
         {
-            await ShowToast("Cannot add: " + NewStore.Name + " - it already exists");
+            await ShowToast("Cannot add '" + NewStore.Name + "' - it already exists");
             return;
         }
 
@@ -44,7 +44,7 @@ public partial class StoresViewModel : ObservableObject
         NewStore.Name = textInfo.ToTitleCase(NewStore.Name.ToLower());
         var isKeyboardHidden = view.HideKeyboardAsync(CancellationToken.None);
         Logger.Log("Keyboard hidden: " + isKeyboardHidden);
-        
+
         // Add to list and database
         Stores.Add(NewStore);
         await _storeService.SaveStoreAsync(NewStore);
