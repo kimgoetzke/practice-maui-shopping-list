@@ -10,7 +10,7 @@ namespace ShoppingList.ViewModel;
 
 public partial class MainViewModel : ObservableObject
 {
-    [ObservableProperty] private ObservableCollection<Item> _items;
+    [ObservableProperty] private ObservableCollection<Item> _items = [];
     [ObservableProperty] private ObservableCollection<ConfigurableStore> _stores = [];
     [ObservableProperty] private Item _newItem;
     [ObservableProperty] private ConfigurableStore? _currentStore;
@@ -21,7 +21,6 @@ public partial class MainViewModel : ObservableObject
     {
         _storeService = storeService;
         _itemService = itemService;
-        Items = [];
         NewItem = new Item();
     }
 

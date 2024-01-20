@@ -3,6 +3,7 @@ using System.Globalization;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Maui.Core.Platform;
 using ShoppingList.Models;
 using ShoppingList.Services;
 
@@ -25,7 +26,7 @@ public partial class StoresViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task AddStore()
+    private async Task AddStore(ITextInput view)
     {
         // Don't add empty items
         if (string.IsNullOrWhiteSpace(NewStore.Name))
@@ -41,7 +42,9 @@ public partial class StoresViewModel : ObservableObject
         // Capitalise first letter of each word
         var textInfo = new CultureInfo("en-US", false).TextInfo;
         NewStore.Name = textInfo.ToTitleCase(NewStore.Name.ToLower());
-
+        var isKeyboardHidden = view.HideKeyboardAsync(CancellationToken.None);
+        Logger.Log("Keyboard hidden: " + isKeyboardHidden);
+        
         // Add to list and database
         Stores.Add(NewStore);
         await _storeService.SaveStoreAsync(NewStore);

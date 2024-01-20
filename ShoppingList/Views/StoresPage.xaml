@@ -8,7 +8,7 @@
              xmlns:models="clr-namespace:ShoppingList.Models"
              x:DataType="viewmodel:StoresViewModel"
              Title="Manage stores">
-    
+
     <ContentPage.Content>
         <VerticalStackLayout Padding="0, 10">
             <Label Text="Configured stores" Style="{StaticResource Headline}" Padding="0, 10, 0,10" />
@@ -69,13 +69,14 @@
                            Text="{Binding NewStore.Name}"
                            Margin="5"
                            FontSize="16"
+                           x:Name="StoreNameEntry"
                            Unfocused="OnEntryUnfocused" />
                     <Button Text="Add Store"
                             Grid.Column="1"
                             x:Name="AddStoreButton"
                             Style="{StaticResource StandardButton}"
                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoresViewModel}}, Path=AddStoreCommand}"
-                            CommandParameter="{Binding .}" />
+                            CommandParameter="{Binding Source={x:Reference StoreNameEntry}}" />
                 </Grid>
                 <Button Text="Reset stores"
                         Margin="0, 20"
