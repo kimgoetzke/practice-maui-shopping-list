@@ -39,7 +39,7 @@ public partial class MainViewModel : ObservableObject
         // Add to list and database
         Items.Add(NewItem);
         await _itemService.SaveItemAsync(NewItem);
-        NotificationService.ShowToast($"Added: {NewItem.Title}");
+        Notifier.ShowToast($"Added: {NewItem.Title}");
 
         // Make sure the UI is reset/updated
         NewItem = new Item();
@@ -59,7 +59,7 @@ public partial class MainViewModel : ObservableObject
     {
         Items.Clear();
         await _itemService.DeleteAllItemsAsync();
-        NotificationService.ShowToast("Removed all items from list");
+        Notifier.ShowToast("Removed all items from list");
     }
 
     [RelayCommand]
@@ -89,7 +89,7 @@ public partial class MainViewModel : ObservableObject
         var clipboardText = string.Join("," + Environment.NewLine, itemTitles);
         Clipboard.SetTextAsync(clipboardText);
         Logger.Log("Copied to clipboard: " + clipboardText.Replace(Environment.NewLine, ""));
-        NotificationService.ShowToast("Copied list to clipboard");
+        Notifier.ShowToast("Copied list to clipboard");
     }
 
     public void SortItems()

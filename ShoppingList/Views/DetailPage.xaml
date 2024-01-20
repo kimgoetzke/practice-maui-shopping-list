@@ -17,7 +17,7 @@
         <Grid Margin="5"
               RowDefinitions="1*"
               ColumnDefinitions=".5*, .5*">
-            <VerticalStackLayout Grid.Column="0" Padding="10">
+            <VerticalStackLayout Grid.Column="0" Padding="5">
                 <Label Text="Priority" Style="{StaticResource StandardValueLabel}" />
                 <Label Text="{Binding Item.IsImportant}" Style="{StaticResource StandardValue}" />
             </VerticalStackLayout>
@@ -30,7 +30,7 @@
         <Grid Margin="5"
               RowDefinitions="1*"
               ColumnDefinitions=".5*, .5*">
-            <VerticalStackLayout Grid.Column="0" Padding="10" VerticalOptions="Center">
+            <VerticalStackLayout Grid.Column="0" Padding="5" VerticalOptions="Center">
                 <Label Text="Quantity" Style="{StaticResource StandardValueLabel}" />
                 <Label Text="{Binding Item.Quantity}" Style="{StaticResource StandardValue}" />
             </VerticalStackLayout>
@@ -45,19 +45,19 @@
 
         <Grid Margin="5"
               RowDefinitions="1*">
-            <VerticalStackLayout Padding="10">
+            <VerticalStackLayout Padding="5">
                 <Label Text="From" Style="{StaticResource StandardValueLabel}" />
                 <Picker Title="Change store"
                         SelectedItem="{Binding CurrentStore, Mode=TwoWay}"
                         ItemsSource="{Binding Stores}"
                         TextColor="{StaticResource OffBlack}"
-                        TitleColor="{StaticResource Primary}"
-                        WidthRequest="280"
+                        TitleColor="{StaticResource OffBlack}"
+                        WidthRequest="290"
                         HorizontalOptions="Start" />
             </VerticalStackLayout>
         </Grid>
 
-        <VerticalStackLayout Padding="10, 10, 10, 40" Margin="5" VerticalOptions="Center">
+        <VerticalStackLayout Padding="5, 5, 5, 40" Margin="5" VerticalOptions="Center">
             <Label Text="Added on" Style="{StaticResource StandardValueLabel}" />
             <Label Text="{Binding Item.AddedOn}" Style="{StaticResource StandardValue}" />
         </VerticalStackLayout>

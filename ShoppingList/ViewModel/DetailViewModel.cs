@@ -32,7 +32,7 @@ public partial class DetailViewModel : ObservableObject
         await _itemService.SaveItemAsync(Item);
 
 #pragma warning disable CS4014
-        NotificationService.AwaitShowToast($"Updated: {Item.Title}");
+        Notifier.AwaitShowToast($"Updated: {Item.Title}");
 #pragma warning restore CS4014
         
         await Shell.Current.GoToAsync("..", true);

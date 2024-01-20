@@ -142,7 +142,7 @@
             </Grid>
 
             <!-- Horizontal line below that -->
-            <BoxView Grid.Row="2" HeightRequest="2" BackgroundColor="{StaticResource Primary}"
+            <BoxView Grid.Row="2" HeightRequest="3" BackgroundColor="{StaticResource Primary}"
                      HorizontalOptions="FillAndExpand" />
 
             <!-- List of added items -->

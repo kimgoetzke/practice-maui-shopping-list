@@ -42,8 +42,28 @@
     <Style TargetType="Button" x:Key="MenuButton" BasedOn="{StaticResource StandardButton}">
         <Setter Property="BorderColor" Value="{StaticResource OffWhite}" />
         <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="FontSize" Value="12" />
         <Setter Property="WidthRequest" Value="140" />
         <Setter Property="Shadow" Value="True" />
+    </Style>
+    
+    <Style TargetType="Span" x:Key="Highlight">
+        <Setter Property="TextColor" Value="{StaticResource Pink}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextTransform" Value="Uppercase" />
+    </Style>
+    
+    <Style TargetType="Span" x:Key="StandardSpan">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource OffBlack}, Dark={StaticResource OffWhite}}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+    </Style>
+    
+    <Style TargetType="Label" x:Key="Standard">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource OffBlack}, Dark={StaticResource OffWhite}}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
     </Style>
     
     <!-- Default styles -->
@@ -223,7 +243,7 @@
     </Style>
 
     <Style TargetType="Span">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource OffBlack}, Dark={StaticResource OffWhite}}" />
     </Style>
 
     <Style TargetType="Label" x:Key="Headline">
@@ -234,7 +254,7 @@
     </Style>
 
     <Style TargetType="Label" x:Key="SubHeadline">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Pink}, Dark={StaticResource White}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PinkLight}, Dark={StaticResource White}}" />
         <Setter Property="FontSize" Value="24" />
         <Setter Property="HorizontalOptions" Value="Center" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />

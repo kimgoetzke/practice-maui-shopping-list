@@ -1,4 +1,5 @@
-﻿using ShoppingList.Services;
+﻿using CommunityToolkit.Maui.Views;
+using ShoppingList.Services;
 using ShoppingList.ViewModel;
 
 namespace ShoppingList.Views;
@@ -23,6 +24,17 @@ public partial class MainPage
         var loadStores = _viewModel.LoadStoresFromService();
         await Task.WhenAll(loadItems, loadStores);
         _viewModel.SortItems();
+        DisplayPopUpOnFirstRun();
+    }
+
+    private void DisplayPopUpOnFirstRun()
+    {
+        if (Settings.FirstRun)
+        {
+            Logger.Log("Application ran for the first time");
+            Settings.FirstRun = false;
+            this.ShowPopup(new SimplePopup());
+        }
     }
 
     private void OnEntryUnfocused(object sender, FocusEventArgs e)
