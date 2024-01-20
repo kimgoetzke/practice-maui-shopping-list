@@ -49,14 +49,14 @@
         <Grid Margin="5"
               RowDefinitions="1*"
               ColumnDefinitions=".5*, .5*">
-            <Label Text="{Binding Item.ConfigurableStore, StringFormat='From: {0}'}"
+            <Label Text="From:"
                    Grid.Column="0"
                    FontSize="14"
                    VerticalTextAlignment="Center"
                    HorizontalTextAlignment="Start"
                    Padding="10" />
             <Picker Title="Change store"
-                    SelectedItem="{Binding Item.ConfigurableStore, Mode=TwoWay}"
+                    SelectedItem="{Binding CurrentStore, Mode=TwoWay}"
                     ItemsSource="{Binding Stores}"
                     Grid.Column="1"
                     HorizontalOptions="Center" />

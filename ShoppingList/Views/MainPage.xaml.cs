@@ -1,35 +1,28 @@
-﻿using ShoppingList.Models;
-using ShoppingList.Services;
+﻿using ShoppingList.Services;
 using ShoppingList.ViewModel;
 
-namespace ShoppingList;
+namespace ShoppingList.Views;
 
 public partial class MainPage
 {
     private const uint AnimationDuration = 400u;
     private bool _isMenuOpen;
+    private readonly MainViewModel _viewModel;
 
     public MainPage(MainViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;
+        _viewModel = viewModel;
     }
 
-    protected override async void OnNavigatedTo(NavigatedToEventArgs args)
-    {
-        base.OnNavigatedTo(args);
-        var mvm = (MainViewModel)BindingContext;
-        var loadItems = mvm.LoadItemsFromDatabase();
-        var loadStores = mvm.LoadStoresFromService();
-        await Task.WhenAll(loadItems, loadStores);
-        mvm.SortItems();
-        
-    }
-
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        ((MainViewModel)BindingContext).NewItem = new Item { From = Store.Anywhere };
+        var loadItems = _viewModel.LoadItemsFromDatabase();
+        var loadStores = _viewModel.LoadStoresFromService();
+        await Task.WhenAll(loadItems, loadStores);
+        _viewModel.SortItems();
     }
 
     private void OnEntryUnfocused(object sender, FocusEventArgs e)
@@ -40,12 +33,6 @@ public partial class MainPage
     private void CopyOnClicked(object? sender, EventArgs e)
     {
         ((MainViewModel)BindingContext).CopyToClipboard();
-    }
-    
-    private void OnTapManageStores(object? sender, EventArgs e)
-    {
-        // Navigation.PushModalAsync(typeof(StoresPage));
-        Shell.Current.GoToAsync(nameof(StoresPage)); 
     }
 
     private async void OnTapSettings(object sender, EventArgs e)

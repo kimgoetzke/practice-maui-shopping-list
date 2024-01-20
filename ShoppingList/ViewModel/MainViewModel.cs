@@ -13,22 +13,16 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<Item> _items;
     [ObservableProperty] private ObservableCollection<ConfigurableStore> _stores = [];
     [ObservableProperty] private Item _newItem;
+    [ObservableProperty] private ConfigurableStore? _currentStore;
     private readonly StoreService _storeService;
     private readonly ItemService _itemService;
 
     public MainViewModel(StoreService storeService, ItemService itemService)
     {
-        Items = [];
         _storeService = storeService;
         _itemService = itemService;
-        NewItem = new Item { From = Store.Anywhere };
-        PopulateDefaultStore();
-    }
-
-    private async void PopulateDefaultStore()
-    {
-        var defaultStore = await _storeService.DefaultStore();
-        NewItem.ConfigurableStore = defaultStore;
+        Items = [];
+        NewItem = new Item();
     }
 
     [RelayCommand]
@@ -41,6 +35,7 @@ public partial class MainViewModel : ObservableObject
         // Capitalise first letter of each word
         var textInfo = new CultureInfo("en-US", false).TextInfo;
         NewItem.Title = textInfo.ToTitleCase(NewItem.Title.ToLower());
+        NewItem.StoreName = CurrentStore!.Name;
 
         // Add to list and database
         Items.Add(NewItem);
@@ -80,10 +75,6 @@ public partial class MainViewModel : ObservableObject
     private async Task TapItem(Item i)
     {
         await Shell.Current.Navigation.PushAsync(new DetailPage(i));
-        // await Shell.Current.GoToAsync(nameof(DetailPage), true, new Dictionary<string, object>
-        // {
-        //     ["Item"] = i
-        // });
     }
 
     [RelayCommand]
@@ -105,7 +96,7 @@ public partial class MainViewModel : ObservableObject
     public void SortItems()
     {
         Items = new ObservableCollection<Item>(Items
-            .OrderByDescending(i => i.From.ToString())
+            .OrderBy(i => i.StoreName)
             .ThenByDescending(i => i.AddedOn));
     }
 
@@ -122,6 +113,12 @@ public partial class MainViewModel : ObservableObject
         var loadedStores = await _storeService.GetStoresAsync();
         Stores.Clear();
         foreach (var s in loadedStores)
+        {
             Stores.Add(s);
+            if (s.Name == StoreService.DefaultStoreName)
+            {
+                CurrentStore = s;
+            }
+        }
     }
 }

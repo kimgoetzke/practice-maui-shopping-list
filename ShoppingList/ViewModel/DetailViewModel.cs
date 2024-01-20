@@ -11,6 +11,7 @@ public partial class DetailViewModel : ObservableObject
 {
     [ObservableProperty] private ObservableCollection<ConfigurableStore> _stores = [];
     [ObservableProperty] private Item _item;
+    [ObservableProperty] private ConfigurableStore _currentStore;
 
     private readonly ItemService _itemService;
     private readonly StoreService _storeService;
@@ -18,6 +19,7 @@ public partial class DetailViewModel : ObservableObject
     public DetailViewModel(Item item, StoreService storeService, ItemService itemService)
     {
         Item = item;
+        CurrentStore = new ConfigurableStore();
         _storeService = storeService;
         _itemService = itemService;
         SetStoreOptions();
@@ -26,6 +28,7 @@ public partial class DetailViewModel : ObservableObject
     [RelayCommand]
     private async Task GoBack()
     {
+        Item.StoreName = CurrentStore.Name;
         await _itemService.SaveItemAsync(Item);
 
 #pragma warning disable CS4014
@@ -40,6 +43,12 @@ public partial class DetailViewModel : ObservableObject
         var loadedStores = await _storeService.GetStoresAsync();
         Stores.Clear();
         foreach (var s in loadedStores)
+        {
             Stores.Add(s);
+            if (s.Name == Item.StoreName)
+            {
+                CurrentStore = s;
+            }
+        }
     }
 }

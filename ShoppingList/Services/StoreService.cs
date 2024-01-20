@@ -53,13 +53,11 @@ public class StoreService(DbProvider dbProvider)
 
     private async Task SetStoresToDefaultOnMatchingItems(string storeName)
     {
-        var defaultStore = await DefaultStore();
         var connection = await dbProvider.GetConnection();
         var items = await connection.Table<Item>().ToListAsync();
-        foreach (var item in items.Where(item => item.ConfigurableStore?.Name == storeName))
+        foreach (var item in items.Where(item => item.StoreName == storeName))
         {
-            item.From = Store.Anywhere;
-            item.ConfigurableStore = defaultStore;
+            item.StoreName = DefaultStoreName;
             await connection.UpdateAsync(item);
         }
     }
@@ -74,12 +72,10 @@ public class StoreService(DbProvider dbProvider)
 
     private async Task SetStoresToDefaultOnAllItems(SQLiteAsyncConnection connection)
     {
-        var defaultStore = await DefaultStore();
         var items = await connection.Table<Item>().ToListAsync();
-        foreach (var item in items.Where(item => item.ConfigurableStore?.Name != DefaultStoreName))
+        foreach (var item in items.Where(item => item.StoreName != DefaultStoreName))
         {
-            item.From = Store.Anywhere;
-            item.ConfigurableStore = defaultStore;
+            item.StoreName = DefaultStoreName;
             await connection.UpdateAsync(item);
         }
     }

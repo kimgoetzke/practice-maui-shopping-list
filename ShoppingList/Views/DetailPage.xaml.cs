@@ -18,7 +18,6 @@ public partial class DetailPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        ((DetailViewModel)BindingContext).Item.From = ((DetailViewModel)BindingContext).Item.From;
         Logger.Log($"{((DetailViewModel)BindingContext).Item.ToLoggableString()}");
     }
 }

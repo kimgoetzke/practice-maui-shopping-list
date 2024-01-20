@@ -1,6 +1,6 @@
 using ShoppingList.ViewModel;
 
-namespace ShoppingList;
+namespace ShoppingList.Views;
 
 public partial class StoresPage
 {
