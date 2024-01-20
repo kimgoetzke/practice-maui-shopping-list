@@ -1,4 +1,6 @@
-﻿namespace ShoppingList;
+﻿using ShoppingList.Views;
+
+namespace ShoppingList;
 
 public partial class AppShell : Shell
 {

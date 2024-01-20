@@ -3,8 +3,9 @@ using System.Globalization;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ShoppingList.Data;
 using ShoppingList.Models;
+using ShoppingList.Services;
+
 #pragma warning disable CS4014
 
 namespace ShoppingList.ViewModel;
@@ -13,19 +14,16 @@ public partial class StoresViewModel : ObservableObject
 {
     [ObservableProperty] private ObservableCollection<ConfigurableStore> _stores;
     [ObservableProperty] private ConfigurableStore _newStore;
-    private readonly DbProvider _database;
     private readonly StoreService _storeService;
-    
 
-    public StoresViewModel(DbProvider database, StoreService storeService)
+
+    public StoresViewModel(StoreService storeService)
     {
         _newStore = new ConfigurableStore();
         Stores = [];
-        _database = database;
         _storeService = storeService;
     }
 
-    // Items
     [RelayCommand]
     private async Task AddStore()
     {
@@ -57,9 +55,9 @@ public partial class StoresViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task RemoveStore(ConfigurableStore s)
+    private async Task RemoveStore(ConfigurableStore s)
     {
-        if (s.Name == DbProvider.DefaultStoreName)
+        if (s.Name == StoreService.DefaultStoreName)
         {
             ShowToast("Cannot remove default store");
             return;

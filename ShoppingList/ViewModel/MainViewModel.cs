@@ -2,52 +2,41 @@
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ShoppingList.Data;
 using ShoppingList.Models;
 using ShoppingList.Services;
+using ShoppingList.Views;
 
 namespace ShoppingList.ViewModel;
 
 public partial class MainViewModel : ObservableObject
 {
-    public DbProvider Database { get; }
     [ObservableProperty] private ObservableCollection<Item> _items;
-    [ObservableProperty] private ObservableCollection<ConfigurableStore> _stores;
+    [ObservableProperty] private ObservableCollection<ConfigurableStore> _stores = [];
     [ObservableProperty] private Item _newItem;
-    private readonly IConnectivity _connectivity;
-    private readonly StoresViewModel _storesViewModel;
     private readonly StoreService _storeService;
     private readonly ItemService _itemService;
 
-    public ObservableCollection<ConfigurableStore> StoreOptions => _storesViewModel.Stores;
-
-    public MainViewModel(IConnectivity connectivity, DbProvider database, StoreService storeService,
-        ItemService itemService, StoresViewModel storesViewModel)
+    public MainViewModel(StoreService storeService, ItemService itemService)
     {
         Items = [];
-        Stores = [];
-        Database = database;
-        _connectivity = connectivity;
         _storeService = storeService;
         _itemService = itemService;
-        _storesViewModel = storesViewModel;
         NewItem = new Item { From = Store.Anywhere };
+        PopulateDefaultStore();
     }
 
-    // Items
+    private async void PopulateDefaultStore()
+    {
+        var defaultStore = await _storeService.DefaultStore();
+        NewItem.ConfigurableStore = defaultStore;
+    }
+
     [RelayCommand]
     private async Task AddItem()
     {
         // Don't add empty items
         if (string.IsNullOrWhiteSpace(NewItem.Title))
             return;
-
-        // Don't add items if there's no internet
-        if (_connectivity.NetworkAccess != NetworkAccess.Internet)
-        {
-            await Shell.Current.DisplayAlert("Uh Oh!", "No Internet", "OK");
-            return;
-        }
 
         // Capitalise first letter of each word
         var textInfo = new CultureInfo("en-US", false).TextInfo;
@@ -56,14 +45,12 @@ public partial class MainViewModel : ObservableObject
         // Add to list and database
         Items.Add(NewItem);
         await _itemService.SaveItemAsync(NewItem);
+        NotificationService.ShowToast($"Added: {NewItem.Title}");
 
         // Make sure the UI is reset/updated
         NewItem = new Item();
         SortItems();
         OnPropertyChanged(nameof(NewItem));
-
-        // Show toast on success
-        await NotificationService.ShowToast("Added: " + NewItem.Title);
     }
 
     [RelayCommand]
@@ -92,9 +79,13 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task TapItem(Item i)
     {
-        await Shell.Current.GoToAsync(nameof(DetailPage), true);
+        await Shell.Current.Navigation.PushAsync(new DetailPage(i));
+        // await Shell.Current.GoToAsync(nameof(DetailPage), true, new Dictionary<string, object>
+        // {
+        //     ["Item"] = i
+        // });
     }
-    
+
     [RelayCommand]
     private async Task ManageStores()
     {
@@ -107,7 +98,7 @@ public partial class MainViewModel : ObservableObject
         var itemTitles = Items.Select(item => item.Title.Trim());
         var clipboardText = string.Join("," + Environment.NewLine, itemTitles);
         Clipboard.SetTextAsync(clipboardText);
-        LogHandler.Log("Copied to clipboard: " + clipboardText.Replace(Environment.NewLine, ""));
+        Logger.Log("Copied to clipboard: " + clipboardText.Replace(Environment.NewLine, ""));
         NotificationService.ShowToast("Copied list to clipboard");
     }
 
@@ -126,7 +117,7 @@ public partial class MainViewModel : ObservableObject
             Items.Add(i);
     }
 
-    public async Task LoadStoresFromDatabase()
+    public async Task LoadStoresFromService()
     {
         var loadedStores = await _storeService.GetStoresAsync();
         Stores.Clear();

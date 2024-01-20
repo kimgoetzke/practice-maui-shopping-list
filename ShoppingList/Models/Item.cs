@@ -17,8 +17,31 @@ public partial class Item : ObservableObject
     [ObservableProperty] private Store from = Store.Anywhere;
 
     [ObservableProperty] private DateTime addedOn = DateTime.Now;
-    
+
+    public Item()
+    {
+        // Figure out how to keep parameterless constructor for SQLite
+        // while enforcing that a ConfigurableStore is always set
+    }
+
+    public Item(ConfigurableStore store)
+    {
+        ConfigurableStore = store;
+    }
+
     [ForeignKey(typeof(ConfigurableStore))]
     [ManyToOne("Id")]
-    public ConfigurableStore ConfigurableStore { get; set; }
+    public ConfigurableStore? ConfigurableStore { get; set; }
+
+    public override string ToString()
+    {
+        return Title;
+    }
+    
+    public string ToLoggableString()
+    {
+        return ConfigurableStore == null
+            ? $"Item.ToString() = {Title} #{Id} (from: null, quantity: {Quantity}, important: {IsImportant})"
+            : $"Item.ToString() = {Title} #{Id} (from {ConfigurableStore.Name} #{ConfigurableStore.Id}, quantity: {Quantity}, important: {IsImportant})";
+    }
 }

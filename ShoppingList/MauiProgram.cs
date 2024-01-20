@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using ShoppingList.Data;
 using ShoppingList.ViewModel;
 using CommunityToolkit.Maui;
+using ShoppingList.Services;
+using ShoppingList.Views;
 
 namespace ShoppingList;
 
@@ -26,10 +27,9 @@ public static class MauiProgram
 
     private static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
     {
-        builder.Services.AddSingleton<IConnectivity>(Connectivity.Current);
+        builder.Services.AddSingleton<DbProvider>();
         builder.Services.AddSingleton<StoreService>();
         builder.Services.AddSingleton<ItemService>();
-        builder.Services.AddSingleton<DbProvider>();
         builder.Services.AddLogging();
 
 #if DEBUG

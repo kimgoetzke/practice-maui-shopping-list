@@ -1,6 +1,6 @@
-namespace ShoppingList;
+namespace ShoppingList.Services;
 
-public static class LogHandler
+public static class Logger
 {
     public static void Log(string message)
     {

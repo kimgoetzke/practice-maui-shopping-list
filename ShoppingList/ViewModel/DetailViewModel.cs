@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ShoppingList.Data;
 using ShoppingList.Models;
 using ShoppingList.Services;
 
@@ -10,16 +9,18 @@ namespace ShoppingList.ViewModel;
 [QueryProperty("Item", "Item")]
 public partial class DetailViewModel : ObservableObject
 {
-    public ObservableCollection<ConfigurableStore> StoreOptions => _storesViewModel.Stores;
+    [ObservableProperty] private ObservableCollection<ConfigurableStore> _stores = [];
     [ObservableProperty] private Item _item;
-    private readonly ItemService _itemService;
-    private readonly StoresViewModel _storesViewModel;
 
-    public DetailViewModel(Item item, StoresViewModel storesViewModel, ItemService itemService)
+    private readonly ItemService _itemService;
+    private readonly StoreService _storeService;
+
+    public DetailViewModel(Item item, StoreService storeService, ItemService itemService)
     {
         Item = item;
-        _storesViewModel = storesViewModel;
+        _storeService = storeService;
         _itemService = itemService;
+        SetStoreOptions();
     }
 
     [RelayCommand]
@@ -28,9 +29,17 @@ public partial class DetailViewModel : ObservableObject
         await _itemService.SaveItemAsync(Item);
 
 #pragma warning disable CS4014
-        NotificationService.ShowToast("Updated: " + Item.Title);
+        NotificationService.AwaitShowToast($"Updated: {Item.Title}");
 #pragma warning restore CS4014
-
+        
         await Shell.Current.GoToAsync("..", true);
+    }
+
+    private async void SetStoreOptions()
+    {
+        var loadedStores = await _storeService.GetStoresAsync();
+        Stores.Clear();
+        foreach (var s in loadedStores)
+            Stores.Add(s);
     }
 }

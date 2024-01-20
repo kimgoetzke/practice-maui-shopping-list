@@ -115,8 +115,8 @@
                       RowSpacing="0">
                     <Label Text="From" Grid.Row="0" FontSize="10" HorizontalTextAlignment="Start" Padding="3, 0 " />
                     <Picker Title="From"
-                            SelectedItem="{Binding NewItem.ConfigurableStore}"
-                            ItemsSource="{Binding StoreOptions}"
+                            SelectedItem="{Binding NewItem.ConfigurableStore.Name}"
+                            ItemsSource="{Binding Stores}"
                             Grid.Row="1"
                             Grid.Column="0" />
                 </Grid>

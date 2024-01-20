@@ -1,6 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using SQLite;
-using SQLiteNetExtensions.Attributes;
 
 namespace ShoppingList.Models;
 
@@ -10,12 +9,13 @@ public partial class ConfigurableStore : ObservableObject
 
     [ObservableProperty] private string _name = string.Empty;
 
-    [OneToMany(CascadeOperations = CascadeOperation.All)]
-    public List<Item> Items { get; set; } = [];
-    
     public override string ToString()
     {
-        // Replace with the string you want to display in the Picker
         return Name;
+    }
+
+    public string ToLoggableString()
+    {
+        return $"{Name} #{Id}";
     }
 }
