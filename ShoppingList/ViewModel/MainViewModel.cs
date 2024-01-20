@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ShoppingList.Models;
@@ -90,6 +91,48 @@ public partial class MainViewModel : ObservableObject
         Clipboard.SetTextAsync(clipboardText);
         Logger.Log("Copied to clipboard: " + clipboardText.Replace(Environment.NewLine, ""));
         Notifier.ShowToast("Copied list to clipboard");
+    }
+
+    [RelayCommand]
+    internal async Task InsertFromClipboard()
+    {
+        var import = await Clipboard.GetTextAsync();
+        if (import == null)
+        {
+            Notifier.ShowToast("Nothing to import - your clipboard is empty");
+            return;
+        }
+
+        Logger.Log("Extracted from clipboard: " + import.Replace(Environment.NewLine, ""));
+        var text = import.Replace(Environment.NewLine, "").Split(",");
+        var addedItems = 0;
+        foreach (var s in text)
+        {
+            if (string.IsNullOrWhiteSpace(s))
+                continue;
+            var (title, quantity) = ProcessItem(s);
+            var item = new Item
+                { Title = title.Trim(), StoreName = StoreService.DefaultStoreName, Quantity = quantity };
+            await _itemService.SaveItemAsync(item);
+            Items.Add(item);
+            addedItems++;
+        }
+
+        Logger.Log("Extracted from clipboard: " + import.Replace(Environment.NewLine, ""));
+        Notifier.ShowToast($"Imported {addedItems} list from clipboard");
+    }
+
+    private static (string, int) ProcessItem(string input)
+    {
+        var match = Regex.Match(input, @"(.*)\((\d+)\)");
+        if (!match.Success) return (input, 1);
+        var itemName = match.Groups[1].Value.Trim();
+        if (int.TryParse(match.Groups[2].Value, out var quantity))
+        {
+            return (itemName, quantity);
+        }
+
+        return (itemName, 1);
     }
 
     public void SortItems()

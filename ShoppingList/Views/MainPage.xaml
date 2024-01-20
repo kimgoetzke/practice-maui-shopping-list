@@ -22,6 +22,13 @@
     </ContentPage.Behaviors>
 
     <ContentPage.ToolbarItems>
+        
+        <ToolbarItem
+            Text="Insert from clipboard"
+            IconImageSource="import_white.png"
+            Order="Primary"
+            Clicked="ImportOnClicked" />
+        
         <ToolbarItem
             Text="Copy to clipboard"
             IconImageSource="copy_white.png"

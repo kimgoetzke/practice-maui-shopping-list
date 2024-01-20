@@ -47,6 +47,12 @@ public partial class MainPage
         ((MainViewModel)BindingContext).CopyToClipboard();
     }
 
+    private async void ImportOnClicked(object? sender, EventArgs e)
+    {
+        await ((MainViewModel)BindingContext).InsertFromClipboard();
+    }
+
+
     private async void OnTapSettings(object sender, EventArgs e)
     {
         if (!_isMenuOpen)
