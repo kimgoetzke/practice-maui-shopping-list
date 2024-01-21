@@ -31,13 +31,13 @@
         
         <ToolbarItem
             Text="Copy to clipboard"
-            IconImageSource="copy_white.png"
+            IconImageSource="export_white.png"
             Order="Primary"
             Clicked="CopyOnClicked" />
 
         <ToolbarItem
             Text="Open settings"
-            IconImageSource="settings_icon_white.png"
+            IconImageSource="settings_white.png"
             Order="Primary"
             Clicked="OnTapSettings" />
     </ContentPage.ToolbarItems>
@@ -196,7 +196,7 @@
                                                        VerticalOptions="Center"
                                                        HeightRequest="100"
                                                        WidthRequest="100">
-                                                    <Image Source="star_icon_white.png"
+                                                    <Image Source="star_white.png"
                                                            Aspect="AspectFit"
                                                            WidthRequest="25"
                                                            HeightRequest="25"

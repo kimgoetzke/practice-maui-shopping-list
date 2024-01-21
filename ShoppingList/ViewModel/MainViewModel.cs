@@ -116,6 +116,12 @@ public partial class MainViewModel : ObservableObject
             await _itemService.SaveItemAsync(item);
             Items.Add(item);
             addedItems++;
+        } 
+        
+        if (addedItems == 0)
+        {
+            Notifier.ShowToast("Nothing to import - your clipboard contains invalid data");
+            return;
         }
 
         Logger.Log("Extracted from clipboard: " + import.Replace(Environment.NewLine, ""));

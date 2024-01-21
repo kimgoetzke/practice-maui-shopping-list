@@ -14,7 +14,7 @@
         VerticalOptions="Center"
         HorizontalOptions="Center">
         <Border BackgroundColor="{StaticResource OffWhite}"
-                StrokeThickness="3"
+                StrokeThickness="{StaticResource ThickLineHeight}"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
                 Margin="20"
@@ -44,9 +44,9 @@
                        HorizontalOptions="Center">
                     <Label.FormattedText>
                         <FormattedString>
-                            <Span Text="Please consider adding " Style="{StaticResource StandardSpan}" />
+                            <Span Text="Check that the " Style="{StaticResource StandardSpan}" />
                             <Span Text="stores" Style="{StaticResource Highlight}" />
-                            <Span Text=" you want to use." Style="{StaticResource StandardSpan}" />
+                            <Span Text=" you want to use are set." Style="{StaticResource StandardSpan}" />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
@@ -57,11 +57,9 @@
                        Padding="0,0,0,20">
                     <Label.FormattedText>
                         <FormattedString>
-                            <Span
-                                Text="You can add and remove stores anytime by tapping the gears icon and selecting '"
-                                Style="{StaticResource StandardSpan}" />
-                            <Span Text="Manage stores" Style="{StaticResource Highlight}" />
-                            <Span Text="'." Style="{StaticResource StandardSpan}" />
+                            <Span Text="You can add and remove stores anytime in the " Style="{StaticResource StandardSpan}" />
+                            <Span Text="Settings" Style="{StaticResource Highlight}" />
+                            <Span Text=" menu." Style="{StaticResource StandardSpan}" />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
