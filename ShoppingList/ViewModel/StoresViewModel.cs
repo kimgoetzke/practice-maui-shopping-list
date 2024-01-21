@@ -1,13 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
-using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Maui.Core.Platform;
 using ShoppingList.Models;
 using ShoppingList.Services;
-
-#pragma warning disable CS4014
 
 namespace ShoppingList.ViewModel;
 
@@ -16,7 +13,6 @@ public partial class StoresViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<ConfigurableStore> _stores;
     [ObservableProperty] private ConfigurableStore _newStore;
     private readonly StoreService _storeService;
-
 
     public StoresViewModel(StoreService storeService)
     {
@@ -42,14 +38,14 @@ public partial class StoresViewModel : ObservableObject
         // Capitalise first letter of each word
         var textInfo = new CultureInfo("en-US", false).TextInfo;
         NewStore.Name = textInfo.ToTitleCase(NewStore.Name.ToLower());
-        var isKeyboardHidden = view.HideKeyboardAsync(CancellationToken.None);
-        Logger.Log("Keyboard hidden: " + isKeyboardHidden);
 
         // Add to list and database
         Stores.Add(NewStore);
         await _storeService.SaveStoreAsync(NewStore);
 
         // Make sure the UI is reset/updated
+        var isKeyboardHidden = view.HideKeyboardAsync(CancellationToken.None);
+        Logger.Log("Keyboard hidden: " + isKeyboardHidden);
         NewStore = new ConfigurableStore();
         OnPropertyChanged(nameof(NewStore));
         OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
@@ -80,13 +76,16 @@ public partial class StoresViewModel : ObservableObject
         await _storeService.ResetStoresAsync();
         await LoadStoresFromDatabase();
         OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
-        Notifier.AwaitShowToast("Reset stores");
+        Notifier.ShowToast("Reset stores");
     }
 
     private static async Task<bool> IsRequestConfirmedByUser()
     {
         var isConfirmed =
-            await Shell.Current.DisplayAlert("Reset stores", $"Are you sure you want to continue?", "Yes", "No");
+            await Shell.Current.DisplayAlert("Reset stores",
+                $"This will remove all stores, except the 'Anywhere' store. Are you sure you want to continue?", 
+                "Yes",
+                "No");
         if (!isConfirmed) Notifier.ShowToast("Request cancelled");
         return isConfirmed;
     }
