@@ -76,10 +76,19 @@ public partial class StoresViewModel : ObservableObject
     [RelayCommand]
     private async Task ResetStores()
     {
+        if (!await IsRequestConfirmedByUser()) return;
         await _storeService.ResetStoresAsync();
         await LoadStoresFromDatabase();
         OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
         Notifier.AwaitShowToast("Reset stores");
+    }
+
+    private static async Task<bool> IsRequestConfirmedByUser()
+    {
+        var isConfirmed =
+            await Shell.Current.DisplayAlert("Reset stores", $"Are you sure you want to continue?", "Yes", "No");
+        if (!isConfirmed) Notifier.ShowToast("Request cancelled");
+        return isConfirmed;
     }
 
     [RelayCommand]

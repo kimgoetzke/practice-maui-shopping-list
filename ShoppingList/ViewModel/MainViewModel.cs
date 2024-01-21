@@ -58,9 +58,18 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task RemoveAllItems()
     {
+        if (!await IsRequestConfirmedByUser()) return;
         Items.Clear();
         await _itemService.DeleteAllItemsAsync();
         Notifier.ShowToast("Removed all items from list");
+    }
+
+    private static async Task<bool> IsRequestConfirmedByUser()
+    {
+        var isConfirmed =
+            await Shell.Current.DisplayAlert("Remove all items from list", $"Are you sure you want to continue?", "Yes", "No");
+        if (!isConfirmed) Notifier.ShowToast("Request cancelled");
+        return isConfirmed;
     }
 
     [RelayCommand]
@@ -97,48 +106,71 @@ public partial class MainViewModel : ObservableObject
     internal async Task InsertFromClipboard()
     {
         var import = await Clipboard.GetTextAsync();
-        if (import == null)
-        {
-            Notifier.ShowToast("Nothing to import - your clipboard is empty");
-            return;
-        }
+        if (IsClipboardEmpty(import)) return;
+        if (!WasAbleToConvertToItemList(import!, out var addedItems, out var toImport)) return;
+        if (!await IsImportConfirmedByUser(addedItems)) return;
+        await ImportItemList(toImport, import!);
+        Notifier.ShowToast($"Imported {addedItems} list from clipboard");
+    }
 
+    private static bool IsClipboardEmpty(string? import)
+    {
+        if (import != null) return false;
+        Notifier.ShowToast("Nothing to import - your clipboard is empty");
+        return true;
+    }
+
+    private static bool WasAbleToConvertToItemList(string import, out int addedItems, out List<Item> toImport)
+    {
         Logger.Log("Extracted from clipboard: " + import.Replace(Environment.NewLine, ""));
         var text = import.Replace(Environment.NewLine, "").Split(",");
-        var addedItems = 0;
+        addedItems = 0;
+        toImport = [];
         foreach (var s in text)
         {
             if (string.IsNullOrWhiteSpace(s))
                 continue;
-            var (title, quantity) = ProcessItem(s);
+            var (title, quantity) = ProcessStrings(s);
             var item = new Item
                 { Title = title.Trim(), StoreName = StoreService.DefaultStoreName, Quantity = quantity };
+            toImport.Add(item);
+            addedItems++;
+        }
+
+        if (addedItems != 0) return true;
+        Notifier.ShowToast("Nothing to import - your clipboard may contain invalid data");
+        return false;
+    }
+
+    private static async Task<bool> IsImportConfirmedByUser(int addedItems)
+    {
+        var isConfirmed = await Shell.Current.DisplayAlert(
+            "Import from clipboard",
+            $"Extracted {addedItems} item(s) from your clipboard. Would you like to add the item(s) to your list?",
+            "Yes",
+            "No");
+
+        if (!isConfirmed) Notifier.ShowToast("Import cancelled");
+        return isConfirmed;
+    }
+
+    private async Task ImportItemList(List<Item> toImport, string import)
+    {
+        foreach (var item in toImport)
+        {
             await _itemService.SaveItemAsync(item);
             Items.Add(item);
-            addedItems++;
-        } 
-        
-        if (addedItems == 0)
-        {
-            Notifier.ShowToast("Nothing to import - your clipboard contains invalid data");
-            return;
         }
 
         Logger.Log("Extracted from clipboard: " + import.Replace(Environment.NewLine, ""));
-        Notifier.ShowToast($"Imported {addedItems} list from clipboard");
     }
 
-    private static (string, int) ProcessItem(string input)
+    private static (string, int) ProcessStrings(string input)
     {
         var match = Regex.Match(input, @"(.*)\((\d+)\)");
         if (!match.Success) return (input, 1);
         var itemName = match.Groups[1].Value.Trim();
-        if (int.TryParse(match.Groups[2].Value, out var quantity))
-        {
-            return (itemName, quantity);
-        }
-
-        return (itemName, 1);
+        return int.TryParse(match.Groups[2].Value, out var quantity) ? (itemName, quantity) : (itemName, 1);
     }
 
     public void SortItems()
