@@ -2,9 +2,9 @@ using CommunityToolkit.Maui.Views;
 
 namespace ShoppingList.Views;
 
-public partial class SimplePopup : Popup
+public partial class WelcomePopup : Popup
 {
-    public SimplePopup()
+    public WelcomePopup()
     {
         InitializeComponent();
     }

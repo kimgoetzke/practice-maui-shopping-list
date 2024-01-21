@@ -29,28 +29,17 @@ public partial class MainPage
 
     private void DisplayPopUpOnFirstRun()
     {
-        if (Settings.FirstRun)
-        {
-            Logger.Log("Application ran for the first time");
-            Settings.FirstRun = false;
-            this.ShowPopup(new SimplePopup());
-        }
+        if (!Settings.FirstRun) return;
+        Logger.Log("Application ran for the first time");
+        Settings.FirstRun = false;
+        this.ShowPopup(new WelcomePopup());
     }
 
-    private void OnEntryUnfocused(object sender, FocusEventArgs e)
-    {
-        AddButton.Focus();
-    }
+    private void OnEntryUnfocused(object sender, FocusEventArgs e) => AddButton.Focus();
 
-    private void CopyOnClicked(object? sender, EventArgs e)
-    {
-        ((MainViewModel)BindingContext).CopyToClipboard();
-    }
+    private void CopyOnClicked(object? sender, EventArgs e) => _viewModel.CopyToClipboard();
 
-    private async void ImportOnClicked(object? sender, EventArgs e)
-    {
-        await ((MainViewModel)BindingContext).InsertFromClipboard();
-    }
+    private async void ImportOnClicked(object? sender, EventArgs e) => await _viewModel.InsertFromClipboard();
 
 
     private async void OnTapSettings(object sender, EventArgs e)
@@ -69,10 +58,7 @@ public partial class MainPage
         await CloseMenu();
     }
 
-    private async void OnTapGridArea(object sender, EventArgs e)
-    {
-        await CloseMenu();
-    }
+    private async void OnTapGridArea(object sender, EventArgs e) => await CloseMenu();
 
     private async Task CloseMenu()
     {
@@ -86,6 +72,7 @@ public partial class MainPage
 
     private void SwipeItemView_OnInvoked(object? sender, EventArgs e)
     {
+        // TODO: Give user feedback through particles or animation
         Logger.Log("OnInvokedSwipeItem");
     }
 }

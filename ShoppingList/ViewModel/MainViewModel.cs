@@ -81,7 +81,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task TapItem(Item i)
+    private static async Task TapItem(Item i)
     {
         await Shell.Current.Navigation.PushAsync(new DetailPage(i));
     }
