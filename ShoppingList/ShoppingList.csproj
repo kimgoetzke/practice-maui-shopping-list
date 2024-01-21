@@ -24,7 +24,7 @@
         <ApplicationTitle>Shopping List</ApplicationTitle>
 
         <!-- App Identifier -->
-        <ApplicationId>net.kimgoetzke.shoppinglist</ApplicationId>
+        <ApplicationId>io.kimgoetzke.shoppinglist</ApplicationId>
 
         <!-- Versions -->
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
