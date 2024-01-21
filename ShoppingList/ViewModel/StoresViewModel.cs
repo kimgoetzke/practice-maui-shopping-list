@@ -43,15 +43,15 @@ public partial class StoresViewModel : ObservableObject
         Stores.Add(NewStore);
         await _storeService.SaveStoreAsync(NewStore);
 
+        // Show toast on success
+        await Notifier.AwaitShowToast($"Added: {NewStore.Name}");
+        
         // Make sure the UI is reset/updated
         var isKeyboardHidden = view.HideKeyboardAsync(CancellationToken.None);
         Logger.Log("Keyboard hidden: " + isKeyboardHidden);
         NewStore = new ConfigurableStore();
         OnPropertyChanged(nameof(NewStore));
         OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
-
-        // Show toast on success
-        await Notifier.AwaitShowToast($"Added: {NewStore.Name}");
     }
 
     [RelayCommand]
