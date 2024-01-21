@@ -21,8 +21,8 @@
         <toolkit:StatusBarBehavior StatusBarColor="{StaticResource Primary}" StatusBarStyle="LightContent" />
     </ContentPage.Behaviors>
 
+    <!-- Top toolbar with icons only -->
     <ContentPage.ToolbarItems>
-        
         <ToolbarItem
             Text="Insert from clipboard"
             IconImageSource="import_white.png"
@@ -46,53 +46,53 @@
 
         <!-- Settings menu -->
         <Grid x:Name="SettingsMenuGrid" IgnoreSafeArea="True">
+            <!-- Settings menu: Configuration -->
             <Grid.Background>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
                     <GradientStop Color="{StaticResource Primary}" Offset="0.1" />
                     <GradientStop Color="{StaticResource Tertiary}" Offset="1.0" />
                 </LinearGradientBrush>
             </Grid.Background>
-
             <Grid.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnTapGridArea" />
             </Grid.GestureRecognizers>
 
+            <!-- Settings menu: Content -->
             <VerticalStackLayout
                 Margin="0,52,16,0"
                 HorizontalOptions="End">
-
                 <Label Style="{StaticResource MenuHeader}"
                        Text="Settings"
                        Padding="0,0,20,0"
                        HorizontalOptions="End" />
-
                 <BoxView HeightRequest="1" BackgroundColor="{StaticResource OffWhite}"
                          HorizontalOptions="FillAndExpand"
                          Margin="0,10,0, 30" />
-
                 <Button Style="{StaticResource MenuButton}"
                         Text="Manage stores"
                         HorizontalOptions="End"
                         x:Name="ManageStoresButton"
                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=ManageStoresCommand}"
                         CommandParameter="{Binding .}" />
-
                 <Button Style="{StaticResource MenuButton}"
                         Text="Clear list"
                         HorizontalOptions="End"
                         x:Name="RemoveStoreButton"
                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=RemoveAllItemsCommand}"
                         CommandParameter="{Binding .}" />
-
             </VerticalStackLayout>
         </Grid>
 
-        <!-- Page content -->
-        <Grid RowDefinitions="Auto, Auto, Auto, *" x:Name="PageContentGrid" VerticalOptions="Fill"
+        <!-- Main page content -->
+        <Grid RowDefinitions="Auto, Auto, Auto, *" 
+              x:Name="PageContentGrid" 
+              VerticalOptions="Fill"
               IgnoreSafeArea="True">
 
             <!-- Background for first two rows -->
-            <BoxView Grid.Row="1" Grid.RowSpan="2" Color="{StaticResource OffWhite}"
+            <BoxView Grid.Row="1" 
+                     Grid.RowSpan="2" 
+                     Color="{StaticResource OffWhite}"
                      BackgroundColor="Transparent" />
 
             <!-- Menu to add items -->
@@ -101,7 +101,6 @@
                   RowDefinitions="Auto, Auto"
                   Padding="5"
                   RowSpacing="5">
-
                 <Entry Placeholder="Enter item name"
                        Text="{Binding NewItem.Title}"
                        Grid.Row="0"
@@ -110,14 +109,12 @@
                        Margin="5"
                        FontSize="16"
                        Unfocused="OnEntryUnfocused" />
-
-                <Button Text="Add"
+                <Button x:Name="AddButton"
+                        Text="Add"
                         Style="{StaticResource StandardButton}"
-                        x:Name="AddButton"
                         Command="{Binding AddItemCommand}"
                         Grid.Row="0"
                         Grid.Column="2" />
-
                 <Grid Margin="5" Grid.Row="1" Grid.Column="0" RowDefinitions="Auto, Auto" ColumnDefinitions="1*"
                       RowSpacing="0">
                     <Label Text="From" Grid.Row="0" FontSize="10" HorizontalTextAlignment="Start" Padding="3, 0 " />
@@ -163,6 +160,8 @@
                         <DataTemplate x:DataType="{x:Type models:Item}">
                             <Grid RowDefinitions="Auto, Auto">
                                 <SwipeView Margin="0,0,0,0" Grid.Row="0" android:SwipeView.SwipeTransitionMode="Reveal">
+                                    
+                                    <!-- Swipe from left to right to complete task -->
                                     <SwipeView.LeftItems>
                                         <SwipeItems Mode="Execute">
                                             <SwipeItemView
@@ -183,6 +182,8 @@
                                             </SwipeItemView>
                                         </SwipeItems>
                                     </SwipeView.LeftItems>
+                                    
+                                    <!-- Swipe from right to left to reveal prioritisation button -->
                                     <SwipeView.RightItems>
                                         <SwipeItems SwipeBehaviorOnInvoked="Close">
                                             <SwipeItemView
@@ -206,8 +207,11 @@
                                         </SwipeItems>
                                     </SwipeView.RightItems>
 
+                                    <!-- Contents of list -->
                                     <Grid Padding="0" RowDefinitions="Auto, Auto">
                                         <Frame CornerRadius="0" HeightRequest="44" BorderColor="White">
+                                            
+                                            <!-- Contents of list: Settings -->
                                             <Frame.Triggers>
                                                 <DataTrigger TargetType="Frame"
                                                              Binding="{Binding IsImportant}"
@@ -227,7 +231,7 @@
                                                     CommandParameter="{Binding .}" />
                                             </Frame.GestureRecognizers>
 
-                                            <!-- Contents of list -->
+                                            <!-- Contents of list: Content -->
                                             <Grid ColumnDefinitions="*,*" HeightRequest="40">
                                                 <StackLayout Orientation="Horizontal"
                                                              Grid.Column="0">
@@ -281,8 +285,10 @@
                                                     </Label.Triggers>
                                                 </Label>
                                             </Grid>
+                                            
                                         </Frame>
                                     </Grid>
+                                    
                                 </SwipeView>
                                 <BoxView Grid.Row="1"
                                          HeightRequest="1"

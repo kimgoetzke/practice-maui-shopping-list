@@ -35,7 +35,7 @@ public partial class StoresViewModel : ObservableObject
         // Only allow unique store names
         if (Stores.Any(store => store.Name == NewStore.Name))
         {
-            await ShowToast("Cannot add '" + NewStore.Name + "' - it already exists");
+            await Notifier.AwaitShowToast($"Cannot add '{NewStore.Name}' - it already exists");
             return;
         }
 
@@ -52,9 +52,10 @@ public partial class StoresViewModel : ObservableObject
         // Make sure the UI is reset/updated
         NewStore = new ConfigurableStore();
         OnPropertyChanged(nameof(NewStore));
+        OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
 
         // Show toast on success
-        await ShowToast("Added: " + NewStore.Name);
+        await Notifier.AwaitShowToast($"Added: {NewStore.Name}");
     }
 
     [RelayCommand]
@@ -62,13 +63,14 @@ public partial class StoresViewModel : ObservableObject
     {
         if (s.Name == StoreService.DefaultStoreName)
         {
-            ShowToast("Cannot remove default store");
+            Notifier.ShowToast("Cannot remove default store");
             return;
         }
 
         Stores.Remove(s);
         await _storeService.DeleteStoreAsync(s);
-        ShowToast("Removed: " + s.Name);
+        OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
+        Notifier.ShowToast($"Removed: {s.Name}");
     }
 
     [RelayCommand]
@@ -76,7 +78,8 @@ public partial class StoresViewModel : ObservableObject
     {
         await _storeService.ResetStoresAsync();
         await LoadStoresFromDatabase();
-        ShowToast("Reset stores");
+        OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
+        Notifier.AwaitShowToast("Reset stores");
     }
 
     [RelayCommand]
@@ -93,10 +96,14 @@ public partial class StoresViewModel : ObservableObject
             Stores.Add(i);
     }
 
-    private static async Task ShowToast(string message)
+    // Used to toggle on/off the line separator between stores list and buttons
+    public bool IsCollectionViewLargerThanThreshold
     {
-        var cancellationTokenSource = new CancellationTokenSource();
-        var toast = Toast.Make(message);
-        await toast.Show(cancellationTokenSource.Token);
+        get
+        {
+            const int itemHeight = 45; // As defined in Styles.XAML
+            var currentHeight = Stores.Count * itemHeight;
+            return currentHeight >= 270;
+        }
     }
 }
