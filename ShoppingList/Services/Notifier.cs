@@ -10,7 +10,7 @@ public static class Notifier
         var toast = Toast.Make(message);
         await toast.Show(cancellationTokenSource.Token);
     }
-    
+
     public static void ShowToast(string message)
     {
         var cancellationTokenSource = new CancellationTokenSource();
