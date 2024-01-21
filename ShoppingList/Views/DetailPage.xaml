@@ -18,7 +18,7 @@
               RowDefinitions="1*"
               ColumnDefinitions=".5*, .5*">
             <VerticalStackLayout Grid.Column="0" Padding="5">
-                <Label Text="Priority" Style="{StaticResource StandardValueLabel}" />
+                <Label Text="Important" Style="{StaticResource StandardValueLabel}" />
                 <Label Text="{Binding Item.IsImportant}" Style="{StaticResource StandardValue}" />
             </VerticalStackLayout>
             <Switch IsToggled="{Binding Item.IsImportant, Mode=TwoWay}"

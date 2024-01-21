@@ -28,7 +28,7 @@
             IconImageSource="import_white.png"
             Order="Primary"
             Clicked="ImportOnClicked" />
-        
+
         <ToolbarItem
             Text="Copy to clipboard"
             IconImageSource="export_white.png"
@@ -84,14 +84,14 @@
         </Grid>
 
         <!-- Main page content -->
-        <Grid RowDefinitions="Auto, Auto, Auto, *" 
-              x:Name="PageContentGrid" 
+        <Grid RowDefinitions="Auto, Auto, Auto, *"
+              x:Name="PageContentGrid"
               VerticalOptions="Fill"
               IgnoreSafeArea="True">
 
             <!-- Background for first two rows -->
-            <BoxView Grid.Row="1" 
-                     Grid.RowSpan="2" 
+            <BoxView Grid.Row="1"
+                     Grid.RowSpan="2"
                      Color="{StaticResource OffWhite}"
                      BackgroundColor="Transparent" />
 
@@ -140,7 +140,7 @@
 
                 <Grid Margin="5" Grid.Row="1" Grid.Column="2" RowDefinitions="Auto, Auto" ColumnDefinitions="1*"
                       RowSpacing="0">
-                    <Label Text="Priority" Grid.Row="0" FontSize="10" HorizontalTextAlignment="Center" />
+                    <Label Text="Important" Grid.Row="0" FontSize="10" HorizontalTextAlignment="Center" />
                     <CheckBox IsChecked="{Binding NewItem.IsImportant}" Grid.Row="1" Scale="1.3" />
                 </Grid>
             </Grid>
@@ -160,7 +160,7 @@
                         <DataTemplate x:DataType="{x:Type models:Item}">
                             <Grid RowDefinitions="Auto, Auto">
                                 <SwipeView Margin="0,0,0,0" Grid.Row="0" android:SwipeView.SwipeTransitionMode="Reveal">
-                                    
+
                                     <!-- Swipe from left to right to complete task -->
                                     <SwipeView.LeftItems>
                                         <SwipeItems Mode="Execute">
@@ -182,7 +182,7 @@
                                             </SwipeItemView>
                                         </SwipeItems>
                                     </SwipeView.LeftItems>
-                                    
+
                                     <!-- Swipe from right to left to reveal prioritisation button -->
                                     <SwipeView.RightItems>
                                         <SwipeItems SwipeBehaviorOnInvoked="Close">
@@ -196,7 +196,7 @@
                                                        VerticalOptions="Center"
                                                        HeightRequest="100"
                                                        WidthRequest="100">
-                                                    <Image Source="star_white.png"
+                                                    <Image Source="important_white.png"
                                                            Aspect="AspectFit"
                                                            WidthRequest="25"
                                                            HeightRequest="25"
@@ -210,7 +210,7 @@
                                     <!-- Contents of list -->
                                     <Grid Padding="0" RowDefinitions="Auto, Auto">
                                         <Frame CornerRadius="0" HeightRequest="44" BorderColor="White">
-                                            
+
                                             <!-- Contents of list: Settings -->
                                             <Frame.Triggers>
                                                 <DataTrigger TargetType="Frame"
@@ -267,6 +267,20 @@
                                                             </DataTrigger>
                                                         </Label.Triggers>
                                                     </Label>
+                                                    <Image x:Name="PriorityIcon"
+                                                           Source="important_pink.png"
+                                                           Scale="0.5"
+                                                           IsVisible="False"
+                                                           HorizontalOptions="Start"
+                                                           VerticalOptions="Center">
+                                                        <Image.Triggers>
+                                                            <DataTrigger TargetType="Image"
+                                                                         Binding="{Binding IsImportant}"
+                                                                         Value="True">
+                                                                <Setter Property="IsVisible" Value="True" />
+                                                            </DataTrigger>
+                                                        </Image.Triggers>
+                                                    </Image>
                                                 </StackLayout>
                                                 <Label Text="{Binding StoreName}"
                                                        FontSize="10"
@@ -277,18 +291,17 @@
                                                        Grid.Column="1">
                                                     <Label.Triggers>
                                                         <DataTrigger TargetType="Label"
-                                                                     Binding="{Binding IsImportant}"
-                                                                     Value="True">
-                                                            <Setter Property="TextColor"
-                                                                    Value="{StaticResource PinkLight}" />
+                                                                     Binding="{Binding StoreName}"
+                                                                     Value="Anywhere">
+                                                            <Setter Property="IsVisible" Value="False" />
                                                         </DataTrigger>
                                                     </Label.Triggers>
                                                 </Label>
                                             </Grid>
-                                            
+
                                         </Frame>
                                     </Grid>
-                                    
+
                                 </SwipeView>
                                 <BoxView Grid.Row="1"
                                          HeightRequest="1"
