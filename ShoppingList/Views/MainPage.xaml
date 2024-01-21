@@ -145,8 +145,8 @@
                 </Grid>
             </Grid>
 
-            <!-- Horizontal line below that -->
-            <BoxView Grid.Row="2" HeightRequest="3" BackgroundColor="{StaticResource Primary}"
+            <!-- Horizontal line below menu to add items -->
+            <BoxView Grid.Row="2" HeightRequest="{StaticResource ThickLineHeight}" BackgroundColor="{StaticResource Primary}"
                      HorizontalOptions="FillAndExpand" />
 
             <!-- List of added items -->
