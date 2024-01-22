@@ -66,10 +66,8 @@ public partial class MainViewModel : ObservableObject
 
     private static async Task<bool> IsRequestConfirmedByUser()
     {
-        var isConfirmed =
-            await Shell.Current.DisplayAlert("Remove all items from list", $"Are you sure you want to continue?", "Yes", "No");
-        if (!isConfirmed) Notifier.ShowToast("Request cancelled");
-        return isConfirmed;
+        return await Shell.Current.DisplayAlert("Remove all items from list", $"Are you sure you want to continue?",
+            "Yes", "No");
     }
 
     [RelayCommand]

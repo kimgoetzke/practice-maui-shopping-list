@@ -45,7 +45,7 @@ public partial class StoresViewModel : ObservableObject
 
         // Show toast on success
         await Notifier.AwaitShowToast($"Added: {NewStore.Name}");
-        
+
         // Make sure the UI is reset/updated
         var isKeyboardHidden = view.HideKeyboardAsync(CancellationToken.None);
         Logger.Log("Keyboard hidden: " + isKeyboardHidden);
@@ -81,13 +81,10 @@ public partial class StoresViewModel : ObservableObject
 
     private static async Task<bool> IsRequestConfirmedByUser()
     {
-        var isConfirmed =
-            await Shell.Current.DisplayAlert("Reset stores",
-                $"This will remove all stores, except the 'Anywhere' store. Are you sure you want to continue?", 
-                "Yes",
-                "No");
-        if (!isConfirmed) Notifier.ShowToast("Request cancelled");
-        return isConfirmed;
+        return await Shell.Current.DisplayAlert("Reset stores",
+            $"This will remove all stores, except the 'Anywhere' store. Are you sure you want to continue?",
+            "Yes",
+            "No");
     }
 
     [RelayCommand]
