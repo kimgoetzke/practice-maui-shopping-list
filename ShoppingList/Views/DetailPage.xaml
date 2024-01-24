@@ -10,7 +10,7 @@
     <VerticalStackLayout Padding="40, 10">
 
         <Entry Text="{Binding Item.Title, Mode=TwoWay}"
-               FontSize="25"
+               Style="{StaticResource Headline}"
                VerticalOptions="Center"
                HorizontalOptions="Center" />
 

@@ -37,13 +37,25 @@
                             <Setter Property="Opacity" Value="1" />
                         </VisualState.Setters>
                     </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.8" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="BorderColor" Value="{StaticResource OffWhite}" />
+                            <Setter Property="BorderWidth" Value="2" />
+                        </VisualState.Setters>
+                    </VisualState>
                     <VisualState x:Name="Pressed">
                         <VisualState.Setters>
                             <Setter Property="Scale" Value="0.98" />
                             <Setter Property="TranslationY" Value="2" />
                             <Setter Property="TranslationX" Value="2" />
-                            <Setter Property="Opacity" Value="0.9" />
                             <Setter Property="Shadow" Value="{StaticResource ShadowOff}" />
+                            <Setter Property="BorderColor" Value="{StaticResource OffWhite}" />
+                            <Setter Property="BorderWidth" Value="2" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
@@ -100,8 +112,6 @@
     </Style>
 
     <Style TargetType="Button" x:Key="MenuButton" BasedOn="{StaticResource StandardButton}">
-        <Setter Property="BorderColor" Value="{StaticResource SecondaryDarkText}" />
-        <Setter Property="BorderWidth" Value="1" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="WidthRequest" Value="140" />
     </Style>

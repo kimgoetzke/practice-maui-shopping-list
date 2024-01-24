@@ -23,7 +23,7 @@
                 <!-- Title -->
                 <CollectionView.Header>
                     <Grid RowDefinitions="Auto,Auto">
-                        <Label Grid.Row="0" Text="Configured stores" Style="{StaticResource Headline}"
+                        <Label Grid.Row="0" Text="Your stores" Style="{StaticResource Headline}"
                                Padding="0, 10, 0,10" />
                         <BoxView Grid.Row="1" HeightRequest="1" BackgroundColor="{StaticResource Gray100}"
                                  VerticalOptions="Fill" />
