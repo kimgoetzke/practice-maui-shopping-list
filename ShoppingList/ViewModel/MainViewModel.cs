@@ -67,8 +67,8 @@ public partial class MainViewModel : ObservableObject
     private static async Task<bool> IsRequestConfirmedByUser()
     {
         return await Shell.Current.DisplayAlert(
-            "Remove all items from list",
-            $"Are you sure you want to continue?",
+            "Clear list",
+            $"This will remove all items from your list. Are you sure you want to continue?",
             "Yes", "No");
     }
 
