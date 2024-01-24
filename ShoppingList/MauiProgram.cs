@@ -28,8 +28,8 @@ public static class MauiProgram
     private static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
     {
         builder.Services.AddSingleton<IDatabaseProvider, DatabaseProvider>();
-        builder.Services.AddSingleton<StoreService>();
-        builder.Services.AddSingleton<ItemService>();
+        builder.Services.AddSingleton<IStoreService, StoreService>();
+        builder.Services.AddSingleton<IItemService, ItemService>();
         builder.Services.AddLogging();
 
 #if DEBUG

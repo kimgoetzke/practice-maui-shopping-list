@@ -13,10 +13,10 @@ public partial class DetailViewModel : ObservableObject
     [ObservableProperty] private Item _item;
     [ObservableProperty] private ConfigurableStore _currentStore;
 
-    private readonly ItemService _itemService;
-    private readonly StoreService _storeService;
+    private readonly IStoreService _storeService;
+    private readonly IItemService _itemService;
 
-    public DetailViewModel(Item item, StoreService storeService, ItemService itemService)
+    public DetailViewModel(Item item, IStoreService storeService, IItemService itemService)
     {
         Item = item;
         CurrentStore = new ConfigurableStore();

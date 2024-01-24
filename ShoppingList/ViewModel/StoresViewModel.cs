@@ -12,12 +12,12 @@ public partial class StoresViewModel : ObservableObject
 {
     [ObservableProperty] private ObservableCollection<ConfigurableStore> _stores;
     [ObservableProperty] private ConfigurableStore _newStore;
-    private readonly StoreService _storeService;
+    private readonly IStoreService _storeService;
 
-    public StoresViewModel(StoreService storeService)
+    public StoresViewModel(IStoreService storeService)
     {
-        _newStore = new ConfigurableStore();
         Stores = [];
+        _newStore = new ConfigurableStore();
         _storeService = storeService;
     }
 
@@ -47,7 +47,9 @@ public partial class StoresViewModel : ObservableObject
         await Notifier.AwaitShowToast($"Added: {NewStore.Name}");
 
         // Make sure the UI is reset/updated
+#pragma warning disable CA1416
         var isKeyboardHidden = view.HideKeyboardAsync(CancellationToken.None);
+#pragma warning restore CA1416
         Logger.Log("Keyboard hidden: " + isKeyboardHidden);
         NewStore = new ConfigurableStore();
         OnPropertyChanged(nameof(NewStore));
@@ -57,7 +59,7 @@ public partial class StoresViewModel : ObservableObject
     [RelayCommand]
     private async Task RemoveStore(ConfigurableStore s)
     {
-        if (s.Name == StoreService.DefaultStoreName)
+        if (s.Name == IStoreService.DefaultStoreName)
         {
             Notifier.ShowToast("Cannot remove default store");
             return;

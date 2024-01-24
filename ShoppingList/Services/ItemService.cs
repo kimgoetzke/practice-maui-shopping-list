@@ -2,7 +2,7 @@ using ShoppingList.Models;
 
 namespace ShoppingList.Services;
 
-public class ItemService(IDatabaseProvider db)
+public class ItemService(IDatabaseProvider db) : IItemService
 {
     public async Task<List<Item>> GetItemsAsync()
     {

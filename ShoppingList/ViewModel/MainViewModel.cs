@@ -15,10 +15,10 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<ConfigurableStore> _stores = [];
     [ObservableProperty] private Item _newItem;
     [ObservableProperty] private ConfigurableStore? _currentStore;
-    private readonly StoreService _storeService;
-    private readonly ItemService _itemService;
+    private readonly IStoreService _storeService;
+    private readonly IItemService _itemService;
 
-    public MainViewModel(StoreService storeService, ItemService itemService)
+    public MainViewModel(IStoreService storeService, IItemService itemService)
     {
         _storeService = storeService;
         _itemService = itemService;
@@ -130,7 +130,7 @@ public partial class MainViewModel : ObservableObject
                 continue;
             var (title, quantity) = ProcessStrings(s);
             var item = new Item
-                { Title = title.Trim(), StoreName = StoreService.DefaultStoreName, Quantity = quantity };
+                { Title = title.Trim(), StoreName = IStoreService.DefaultStoreName, Quantity = quantity };
             toImport.Add(item);
             addedItems++;
         }
@@ -193,7 +193,7 @@ public partial class MainViewModel : ObservableObject
         foreach (var s in loadedStores)
         {
             Stores.Add(s);
-            if (s.Name == StoreService.DefaultStoreName)
+            if (s.Name == IStoreService.DefaultStoreName)
             {
                 CurrentStore = s;
             }

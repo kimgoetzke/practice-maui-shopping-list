@@ -3,18 +3,17 @@ using SQLite;
 
 namespace ShoppingList.Services;
 
-public class StoreService(IDatabaseProvider db)
+public class StoreService(IDatabaseProvider db) : IStoreService
 {
-    public const string DefaultStoreName = "Anywhere";
     private ConfigurableStore? _defaultStore;
 
-    public async Task<ConfigurableStore> DefaultStore()
+    public async Task<ConfigurableStore> GetDefaultStore()
     {
         if (_defaultStore == null)
         {
             var connection = await db.GetConnection();
             var loadedStore = await connection.Table<ConfigurableStore>()
-                .FirstAsync(s => s.Name == DefaultStoreName);
+                .FirstAsync(s => s.Name == IStoreService.DefaultStoreName);
             _defaultStore = loadedStore;
         }
 
@@ -57,7 +56,7 @@ public class StoreService(IDatabaseProvider db)
         var items = await connection.Table<Item>().ToListAsync();
         foreach (var item in items.Where(item => item.StoreName == storeName))
         {
-            item.StoreName = DefaultStoreName;
+            item.StoreName = IStoreService.DefaultStoreName;
             await connection.UpdateAsync(item);
         }
     }
@@ -70,12 +69,12 @@ public class StoreService(IDatabaseProvider db)
         Logger.Log("Removing all stores");
     }
 
-    private async Task SetStoresToDefaultOnAllItems(SQLiteAsyncConnection connection)
+    private static async Task SetStoresToDefaultOnAllItems(SQLiteAsyncConnection connection)
     {
         var items = await connection.Table<Item>().ToListAsync();
-        foreach (var item in items.Where(item => item.StoreName != DefaultStoreName))
+        foreach (var item in items.Where(item => item.StoreName != IStoreService.DefaultStoreName))
         {
-            item.StoreName = DefaultStoreName;
+            item.StoreName = IStoreService.DefaultStoreName;
             await connection.UpdateAsync(item);
         }
     }
@@ -83,7 +82,7 @@ public class StoreService(IDatabaseProvider db)
     private static async Task RemoveAllExceptDefaultStore(SQLiteAsyncConnection connection)
     {
         var stores = await connection.Table<ConfigurableStore>().ToListAsync();
-        foreach (var store in stores.Where(store => store.Name != DefaultStoreName))
+        foreach (var store in stores.Where(store => store.Name != IStoreService.DefaultStoreName))
         {
             await connection.DeleteAsync(store);
         }
