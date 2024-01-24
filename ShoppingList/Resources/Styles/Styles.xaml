@@ -39,12 +39,12 @@
                     </VisualState>
                     <VisualState x:Name="Disabled">
                         <VisualState.Setters>
+                            <Setter Property="Scale" Value="1" />
+                            <Setter Property="TranslationY" Value="0" />
+                            <Setter Property="TranslationX" Value="0" />
                             <Setter Property="Opacity" Value="0.8" />
-                        </VisualState.Setters>
-                    </VisualState>
-                    <VisualState x:Name="PointerOver">
-                        <VisualState.Setters>
-                            <Setter Property="BorderColor" Value="{StaticResource OffWhite}" />
+                            <Setter Property="Shadow" Value="{StaticResource ShadowOff}" />
+                            <Setter Property="BorderColor" Value="{StaticResource White}" />
                             <Setter Property="BorderWidth" Value="2" />
                         </VisualState.Setters>
                     </VisualState>
@@ -54,7 +54,7 @@
                             <Setter Property="TranslationY" Value="2" />
                             <Setter Property="TranslationX" Value="2" />
                             <Setter Property="Shadow" Value="{StaticResource ShadowOff}" />
-                            <Setter Property="BorderColor" Value="{StaticResource OffWhite}" />
+                            <Setter Property="BorderColor" Value="{StaticResource White}" />
                             <Setter Property="BorderWidth" Value="2" />
                         </VisualState.Setters>
                     </VisualState>
@@ -126,7 +126,7 @@
         <Setter Property="TextColor"
                 Value="{AppThemeBinding Light={StaticResource OffBlack}, Dark={StaticResource OffWhite}}" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontFamily" Value="JostRegular" />
     </Style>
 
     <Style TargetType="Label" x:Key="Standard">
@@ -134,7 +134,7 @@
                 Value="{AppThemeBinding Light={StaticResource OffBlack}, Dark={StaticResource OffWhite}}" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
-        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontFamily" Value="JostRegular" />
     </Style>
 
     <!-- Default styles -->
@@ -166,7 +166,7 @@
                 Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}" />
         <Setter Property="BackgroundColor"
                 Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
-        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontFamily" Value="JostRegular" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="BorderWidth" Value="0" />
         <Setter Property="CornerRadius" Value="8" />
@@ -214,7 +214,7 @@
         <Setter Property="TextColor"
                 Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontFamily" Value="JostRegular" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="MinimumHeightRequest" Value="44" />
         <Setter Property="MinimumWidthRequest" Value="44" />
@@ -237,7 +237,7 @@
         <Setter Property="TextColor"
                 Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontFamily" Value="JostRegular" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="PlaceholderColor"
                 Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" />
@@ -262,7 +262,7 @@
         <Setter Property="TextColor"
                 Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontFamily" Value="JostRegular" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="PlaceholderColor"
                 Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" />
@@ -316,7 +316,7 @@
         <Setter Property="TextColor"
                 Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontFamily" Value="JostRegular" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
@@ -366,7 +366,7 @@
         <Setter Property="TitleColor"
                 Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontFamily" Value="JostRegular" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="MinimumHeightRequest" Value="44" />
         <Setter Property="MinimumWidthRequest" Value="44" />
@@ -409,7 +409,7 @@
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="TextColor"
                 Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
-        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontFamily" Value="JostRegular" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="MinimumHeightRequest" Value="44" />
         <Setter Property="MinimumWidthRequest" Value="44" />
@@ -439,7 +439,7 @@
         <Setter Property="PlaceholderColor" Value="{StaticResource Gray500}" />
         <Setter Property="CancelButtonColor" Value="{StaticResource Gray500}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontFamily" Value="JostRegular" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="MinimumHeightRequest" Value="44" />
         <Setter Property="MinimumWidthRequest" Value="44" />
@@ -465,7 +465,7 @@
                 Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}" />
         <Setter Property="PlaceholderColor" Value="{StaticResource Gray500}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontFamily" Value="JostRegular" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
@@ -561,7 +561,7 @@
         <Setter Property="TextColor"
                 Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontFamily" Value="JostRegular" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="MinimumHeightRequest" Value="44" />
         <Setter Property="MinimumWidthRequest" Value="44" />
