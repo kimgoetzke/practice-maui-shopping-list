@@ -3,7 +3,7 @@ using SQLite;
 
 namespace ShoppingList.Services;
 
-public class DbProvider
+public class DatabaseProvider : IDatabaseProvider
 {
     private SQLiteAsyncConnection? _connection;
 
