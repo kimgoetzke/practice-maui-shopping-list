@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ShoppingList.Models;
 using ShoppingList.Services;
+using ShoppingList.Utilities;
 
 namespace ShoppingList.ViewModel;
 

@@ -1,11 +1,11 @@
 ﻿using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ShoppingList.Models;
 using ShoppingList.Services;
+using ShoppingList.Utilities;
 using ShoppingList.Views;
+using StringProcessor = ShoppingList.Utilities.StringProcessor;
 
 namespace ShoppingList.ViewModel;
 
@@ -33,8 +33,7 @@ public partial class MainViewModel : ObservableObject
             return;
 
         // Capitalise first letter of each word
-        var textInfo = new CultureInfo("en-US", false).TextInfo;
-        NewItem.Title = textInfo.ToTitleCase(NewItem.Title.ToLower());
+        NewItem.Title = StringProcessor.ProcessItemTitle(NewItem.Title);
         NewItem.StoreName = CurrentStore!.Name;
 
         // Add to list and database
@@ -47,6 +46,7 @@ public partial class MainViewModel : ObservableObject
         SortItems();
         OnPropertyChanged(nameof(NewItem));
     }
+
 
     [RelayCommand]
     private async Task RemoveItem(Item i)
@@ -66,7 +66,9 @@ public partial class MainViewModel : ObservableObject
 
     private static async Task<bool> IsRequestConfirmedByUser()
     {
-        return await Shell.Current.DisplayAlert("Remove all items from list", $"Are you sure you want to continue?",
+        return await Shell.Current.DisplayAlert(
+            "Remove all items from list",
+            $"Are you sure you want to continue?",
             "Yes", "No");
     }
 
@@ -128,9 +130,10 @@ public partial class MainViewModel : ObservableObject
         {
             if (string.IsNullOrWhiteSpace(s))
                 continue;
-            var (title, quantity) = ProcessStrings(s);
+            var (title, quantity) = StringProcessor.ExtractItemTitleAndQuantity(s);
+            var processedTitle = StringProcessor.ProcessItemTitle(title);
             var item = new Item
-                { Title = title.Trim(), StoreName = IStoreService.DefaultStoreName, Quantity = quantity };
+                { Title = processedTitle, StoreName = IStoreService.DefaultStoreName, Quantity = quantity };
             toImport.Add(item);
             addedItems++;
         }
@@ -161,14 +164,6 @@ public partial class MainViewModel : ObservableObject
         }
 
         Logger.Log("Extracted from clipboard: " + import.Replace(Environment.NewLine, ""));
-    }
-
-    private static (string, int) ProcessStrings(string input)
-    {
-        var match = Regex.Match(input, @"(.*)\((\d+)\)");
-        if (!match.Success) return (input, 1);
-        var itemName = match.Groups[1].Value.Trim();
-        return int.TryParse(match.Groups[2].Value, out var quantity) ? (itemName, quantity) : (itemName, 1);
     }
 
     public void SortItems()

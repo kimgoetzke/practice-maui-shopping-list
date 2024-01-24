@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Maui.Core.Platform;
 using ShoppingList.Models;
 using ShoppingList.Services;
+using ShoppingList.Utilities;
 
 namespace ShoppingList.ViewModel;
 

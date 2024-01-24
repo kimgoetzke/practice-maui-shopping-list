@@ -1,5 +1,6 @@
 ﻿using ShoppingList.Models;
 using ShoppingList.Services;
+using ShoppingList.Utilities;
 using ShoppingList.ViewModel;
 
 namespace ShoppingList.Views;

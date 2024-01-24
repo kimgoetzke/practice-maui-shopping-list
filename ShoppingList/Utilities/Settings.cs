@@ -1,4 +1,4 @@
-namespace ShoppingList.Services;
+namespace ShoppingList.Utilities;
 
 public static class Settings
 {

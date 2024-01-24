@@ -1,4 +1,5 @@
 using ShoppingList.Models;
+using ShoppingList.Utilities;
 using SQLite;
 
 namespace ShoppingList.Services;

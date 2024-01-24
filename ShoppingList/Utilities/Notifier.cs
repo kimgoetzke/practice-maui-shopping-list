@@ -1,6 +1,6 @@
 using CommunityToolkit.Maui.Alerts;
 
-namespace ShoppingList.Services;
+namespace ShoppingList.Utilities;
 
 public static class Notifier
 {
