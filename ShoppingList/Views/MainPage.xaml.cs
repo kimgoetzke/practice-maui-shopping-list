@@ -25,6 +25,9 @@ public partial class MainPage
         await Task.WhenAll(loadItems, loadStores);
         _viewModel.SortItems();
         DisplayPopUpOnFirstRun();
+        var systemTheme = Application.Current?.RequestedTheme;
+        Settings.SetCurrentThemeFromSystem(systemTheme);
+        Logger.Log($"Current app theme is: {Settings.CurrentTheme}");
     }
 
     private void DisplayPopUpOnFirstRun()
@@ -46,9 +49,14 @@ public partial class MainPage
     {
         if (!_isMenuOpen)
         {
+            var opacity = Settings.CurrentTheme switch
+            {
+                Settings.Theme.Dark => 0,
+                _ => 0.8
+            };
             var resize = PageContentGrid.TranslateTo(-Width * 0.25, 0, AnimationDuration);
             var scaleDown = PageContentGrid.ScaleTo(0.75, AnimationDuration);
-            var fadeOut = PageContentGrid.FadeTo(0.8, AnimationDuration);
+            var fadeOut = PageContentGrid.FadeTo(opacity, AnimationDuration);
             var rotate = PageContentGrid.RotateYTo(35, AnimationDuration, Easing.CubicIn);
             await Task.WhenAll(resize, scaleDown, fadeOut, rotate);
             _isMenuOpen = true;

@@ -8,6 +8,7 @@
     <x:Double x:Key="StandardLineHeight">1</x:Double>
     <x:Double x:Key="ThickLineHeight">3</x:Double>
     <x:Double x:Key="StandardSwipeItemHeight">44</x:Double>
+    <x:Double x:Key="StandardSwipeItemHeightPlusLineHeight">45</x:Double>
 
     <Shadow Brush="Black"
             x:Key="DefaultShadow"
@@ -26,6 +27,7 @@
         <Setter Property="Margin" Value="5" />
         <Setter Property="FontAttributes" Value="Bold" />
         <Setter Property="TextTransform" Value="Uppercase" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffWhite}}" />
         <Setter Property="Shadow" Value="{StaticResource DefaultShadow}" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
@@ -86,29 +88,34 @@
         <Setter Property="FontSize" Value="16" />
         <Setter Property="HorizontalTextAlignment" Value="Start" />
         <Setter Property="VerticalOptions" Value="Center" />
-        <Setter Property="TextColor" Value="{StaticResource OffBlack}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource OffBlack}, Dark={StaticResource OffWhite}}" />
         <Setter Property="FontAttributes" Value="None" />
     </Style>
 
-    <Style TargetType="Label" x:Key="StandardSwipeItem">
+    <Style TargetType="Label" x:Key="StandardSwipeItemLabel">
         <Setter Property="TextColor"
                 Value="{AppThemeBinding Light={StaticResource OffBlack}, Dark={StaticResource OffWhite}}" />
         <Setter Property="HeightRequest" Value="{StaticResource StandardSwipeItemHeight}" />
+        <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="Background"
-                Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray600}}" />
+                Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
     </Style>
-
-    <Style TargetType="Label" x:Key="StandardLineSeparator">
-        <Setter Property="TextColor"
-                Value="{AppThemeBinding Light={StaticResource OffBlack}, Dark={StaticResource OffWhite}}" />
-        <Setter Property="HeightRequest" Value="{StaticResource StandardSwipeItemHeight}" />
-        <Setter Property="Background"
-                Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray600}}" />
+        
+    <Style TargetType="BoxView">
+        <Setter Property="BackgroundColor"
+                Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
+    </Style>
+    
+    <Style TargetType="BoxView" x:Key="ThinLineSeparator">
+        <Setter Property="HeightRequest" Value="{StaticResource StandardLineHeight}" />
+        <Setter Property="Background" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
     </Style>
 
     <Style TargetType="BoxView" x:Key="ThickLineSeparator">
         <Setter Property="HeightRequest" Value="{StaticResource ThickLineHeight}" />
-        <Setter Property="Background" Value="{StaticResource Primary}" />
+        <Setter Property="Background" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray600}}" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
     </Style>
 
     <Style TargetType="Button" x:Key="MenuButton" BasedOn="{StaticResource StandardButton}">
@@ -136,6 +143,11 @@
         <Setter Property="HorizontalTextAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="JostRegular" />
     </Style>
+    
+    <Style TargetType="CollectionView">
+        <Setter Property="BackgroundColor"
+                Value="{AppThemeBinding Light={StaticResource LightBackgroundColor}, Dark={StaticResource DarkBackgroundColor}}" />
+    </Style>
 
     <!-- Default styles -->
     <Style TargetType="ActivityIndicator">
@@ -154,11 +166,6 @@
                 Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" />
         <Setter Property="StrokeShape" Value="Rectangle" />
         <Setter Property="StrokeThickness" Value="1" />
-    </Style>
-
-    <Style TargetType="BoxView">
-        <Setter Property="BackgroundColor"
-                Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
 
     <Style TargetType="Button">
@@ -594,7 +601,7 @@
         <Setter Property="Shell.ForegroundColor"
                 Value="{OnPlatform WinUI={StaticResource Primary}, Default={StaticResource OffWhite}}" />
         <Setter Property="Shell.TitleColor"
-                Value="{AppThemeBinding Light={StaticResource OffWhite}, Dark={StaticResource SecondaryDarkText}}" />
+                Value="{AppThemeBinding Light={StaticResource OffWhite}, Dark={StaticResource OffWhite}}" />
         <Setter Property="Shell.DisabledColor"
                 Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
         <Setter Property="Shell.UnselectedColor"

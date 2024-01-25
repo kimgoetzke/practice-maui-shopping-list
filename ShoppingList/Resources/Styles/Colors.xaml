@@ -25,6 +25,9 @@
     <Color x:Key="OffWhite">#F4F4F4</Color>
     <Color x:Key="Neutral">#C8C8C8</Color>
     <Color x:Key="ThickLineSeparatorColor">#512BD4</Color>
+    
+    <Color x:Key="LightBackgroundColor">White</Color>
+    <Color x:Key="DarkBackgroundColor">#1F1F1F</Color>
 
     <Color x:Key="Gray100">#E1E1E1</Color>
     <Color x:Key="Gray200">#C8C8C8</Color>

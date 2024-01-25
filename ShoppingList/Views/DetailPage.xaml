@@ -50,8 +50,8 @@
                 <Picker Title="Change store"
                         SelectedItem="{Binding CurrentStore, Mode=TwoWay}"
                         ItemsSource="{Binding Stores}"
-                        TextColor="{StaticResource OffBlack}"
-                        TitleColor="{StaticResource OffBlack}"
+                        TextColor="{AppThemeBinding Light={StaticResource OffBlack}, Dark={StaticResource OffWhite}}"
+                        TitleColor="{AppThemeBinding Light={StaticResource OffBlack}, Dark={StaticResource OffWhite}}"
                         WidthRequest="290"
                         HorizontalOptions="Start" />
             </VerticalStackLayout>

@@ -17,16 +17,14 @@
                             ItemsSource="{Binding Stores}"
                             SelectionMode="None"
                             VerticalScrollBarVisibility="Always"
-                            VerticalOptions="Start"
-                            BackgroundColor="White">
+                            VerticalOptions="Start">
 
                 <!-- Title -->
                 <CollectionView.Header>
                     <Grid RowDefinitions="Auto,Auto">
                         <Label Grid.Row="0" Text="Your stores" Style="{StaticResource Headline}"
                                Padding="0, 10, 0,10" />
-                        <BoxView Grid.Row="1" HeightRequest="1" BackgroundColor="{StaticResource Gray100}"
-                                 VerticalOptions="Fill" />
+                        <BoxView Grid.Row="1" Style="{StaticResource ThinLineSeparator}" />
                     </Grid>
                 </CollectionView.Header>
 
@@ -40,7 +38,7 @@
                                         <SwipeItemView
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoresViewModel}}, Path=RemoveStoreCommand}"
                                             CommandParameter="{Binding .}"
-                                            HeightRequest="44">
+                                            HeightRequest="{StaticResource StandardSwipeItemHeight}">
                                             <Frame BackgroundColor="{StaticResource Pink}"
                                                    BorderColor="Transparent"
                                                    Padding="0"
@@ -58,15 +56,13 @@
                                     </SwipeItems>
                                 </SwipeView.RightItems>
                                 <Grid>
-                                    <VerticalStackLayout HeightRequest="45">
+                                    <VerticalStackLayout HeightRequest="{StaticResource StandardSwipeItemHeightPlusLineHeight}">
                                         <Label Text="{Binding Name}"
-                                               Style="{StaticResource StandardSwipeItem}"
+                                               Style="{StaticResource StandardSwipeItemLabel}"
                                                VerticalOptions="Fill"
                                                VerticalTextAlignment="Center"
                                                HorizontalTextAlignment="Center" />
-                                        <BoxView HeightRequest="{StaticResource StandardLineHeight}"
-                                                 BackgroundColor="{StaticResource Gray100}"
-                                                 HorizontalOptions="FillAndExpand" />
+                                        <BoxView Style="{StaticResource ThinLineSeparator}" />
                                     </VerticalStackLayout>
                                 </Grid>
                             </SwipeView>
@@ -81,12 +77,12 @@
                     <DataTrigger TargetType="BoxView"
                                  Binding="{Binding IsCollectionViewLargerThanThreshold}"
                                  Value="True">
-                        <Setter Property="Color" Value="{StaticResource ThickLineSeparatorColor}" />
+                        <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource ThinLineSeparator}, Dark={StaticResource Neutral}}" />
                     </DataTrigger>
                     <DataTrigger TargetType="BoxView"
                                  Binding="{Binding IsCollectionViewLargerThanThreshold}"
                                  Value="False">
-                        <Setter Property="Color" Value="White" />
+                        <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
                     </DataTrigger>
                 </BoxView.Triggers>
             </BoxView>
