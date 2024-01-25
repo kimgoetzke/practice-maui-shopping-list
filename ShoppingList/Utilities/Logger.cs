@@ -6,8 +6,7 @@ public static class Logger
     {
 #if __ANDROID__
         Android.Util.Log.Info(Constants.LoggerTag, $"[XXX] {message}");
-#endif
-#if DEBUG
+#elif DEBUG
         Console.WriteLine($"[XXX] {message}");
 #endif
     }
