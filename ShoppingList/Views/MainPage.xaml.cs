@@ -49,21 +49,35 @@ public partial class MainPage
     {
         if (!_isMenuOpen)
         {
-            var opacity = Settings.CurrentTheme switch
+            if (Settings.CurrentTheme == Settings.Theme.Dark)
             {
-                Settings.Theme.Dark => 0,
-                _ => 0.8
-            };
-            var resize = PageContentGrid.TranslateTo(-Width * 0.25, 0, AnimationDuration);
-            var scaleDown = PageContentGrid.ScaleTo(0.75, AnimationDuration);
-            var fadeOut = PageContentGrid.FadeTo(opacity, AnimationDuration);
-            var rotate = PageContentGrid.RotateYTo(35, AnimationDuration, Easing.CubicIn);
-            await Task.WhenAll(resize, scaleDown, fadeOut, rotate);
+                await DarkModeTransitionToSettings();
+            }
+            else
+            {
+                await LightModeTransitionToSettings();
+            }
+
             _isMenuOpen = true;
             return;
         }
 
         await CloseMenu();
+    }
+
+    private async Task LightModeTransitionToSettings()
+    {
+        var resize = PageContentGrid.TranslateTo(-Width * 0.25, 0, AnimationDuration);
+        var scaleDown = PageContentGrid.ScaleTo(0.75, AnimationDuration);
+        var fadeOut = PageContentGrid.FadeTo(0.8, AnimationDuration);
+        var rotate = PageContentGrid.RotateYTo(35, AnimationDuration, Easing.CubicIn);
+        await Task.WhenAll(resize, scaleDown, fadeOut, rotate);
+    }
+
+    private async Task DarkModeTransitionToSettings()
+    {
+        var resize = PageContentGrid.TranslateTo(0, Height * 0.5, AnimationDuration);
+        await resize;
     }
 
     private async void OnTapGridArea(object sender, EventArgs e) => await CloseMenu();

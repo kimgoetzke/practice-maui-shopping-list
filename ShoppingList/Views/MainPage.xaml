@@ -52,10 +52,10 @@
             <Grid.Background>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
                     <GradientStop
-                        Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource OffBlack}}"
+                        Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray800}}"
                         Offset="0.1" />
                     <GradientStop
-                        Color="{AppThemeBinding Light={StaticResource Tertiary}, Dark={StaticResource Gray900}}"
+                        Color="{AppThemeBinding Light={StaticResource Tertiary}, Dark={StaticResource Gray800}}"
                         Offset="1.0" />
                 </LinearGradientBrush>
             </Grid.Background>
