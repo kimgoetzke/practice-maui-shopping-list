@@ -105,7 +105,8 @@
                   RowDefinitions="Auto, Auto"
                   Padding="5"
                   RowSpacing="5">
-                <Entry Placeholder="Enter item name"
+                <Entry x:Name="EntryField"
+                       Placeholder="Enter item name"
                        Text="{Binding NewItem.Title}"
                        Grid.Row="0"
                        Grid.Column="0"
@@ -113,9 +114,11 @@
                        Margin="5"
                        FontSize="16"
                        Unfocused="OnEntryUnfocused"
-                       ReturnCommand="{Binding AddItemCommand}"/>
+                       Completed="OnItemAdded"
+                       ReturnCommand="{Binding AddItemCommand}" />
                 <Button x:Name="AddButton"
                         Text="Add"
+                        Pressed="OnItemAdded"
                         Style="{StaticResource StandardButton}"
                         Command="{Binding AddItemCommand}"
                         Grid.Row="0"

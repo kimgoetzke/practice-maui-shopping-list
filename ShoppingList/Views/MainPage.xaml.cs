@@ -40,10 +40,13 @@ public partial class MainPage
 
     private void OnEntryUnfocused(object sender, FocusEventArgs e) => AddButton.Focus();
 
+    private void OnItemAdded(object? sender, EventArgs e) => EntryField.Focus();
+
+    private async void OnTapGridArea(object sender, EventArgs e) => await CloseMenu();
+
     private void CopyOnClicked(object? sender, EventArgs e) => _viewModel.CopyToClipboard();
 
     private async void ImportOnClicked(object? sender, EventArgs e) => await _viewModel.InsertFromClipboard();
-
 
     private async void OnTapSettings(object sender, EventArgs e)
     {
@@ -79,8 +82,6 @@ public partial class MainPage
         var resize = PageContentGrid.TranslateTo(0, Height * 0.5, AnimationDuration);
         await resize;
     }
-
-    private async void OnTapGridArea(object sender, EventArgs e) => await CloseMenu();
 
     private async Task CloseMenu()
     {

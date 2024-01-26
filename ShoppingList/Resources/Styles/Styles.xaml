@@ -10,7 +10,7 @@
     <x:Double x:Key="StandardSwipeItemHeight">44</x:Double>
     <x:Double x:Key="StandardSwipeItemHeightPlusLineHeight">45</x:Double>
 
-    <Shadow Brush="Black"
+    <Shadow Brush="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray500}}"
             x:Key="DefaultShadow"
             Offset="5,5"
             Radius="5"
