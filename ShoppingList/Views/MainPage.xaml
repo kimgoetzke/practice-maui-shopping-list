@@ -112,7 +112,8 @@
                        Grid.ColumnSpan="2"
                        Margin="5"
                        FontSize="16"
-                       Unfocused="OnEntryUnfocused" />
+                       Unfocused="OnEntryUnfocused"
+                       ReturnCommand="{Binding AddItemCommand}"/>
                 <Button x:Name="AddButton"
                         Text="Add"
                         Style="{StaticResource StandardButton}"
