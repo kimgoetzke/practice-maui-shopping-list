@@ -1,4 +1,7 @@
 ﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
+using ShoppingList.Resources.Styles;
 using ShoppingList.Utilities;
 using ShoppingList.ViewModel;
 
@@ -25,9 +28,6 @@ public partial class MainPage
         await Task.WhenAll(loadItems, loadStores);
         _viewModel.SortItems();
         DisplayPopUpOnFirstRun();
-        var systemTheme = Application.Current?.RequestedTheme;
-        Settings.SetCurrentThemeFromSystem(systemTheme);
-        Logger.Log($"Current app theme is: {Settings.CurrentTheme}");
     }
 
     private void DisplayPopUpOnFirstRun()
@@ -97,5 +97,30 @@ public partial class MainPage
     {
         // TODO: Give user feedback through particles or animation
         Logger.Log("OnInvokedSwipeItem");
+    }
+
+    private void OnPickerSelectionChanged(object sender, EventArgs e)
+    {
+        var picker = sender as Picker;
+        var themeString = picker!.SelectedItem!.ToString();
+        var mergedDictionaries = Application.Current?.Resources.MergedDictionaries;
+        if (mergedDictionaries == null)
+            return;
+        mergedDictionaries.Clear();
+        var isParsed = Enum.TryParse(themeString, out Settings.Theme theme);
+        if (!isParsed)
+            return;
+        switch (theme)
+        {
+            case Settings.Theme.Dark:
+                mergedDictionaries.Add(new DarkTheme());
+                break;
+            case Settings.Theme.Light:
+            default:
+                mergedDictionaries.Add(new LightTheme());
+                break;
+        }
+
+        Settings.CurrentTheme = theme;
     }
 }

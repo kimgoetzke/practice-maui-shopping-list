@@ -84,6 +84,18 @@
                         x:Name="RemoveStoreButton"
                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=RemoveAllItemsCommand}"
                         CommandParameter="{Binding .}" />
+                <Picker x:Name="ThemePicker"
+                        Title="Select theme"
+                        Margin="0, 20, 0, 0"
+                        HorizontalOptions="Center"
+                        SelectedIndexChanged="OnPickerSelectionChanged">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Light</x:String>
+                            <x:String>Dark</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
             </VerticalStackLayout>
         </Grid>
 
@@ -96,7 +108,7 @@
             <!-- Background for first two rows -->
             <BoxView Grid.Row="1"
                      Grid.RowSpan="2"
-                     Color="{AppThemeBinding Light={StaticResource LightBackgroundColor}, Dark={StaticResource DarkBackgroundColor}}"
+                     Color="{DynamicResource BackgroundColor}"
                      BackgroundColor="Transparent" />
 
             <!-- Menu to add items -->
