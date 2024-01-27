@@ -110,11 +110,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     internal void CopyToClipboard()
     {
-        var itemTitles = Items.Select(item => item.Title.Trim());
-        var clipboardText = string.Join("," + Environment.NewLine, itemTitles);
-        Clipboard.SetTextAsync(clipboardText);
-        Logger.Log("Copied to clipboard: " + clipboardText.Replace(Environment.NewLine, ""));
-        Notifier.ShowToast("Copied list to clipboard");
+        _clipboardService.CopyToClipboard(Items, Stores);
     }
 
     [RelayCommand]

@@ -11,15 +11,16 @@ public static partial class StringProcessor
         return itemTitle.Length > 1 ? trimmed[..1].ToUpper() + trimmed[1..] : trimmed.ToUpper();
     }
 
-    public static (string, int) ExtractItemTitleAndQuantity(string input)
+    public static (string, int, bool) ExtractItem(string input)
     {
-        var match = TitleAndQuantityRegex().Match(input);
-        if (!match.Success)
-            return (input, 1);
-        var itemName = match.Groups[1].Value.Trim();
-        return int.TryParse(match.Groups[2].Value, out var quantity)
-            ? (itemName, quantity)
-            : (itemName, 1);
+        var itemNameMatch = ItemNameRegex().Match(input);
+        var itemName = itemNameMatch.Success
+            ? itemNameMatch.Groups[1].Value.Trim()
+            : "<Failed to extract>";
+        var quantityMatch = ItemQuantityRegex().Match(input);
+        int.TryParse(quantityMatch.Value, out var quantity);
+        var isImportant = ItemIsImportantRegex().IsMatch(input);
+        return (itemName, quantity == 0 ? 1 : quantity, isImportant);
     }
 
     public static bool IsStoreName(string input)
@@ -34,9 +35,15 @@ public static partial class StringProcessor
         return match.Success ? match.Groups[1].Value.Trim() : IStoreService.DefaultStoreName;
     }
 
-    [GeneratedRegex(@"(.*)\((\d+)\)")]
-    private static partial Regex TitleAndQuantityRegex();
-
     [GeneratedRegex(@"\[(.*)\]:")]
     private static partial Regex StoreRegex();
+
+    [GeneratedRegex(@"^(.*?)(?=\s*\(\d+|\s*!|$)")]
+    private static partial Regex ItemNameRegex();
+
+    [GeneratedRegex(@"(\d+)")]
+    private static partial Regex ItemQuantityRegex();
+
+    [GeneratedRegex(@"!")]
+    private static partial Regex ItemIsImportantRegex();
 }

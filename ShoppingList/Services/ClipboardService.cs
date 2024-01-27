@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Text;
 using ShoppingList.Models;
 using ShoppingList.Utilities;
 
@@ -84,13 +85,14 @@ public class ClipboardService(IStoreService storeService, IItemService itemServi
         string storeName
     )
     {
-        var (title, quantity) = StringProcessor.ExtractItemTitleAndQuantity(substring);
+        var (title, quantity, isImportant) = StringProcessor.ExtractItem(substring);
         var processedTitle = StringProcessor.ProcessItemTitle(title);
         var item = new Item
         {
             Title = processedTitle,
             StoreName = storeName,
-            Quantity = quantity
+            Quantity = quantity,
+            IsImportant = isImportant
         };
         itemList.Add(item);
         itemCount++;
@@ -153,5 +155,47 @@ public class ClipboardService(IStoreService storeService, IItemService itemServi
             await itemService.CreateOrUpdateAsync(item);
             items.Add(item);
         }
+    }
+
+    public void CopyToClipboard(
+        ObservableCollection<Item> items,
+        ObservableCollection<ConfigurableStore> stores
+    )
+    {
+        var text = BuildStringFromList(items, stores);
+        Clipboard.SetTextAsync(text);
+        Logger.Log("Copied to clipboard: " + text.Replace(Environment.NewLine, ", "));
+        Notifier.ShowToast("Copied list to clipboard");
+    }
+
+    private static string BuildStringFromList(
+        ObservableCollection<Item> items,
+        ObservableCollection<ConfigurableStore> stores
+    )
+    {
+        var builder = new StringBuilder();
+        foreach (var store in stores)
+        {
+            var itemsFromStore = items.Where(item => item.StoreName == store.Name).ToList();
+            if (itemsFromStore.Count == 0)
+                continue;
+            builder.AppendLine($"[{store.Name}]:");
+            foreach (var item in itemsFromStore)
+            {
+                builder.Append(item.Title);
+                if (item.Quantity > 1)
+                    builder.Append($" ({item.Quantity})");
+                if (item.IsImportant)
+                    builder.Append(" !");
+                builder.AppendLine();
+            }
+            builder.AppendLine();
+        }
+
+        // Remove last two line breaks as they are only needed to separate stores
+        if (builder.Length >= 2)
+            builder.Length -= 2;
+
+        return builder.ToString();
     }
 }

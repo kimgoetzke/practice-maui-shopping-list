@@ -9,4 +9,9 @@ public interface IClipboardService
         ObservableCollection<ConfigurableStore> stores,
         ObservableCollection<Item> items
     );
+
+    void CopyToClipboard(
+        ObservableCollection<Item> items,
+        ObservableCollection<ConfigurableStore> stores
+    );
 }
