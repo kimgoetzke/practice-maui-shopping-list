@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
-using ShoppingList.ViewModel;
-using CommunityToolkit.Maui;
+﻿using CommunityToolkit.Maui;
+using Microsoft.Extensions.Logging;
 using ShoppingList.Services;
+using ShoppingList.ViewModel;
 using ShoppingList.Views;
 
 namespace ShoppingList;
@@ -30,6 +30,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IDatabaseProvider, DatabaseProvider>();
         builder.Services.AddSingleton<IStoreService, StoreService>();
         builder.Services.AddSingleton<IItemService, ItemService>();
+        builder.Services.AddSingleton<IClipboardService, ClipboardService>();
         builder.Services.AddLogging();
 
 #if DEBUG
