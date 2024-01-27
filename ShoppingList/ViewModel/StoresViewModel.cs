@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
+using CommunityToolkit.Maui.Core.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Maui.Core.Platform;
 using ShoppingList.Models;
 using ShoppingList.Services;
 using ShoppingList.Utilities;
@@ -11,8 +11,11 @@ namespace ShoppingList.ViewModel;
 
 public partial class StoresViewModel : ObservableObject
 {
-    [ObservableProperty] private ObservableCollection<ConfigurableStore> _stores;
-    [ObservableProperty] private ConfigurableStore _newStore;
+    [ObservableProperty]
+    private ObservableCollection<ConfigurableStore> _stores;
+
+    [ObservableProperty]
+    private ConfigurableStore _newStore;
     private readonly IStoreService _storeService;
 
     public StoresViewModel(IStoreService storeService)
@@ -42,7 +45,7 @@ public partial class StoresViewModel : ObservableObject
 
         // Add to list and database
         Stores.Add(NewStore);
-        await _storeService.SaveStoreAsync(NewStore);
+        await _storeService.CreateOrUpdateAsync(NewStore);
 
         // Show toast on success
         await Notifier.AwaitShowToast($"Added: {NewStore.Name}");
@@ -67,7 +70,7 @@ public partial class StoresViewModel : ObservableObject
         }
 
         Stores.Remove(s);
-        await _storeService.DeleteStoreAsync(s);
+        await _storeService.DeleteAsync(s);
         OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
         Notifier.ShowToast($"Removed: {s.Name}");
     }
@@ -75,8 +78,9 @@ public partial class StoresViewModel : ObservableObject
     [RelayCommand]
     private async Task ResetStores()
     {
-        if (!await IsRequestConfirmedByUser()) return;
-        await _storeService.ResetStoresAsync();
+        if (!await IsRequestConfirmedByUser())
+            return;
+        await _storeService.DeleteAllAsync();
         await LoadStoresFromDatabase();
         OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
         Notifier.ShowToast("Reset stores");
@@ -84,10 +88,12 @@ public partial class StoresViewModel : ObservableObject
 
     private static async Task<bool> IsRequestConfirmedByUser()
     {
-        return await Shell.Current.DisplayAlert("Reset stores",
+        return await Shell.Current.DisplayAlert(
+            "Reset stores",
             $"This will remove all stores, except the 'Anywhere' store. Are you sure you want to continue?",
             "Yes",
-            "No");
+            "No"
+        );
     }
 
     [RelayCommand]
@@ -98,7 +104,7 @@ public partial class StoresViewModel : ObservableObject
 
     public async Task LoadStoresFromDatabase()
     {
-        var loadedItems = await _storeService.GetStoresAsync();
+        var loadedItems = await _storeService.GetAllAsync();
         Stores.Clear();
         foreach (var i in loadedItems)
             Stores.Add(i);

@@ -13,7 +13,8 @@ public class StoreService(IDatabaseProvider db) : IStoreService
         if (_defaultStore == null)
         {
             var connection = await db.GetConnection();
-            var loadedStore = await connection.Table<ConfigurableStore>()
+            var loadedStore = await connection
+                .Table<ConfigurableStore>()
                 .FirstAsync(s => s.Name == IStoreService.DefaultStoreName);
             _defaultStore = loadedStore;
         }
@@ -24,13 +25,13 @@ public class StoreService(IDatabaseProvider db) : IStoreService
         return _defaultStore;
     }
 
-    public async Task<List<ConfigurableStore>> GetStoresAsync()
+    public async Task<List<ConfigurableStore>> GetAllAsync()
     {
         var connection = await db.GetConnection();
         return await connection.Table<ConfigurableStore>().ToListAsync();
     }
 
-    public async Task SaveStoreAsync(ConfigurableStore store)
+    public async Task CreateOrUpdateAsync(ConfigurableStore store)
     {
         var connection = await db.GetConnection();
         Logger.Log($"Adding or updating store: {store.ToLoggableString()}");
@@ -43,7 +44,25 @@ public class StoreService(IDatabaseProvider db) : IStoreService
         await connection.InsertAsync(store);
     }
 
-    public async Task DeleteStoreAsync(ConfigurableStore store)
+    public async Task CreateIfNotExistAsync(string name)
+    {
+        var connection = await db.GetConnection();
+        Logger.Log($"Attempting to find store '{name}'");
+        var item = await connection
+            .Table<ConfigurableStore>()
+            .Where(store => store.Name == name)
+            .FirstOrDefaultAsync();
+        if (item != null)
+        {
+            Logger.Log($"Found store {name} - no need to add it");
+            return;
+        }
+
+        await connection.InsertAsync(new ConfigurableStore { Name = name });
+        Logger.Log($"Added store {name}");
+    }
+
+    public async Task DeleteAsync(ConfigurableStore store)
     {
         var connection = await db.GetConnection();
         await SetStoresToDefaultOnMatchingItems(store.Name);
@@ -62,7 +81,7 @@ public class StoreService(IDatabaseProvider db) : IStoreService
         }
     }
 
-    public async Task ResetStoresAsync()
+    public async Task DeleteAllAsync()
     {
         var connection = await db.GetConnection();
         await SetStoresToDefaultOnAllItems(connection);

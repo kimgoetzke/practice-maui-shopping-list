@@ -5,14 +5,14 @@ namespace ShoppingList.Services;
 
 public class ItemService(IDatabaseProvider db) : IItemService
 {
-    public async Task<List<Item>> GetItemsAsync()
+    public async Task<List<Item>> GetAsync()
     {
         var connection = await db.GetConnection();
         var items = await connection.Table<Item>().ToListAsync();
         return items;
     }
 
-    public async Task SaveItemAsync(Item item)
+    public async Task CreateOrUpdateAsync(Item item)
     {
         var connection = await db.GetConnection();
         Logger.Log($"Adding or updating item: {item.ToLoggableString()}");
@@ -25,14 +25,14 @@ public class ItemService(IDatabaseProvider db) : IItemService
         await connection.InsertAsync(item);
     }
 
-    public async Task DeleteItemAsync(Item item)
+    public async Task DeleteAsync(Item item)
     {
         var connection = await db.GetConnection();
         Logger.Log($"Removing item: {item.Title} #{item.Id}");
         await connection.DeleteAsync(item);
     }
 
-    public async Task DeleteAllItemsAsync()
+    public async Task DeleteAllAsync()
     {
         Logger.Log("Removing all items");
         var connection = await db.GetConnection();

@@ -11,17 +11,30 @@ namespace ShoppingList.ViewModel;
 
 public partial class MainViewModel : ObservableObject
 {
-    [ObservableProperty] private ObservableCollection<Item> _items = [];
-    [ObservableProperty] private ObservableCollection<ConfigurableStore> _stores = [];
-    [ObservableProperty] private Item _newItem;
-    [ObservableProperty] private ConfigurableStore? _currentStore;
+    [ObservableProperty]
+    private ObservableCollection<Item> _items = [];
+
+    [ObservableProperty]
+    private ObservableCollection<ConfigurableStore> _stores = [];
+
+    [ObservableProperty]
+    private Item _newItem;
+
+    [ObservableProperty]
+    private ConfigurableStore? _currentStore;
     private readonly IStoreService _storeService;
     private readonly IItemService _itemService;
+    private readonly IClipboardService _clipboardService;
 
-    public MainViewModel(IStoreService storeService, IItemService itemService)
+    public MainViewModel(
+        IStoreService storeService,
+        IItemService itemService,
+        IClipboardService clipboardService
+    )
     {
         _storeService = storeService;
         _itemService = itemService;
+        _clipboardService = clipboardService;
         NewItem = new Item();
     }
 
@@ -38,7 +51,7 @@ public partial class MainViewModel : ObservableObject
 
         // Add to list and database
         Items.Add(NewItem);
-        await _itemService.SaveItemAsync(NewItem);
+        await _itemService.CreateOrUpdateAsync(NewItem);
         Notifier.ShowToast($"Added: {NewItem.Title}");
 
         // Make sure the UI is reset/updated
@@ -47,20 +60,20 @@ public partial class MainViewModel : ObservableObject
         OnPropertyChanged(nameof(NewItem));
     }
 
-
     [RelayCommand]
     private async Task RemoveItem(Item i)
     {
         Items.Remove(i);
-        await _itemService.DeleteItemAsync(i);
+        await _itemService.DeleteAsync(i);
     }
 
     [RelayCommand]
     private async Task RemoveAllItems()
     {
-        if (!await IsRequestConfirmedByUser()) return;
+        if (!await IsRequestConfirmedByUser())
+            return;
         Items.Clear();
-        await _itemService.DeleteAllItemsAsync();
+        await _itemService.DeleteAllAsync();
         Notifier.ShowToast("Removed all items from list");
     }
 
@@ -69,14 +82,16 @@ public partial class MainViewModel : ObservableObject
         return await Shell.Current.DisplayAlert(
             "Clear list",
             $"This will remove all items from your list. Are you sure you want to continue?",
-            "Yes", "No");
+            "Yes",
+            "No"
+        );
     }
 
     [RelayCommand]
     private async Task TogglePriority(Item i)
     {
         i.IsImportant = !i.IsImportant;
-        await _itemService.SaveItemAsync(i);
+        await _itemService.CreateOrUpdateAsync(i);
         SortItems();
     }
 
@@ -103,79 +118,21 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    internal async Task InsertFromClipboard()
+    internal void InsertFromClipboard()
     {
-        var import = await Clipboard.GetTextAsync();
-        if (IsClipboardEmpty(import)) return;
-        if (!WasAbleToConvertToItemList(import!, out var addedItems, out var toImport)) return;
-        if (!await IsImportConfirmedByUser(addedItems)) return;
-        await ImportItemList(toImport, import!);
-        Notifier.ShowToast($"Imported {addedItems} list from clipboard");
-    }
-
-    private static bool IsClipboardEmpty(string? import)
-    {
-        if (import != null) return false;
-        Notifier.ShowToast("Nothing to import - your clipboard is empty");
-        return true;
-    }
-
-    private static bool WasAbleToConvertToItemList(string import, out int addedItems, out List<Item> toImport)
-    {
-        Logger.Log("Extracted from clipboard: " + import.Replace(Environment.NewLine, ""));
-        var text = import.Replace(Environment.NewLine, "").Split(",");
-        addedItems = 0;
-        toImport = [];
-        foreach (var s in text)
-        {
-            if (string.IsNullOrWhiteSpace(s))
-                continue;
-            var (title, quantity) = StringProcessor.ExtractItemTitleAndQuantity(s);
-            var processedTitle = StringProcessor.ProcessItemTitle(title);
-            var item = new Item
-                { Title = processedTitle, StoreName = IStoreService.DefaultStoreName, Quantity = quantity };
-            toImport.Add(item);
-            addedItems++;
-        }
-
-        if (addedItems != 0) return true;
-        Notifier.ShowToast("Nothing to import - your clipboard may contain invalid data");
-        return false;
-    }
-
-    private static async Task<bool> IsImportConfirmedByUser(int addedItems)
-    {
-        var isConfirmed = await Shell.Current.DisplayAlert(
-            "Import from clipboard",
-            $"Extracted {addedItems} item(s) from your clipboard. Would you like to add the item(s) to your list?",
-            "Yes",
-            "No");
-
-        if (!isConfirmed) Notifier.ShowToast("Import cancelled");
-        return isConfirmed;
-    }
-
-    private async Task ImportItemList(List<Item> toImport, string import)
-    {
-        foreach (var item in toImport)
-        {
-            await _itemService.SaveItemAsync(item);
-            Items.Add(item);
-        }
-
-        Logger.Log("Extracted from clipboard: " + import.Replace(Environment.NewLine, ""));
+        _clipboardService.InsertFromClipboardAsync(Stores, Items);
     }
 
     public void SortItems()
     {
-        Items = new ObservableCollection<Item>(Items
-            .OrderBy(i => i.StoreName)
-            .ThenByDescending(i => i.AddedOn));
+        Items = new ObservableCollection<Item>(
+            Items.OrderBy(i => i.StoreName).ThenByDescending(i => i.AddedOn)
+        );
     }
 
     public async Task LoadItemsFromDatabase()
     {
-        var loadedItems = await _itemService.GetItemsAsync();
+        var loadedItems = await _itemService.GetAsync();
         Items.Clear();
         foreach (var i in loadedItems)
             Items.Add(i);
@@ -183,7 +140,7 @@ public partial class MainViewModel : ObservableObject
 
     public async Task LoadStoresFromService()
     {
-        var loadedStores = await _storeService.GetStoresAsync();
+        var loadedStores = await _storeService.GetAllAsync();
         Stores.Clear();
         foreach (var s in loadedStores)
         {

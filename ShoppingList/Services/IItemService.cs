@@ -4,8 +4,8 @@ namespace ShoppingList.Services;
 
 public interface IItemService
 {
-    Task<List<Item>> GetItemsAsync();
-    Task SaveItemAsync(Item item);
-    Task DeleteItemAsync(Item item);
-    Task DeleteAllItemsAsync();
+    Task<List<Item>> GetAsync();
+    Task CreateOrUpdateAsync(Item item);
+    Task DeleteAsync(Item item);
+    Task DeleteAllAsync();
 }

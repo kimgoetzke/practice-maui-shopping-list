@@ -32,7 +32,8 @@ public partial class MainPage
 
     private void DisplayPopUpOnFirstRun()
     {
-        if (!Settings.FirstRun) return;
+        if (!Settings.FirstRun)
+            return;
         Logger.Log("Application ran for the first time");
         Settings.FirstRun = false;
         this.ShowPopup(new WelcomePopup());
@@ -46,7 +47,7 @@ public partial class MainPage
 
     private void CopyOnClicked(object? sender, EventArgs e) => _viewModel.CopyToClipboard();
 
-    private async void ImportOnClicked(object? sender, EventArgs e) => await _viewModel.InsertFromClipboard();
+    private void ImportOnClicked(object? sender, EventArgs e) => _viewModel.InsertFromClipboard();
 
     private async void OnTapSettings(object sender, EventArgs e)
     {
@@ -79,8 +80,7 @@ public partial class MainPage
 
     private async Task DarkModeTransitionToSettings()
     {
-        var resize = PageContentGrid.TranslateTo(0, Height * 0.5, AnimationDuration);
-        await resize;
+        await PageContentGrid.TranslateTo(-Width * 0.5, 0, AnimationDuration);
     }
 
     private async Task CloseMenu()

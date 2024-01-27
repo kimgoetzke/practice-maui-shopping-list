@@ -10,9 +10,14 @@ namespace ShoppingList.ViewModel;
 [QueryProperty("Item", "Item")]
 public partial class DetailViewModel : ObservableObject
 {
-    [ObservableProperty] private ObservableCollection<ConfigurableStore> _stores = [];
-    [ObservableProperty] private Item _item;
-    [ObservableProperty] private ConfigurableStore _currentStore;
+    [ObservableProperty]
+    private ObservableCollection<ConfigurableStore> _stores = [];
+
+    [ObservableProperty]
+    private Item _item;
+
+    [ObservableProperty]
+    private ConfigurableStore _currentStore;
 
     private readonly IStoreService _storeService;
     private readonly IItemService _itemService;
@@ -30,18 +35,18 @@ public partial class DetailViewModel : ObservableObject
     private async Task GoBack()
     {
         Item.StoreName = CurrentStore.Name;
-        await _itemService.SaveItemAsync(Item);
+        await _itemService.CreateOrUpdateAsync(Item);
 
 #pragma warning disable CS4014
         Notifier.AwaitShowToast($"Updated: {Item.Title}");
 #pragma warning restore CS4014
-        
+
         await Shell.Current.GoToAsync("..", true);
     }
 
     private async void SetStoreOptions()
     {
-        var loadedStores = await _storeService.GetStoresAsync();
+        var loadedStores = await _storeService.GetAllAsync();
         Stores.Clear();
         foreach (var s in loadedStores)
         {
