@@ -8,7 +8,7 @@ public partial class WelcomePopup : Popup
     {
         InitializeComponent();
     }
-    
+
     private void OnButtonClicked(object sender, EventArgs e)
     {
         Close();

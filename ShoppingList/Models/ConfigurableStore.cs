@@ -5,9 +5,11 @@ namespace ShoppingList.Models;
 
 public partial class ConfigurableStore : ObservableObject
 {
-    [PrimaryKey, AutoIncrement] public int Id { get; set; }
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
 
-    [ObservableProperty] private string _name = string.Empty;
+    [ObservableProperty]
+    private string _name = string.Empty;
 
     public override string ToString()
     {

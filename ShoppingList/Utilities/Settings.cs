@@ -13,7 +13,7 @@ public static class Settings
         get => (Theme)Preferences.Get(nameof(CurrentTheme), (int)Theme.Light);
         set => Preferences.Set(nameof(CurrentTheme), (int)value);
     }
-    
+
     public static void SetCurrentThemeFromSystem(AppTheme? systemTheme)
     {
         CurrentTheme = systemTheme switch

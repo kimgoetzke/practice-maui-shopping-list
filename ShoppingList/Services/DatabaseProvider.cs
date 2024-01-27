@@ -37,7 +37,9 @@ public class DatabaseProvider : IDatabaseProvider
         if (await connection.Table<ConfigurableStore>().CountAsync() != 0)
             return;
 
-        await connection.InsertAsync(new ConfigurableStore { Name = IStoreService.DefaultStoreName });
+        await connection.InsertAsync(
+            new ConfigurableStore { Name = IStoreService.DefaultStoreName }
+        );
         var stores = await connection.Table<ConfigurableStore>().ToListAsync();
         Logger.Log($"Added default stores:");
         stores.ForEach(store => Logger.Log($" - {store.Name}"));
