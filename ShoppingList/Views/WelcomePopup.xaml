@@ -14,7 +14,7 @@
         VerticalOptions="Center"
         HorizontalOptions="Center">
         <Border BackgroundColor="{StaticResource OffWhite}"
-                StrokeThickness="{StaticResource ThickLineHeight}"
+                StrokeThickness="{DynamicResource ThickLineHeight}"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
                 Margin="20"
@@ -44,9 +44,9 @@
                        HorizontalOptions="Center">
                     <Label.FormattedText>
                         <FormattedString>
-                            <Span Text="Check that the " Style="{StaticResource StandardSpan}" />
-                            <Span Text="stores" Style="{StaticResource Highlight}" />
-                            <Span Text=" you want to use are set." Style="{StaticResource StandardSpan}" />
+                            <Span Text="Check that the " Style="{DynamicResource StandardSpan}" />
+                            <Span Text="stores" Style="{DynamicResource Highlight}" />
+                            <Span Text=" you want to use are set." Style="{DynamicResource StandardSpan}" />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
@@ -57,15 +57,15 @@
                        Padding="0,0,0,20">
                     <Label.FormattedText>
                         <FormattedString>
-                            <Span Text="You can add and remove stores anytime in the " Style="{StaticResource StandardSpan}" />
-                            <Span Text="Settings" Style="{StaticResource Highlight}" />
-                            <Span Text=" menu." Style="{StaticResource StandardSpan}" />
+                            <Span Text="You can add and remove stores anytime in the " Style="{DynamicResource StandardSpan}" />
+                            <Span Text="Settings" Style="{DynamicResource Highlight}" />
+                            <Span Text=" menu." Style="{DynamicResource StandardSpan}" />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
                 <Button Text="View stores"
                         Grid.Row="3"
-                        Style="{StaticResource StandardButton}"
+                        Style="{DynamicResource StandardButton}"
                         VerticalOptions="End"
                         HorizontalOptions="Center"
                         Clicked="OnButtonClicked" />

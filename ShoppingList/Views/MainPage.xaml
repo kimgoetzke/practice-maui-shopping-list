@@ -18,8 +18,8 @@
     </ContentPage.Resources>
 
     <ContentPage.Behaviors>
-        <toolkit:StatusBarBehavior
-            StatusBarColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource OffBlack}}"
+        <toolkit:StatusBarBehavior 
+            StatusBarColor="{DynamicResource StatusBarColor}"
             StatusBarStyle="LightContent" />
     </ContentPage.Behaviors>
 
@@ -51,12 +51,8 @@
             <!-- Settings menu: Configuration -->
             <Grid.Background>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
-                    <GradientStop
-                        Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Gray800}}"
-                        Offset="0.1" />
-                    <GradientStop
-                        Color="{AppThemeBinding Light={StaticResource Tertiary}, Dark={StaticResource Gray800}}"
-                        Offset="1.0" />
+                    <GradientStop Color="{DynamicResource SettingsMenuGradientStop1}" Offset="0.1" />
+                    <GradientStop Color="{DynamicResource SettingsMenuGradientStop2}" Offset="1.0" />
                 </LinearGradientBrush>
             </Grid.Background>
             <Grid.GestureRecognizers>
@@ -71,14 +67,14 @@
                        Text="Settings"
                        Padding="0,0,20,0"
                        HorizontalOptions="End" />
-                <BoxView Style="{StaticResource ThinLineSeparator}" Margin="0,10,0, 30" />
-                <Button Style="{StaticResource MenuButton}"
+                <BoxView Style="{DynamicResource ThinLineSeparator}" Margin="0,10,0, 30" />
+                <Button Style="{DynamicResource MenuButton}"
                         Text="Manage stores"
                         HorizontalOptions="End"
                         x:Name="ManageStoresButton"
                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=ManageStoresCommand}"
                         CommandParameter="{Binding .}" />
-                <Button Style="{StaticResource MenuButton}"
+                <Button Style="{DynamicResource MenuButton}"
                         Text="Clear list"
                         HorizontalOptions="End"
                         x:Name="RemoveStoreButton"
@@ -131,7 +127,7 @@
                 <Button x:Name="AddButton"
                         Text="Add"
                         Pressed="OnItemAdded"
-                        Style="{StaticResource StandardButton}"
+                        Style="{DynamicResource StandardButton}"
                         Command="{Binding AddItemCommand}"
                         Grid.Row="0"
                         Grid.Column="2" />
@@ -166,7 +162,7 @@
             </Grid>
 
             <!-- Horizontal line below menu to add items -->
-            <BoxView Grid.Row="2" Style="{StaticResource ThickLineSeparator}" HorizontalOptions="FillAndExpand" />
+            <BoxView Grid.Row="2" Style="{DynamicResource ThickLineSeparator}" HorizontalOptions="FillAndExpand" />
 
             <!-- List of added items -->
             <Grid Grid.Row="3" Padding="0">
@@ -185,9 +181,9 @@
                                             <SwipeItemView
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=RemoveItemCommand}"
                                                 CommandParameter="{Binding .}"
-                                                BackgroundColor="{StaticResource Green}"
+                                                BackgroundColor="{DynamicResource Green}"
                                                 WidthRequest="300">
-                                                <Grid HorizontalOptions="Fill" Background="{StaticResource Green}">
+                                                <Grid HorizontalOptions="Fill" Background="{DynamicResource Green}">
                                                     <Grid HorizontalOptions="Start">
                                                         <Image Source="done_white.png"
                                                                Aspect="AspectFit"
@@ -208,7 +204,7 @@
                                                 Invoked="SwipeItemView_OnInvoked"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=TogglePriorityCommand}"
                                                 CommandParameter="{Binding .}">
-                                                <Frame BackgroundColor="{StaticResource Pink}"
+                                                <Frame BackgroundColor="{DynamicResource Pink}"
                                                        BorderColor="Transparent"
                                                        Padding="0"
                                                        VerticalOptions="Center"
@@ -227,24 +223,11 @@
 
                                     <!-- Contents of list -->
                                     <Grid Padding="0" RowDefinitions="Auto, Auto">
-                                        <Frame CornerRadius="0" HeightRequest="44"
-                                               BorderColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}">
+                                        <Frame CornerRadius="0" HeightRequest="44" 
+                                               BorderColor="{DynamicResource BackgroundColor}" 
+                                               BackgroundColor="{DynamicResource BackgroundColor}">
 
                                             <!-- Contents of list: Settings -->
-                                            <Frame.Triggers>
-                                                <DataTrigger TargetType="Frame"
-                                                             Binding="{Binding IsImportant}"
-                                                             Value="True">
-                                                    <Setter Property="BackgroundColor"
-                                                            Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}" />
-                                                </DataTrigger>
-                                                <DataTrigger TargetType="Frame"
-                                                             Binding="{Binding IsImportant}"
-                                                             Value="False">
-                                                    <Setter Property="BackgroundColor"
-                                                            Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}" />
-                                                </DataTrigger>
-                                            </Frame.Triggers>
                                             <Frame.GestureRecognizers>
                                                 <TapGestureRecognizer
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=TapItemCommand}"
@@ -263,7 +246,7 @@
                                                                          Binding="{Binding IsImportant}"
                                                                          Value="True">
                                                                 <Setter Property="TextColor"
-                                                                        Value="{StaticResource Pink}" />
+                                                                        Value="{DynamicResource Pink}" />
                                                             </DataTrigger>
                                                         </Label.Triggers>
                                                     </Label>
@@ -282,7 +265,7 @@
                                                                          Binding="{Binding IsImportant}"
                                                                          Value="True">
                                                                 <Setter Property="TextColor"
-                                                                        Value="{StaticResource Pink}" />
+                                                                        Value="{DynamicResource Pink}" />
                                                             </DataTrigger>
                                                         </Label.Triggers>
                                                     </Label>
@@ -303,7 +286,7 @@
                                                 </StackLayout>
                                                 <Label Text="{Binding StoreName}"
                                                        FontSize="10"
-                                                       TextColor="{StaticResource Neutral}"
+                                                       TextColor="{DynamicResource Neutral}"
                                                        HorizontalOptions="End"
                                                        VerticalOptions="Center"
                                                        Padding="0,0,5,0"
@@ -322,7 +305,7 @@
                                     </Grid>
 
                                 </SwipeView>
-                                <BoxView Grid.Row="1" Style="{StaticResource ThinLineSeparator}" />
+                                <BoxView Grid.Row="1" Style="{DynamicResource ThinLineSeparator}" />
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
@@ -332,19 +315,19 @@
                                          VerticalOptions="CenterAndExpand">
                                 <Label Text=":)"
                                        FontSize="48"
-                                       TextColor="{StaticResource Gray200}"
+                                       TextColor="{DynamicResource LightTextColor}"
                                        HorizontalOptions="Fill"
                                        HorizontalTextAlignment="Center" />
                                 <Label Text="Nothing to buy"
                                        Margin="10"
                                        FontSize="18"
-                                       TextColor="{StaticResource Gray200}"
+                                       TextColor="{DynamicResource LightTextColor}"
                                        HorizontalOptions="Fill"
                                        HorizontalTextAlignment="Center" />
                                 <Label Text="Add items to populate your list"
                                        FontSize="12"
                                        HorizontalOptions="Fill"
-                                       TextColor="{StaticResource Neutral}"
+                                       TextColor="{DynamicResource LightTextColor}"
                                        HorizontalTextAlignment="Center" />
                             </StackLayout>
                         </ContentView>

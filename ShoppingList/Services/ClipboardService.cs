@@ -186,7 +186,7 @@ public class ClipboardService(IStoreService storeService, IItemService itemServi
                 if (item.Quantity > 1)
                     builder.Append($" ({item.Quantity})");
                 if (item.IsImportant)
-                    builder.Append(" !");
+                    builder.Append('!');
                 builder.AppendLine();
             }
             builder.AppendLine();

@@ -24,7 +24,7 @@
                     <Grid RowDefinitions="Auto,Auto">
                         <Label Grid.Row="0" Text="Your stores" Style="{StaticResource Headline}"
                                Padding="0, 10, 0,10" />
-                        <BoxView Grid.Row="1" Style="{StaticResource ThinLineSeparator}" />
+                        <BoxView Grid.Row="1" Style="{DynamicResource ThinLineSeparator}" />
                     </Grid>
                 </CollectionView.Header>
 
@@ -38,7 +38,7 @@
                                         <SwipeItemView
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoresViewModel}}, Path=RemoveStoreCommand}"
                                             CommandParameter="{Binding .}"
-                                            HeightRequest="{StaticResource StandardSwipeItemHeight}">
+                                            HeightRequest="{DynamicResource StandardSwipeItemHeight}">
                                             <Frame BackgroundColor="{StaticResource Pink}"
                                                    BorderColor="Transparent"
                                                    Padding="0"
@@ -56,13 +56,13 @@
                                     </SwipeItems>
                                 </SwipeView.RightItems>
                                 <Grid>
-                                    <VerticalStackLayout HeightRequest="{StaticResource StandardSwipeItemHeightPlusLineHeight}">
+                                    <VerticalStackLayout HeightRequest="{DynamicResource StandardSwipeItemHeightPlusLineHeight}">
                                         <Label Text="{Binding Name}"
-                                               Style="{StaticResource StandardSwipeItemLabel}"
+                                               Style="{DynamicResource StoreSwipeItem}"
                                                VerticalOptions="Fill"
                                                VerticalTextAlignment="Center"
                                                HorizontalTextAlignment="Center" />
-                                        <BoxView Style="{StaticResource ThinLineSeparator}" />
+                                        <BoxView Style="{DynamicResource ThinLineSeparator}" />
                                     </VerticalStackLayout>
                                 </Grid>
                             </SwipeView>
@@ -72,17 +72,17 @@
             </CollectionView>
 
             <!-- Separator (only visible when larger than threshold) -->
-            <BoxView Grid.Row="1" HeightRequest="{StaticResource ThickLineHeight}">
+            <BoxView Grid.Row="1" HeightRequest="{DynamicResource ThickLineHeight}">
                 <BoxView.Triggers>
                     <DataTrigger TargetType="BoxView"
                                  Binding="{Binding IsCollectionViewLargerThanThreshold}"
                                  Value="True">
-                        <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource ThinLineSeparator}, Dark={StaticResource Neutral}}" />
+                        <Setter Property="Color" Value="{DynamicResource ThickLineSeparatorColor}" />
                     </DataTrigger>
                     <DataTrigger TargetType="BoxView"
                                  Binding="{Binding IsCollectionViewLargerThanThreshold}"
                                  Value="False">
-                        <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
+                        <Setter Property="Color" Value="{DynamicResource BackgroundColor}" />
                     </DataTrigger>
                 </BoxView.Triggers>
             </BoxView>
@@ -100,20 +100,20 @@
                     <Button Text="Add Store"
                             Grid.Column="1"
                             x:Name="AddStoreButton"
-                            Style="{StaticResource StandardButton}"
+                            Style="{DynamicResource StandardButton}"
                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoresViewModel}}, Path=AddStoreCommand}"
                             CommandParameter="{Binding Source={x:Reference StoreNameEntry}}" />
                 </Grid>
                 <Button Text="Reset stores"
                         Margin="0, 20"
-                        Style="{StaticResource StandardButton}"
+                        Style="{DynamicResource StandardButton}"
                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoresViewModel}}, Path=ResetStoresCommand}"
                         CommandParameter="{Binding .}" />
 
                 <Button Text="Back"
                         Margin="0, 20"
                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoresViewModel}}, Path=GoBackCommand}"
-                        Style="{StaticResource StandardButton}" />
+                        Style="{DynamicResource StandardButton}" />
             </VerticalStackLayout>
 
         </Grid>

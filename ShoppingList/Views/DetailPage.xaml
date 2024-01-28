@@ -18,8 +18,8 @@
               RowDefinitions="1*"
               ColumnDefinitions=".5*, .5*">
             <VerticalStackLayout Grid.Column="0" Padding="5">
-                <Label Text="Important" Style="{StaticResource StandardValueLabel}" />
-                <Label Text="{Binding Item.IsImportant}" Style="{StaticResource StandardValue}" />
+                <Label Text="Important" Style="{DynamicResource ItemPropertyLabel}" />
+                <Label Text="{Binding Item.IsImportant}" Style="{DynamicResource ItemProperty}" />
             </VerticalStackLayout>
             <Switch IsToggled="{Binding Item.IsImportant, Mode=TwoWay}"
                     Grid.Column="1"
@@ -31,8 +31,8 @@
               RowDefinitions="1*"
               ColumnDefinitions=".5*, .5*">
             <VerticalStackLayout Grid.Column="0" Padding="5" VerticalOptions="Center">
-                <Label Text="Quantity" Style="{StaticResource StandardValueLabel}" />
-                <Label Text="{Binding Item.Quantity}" Style="{StaticResource StandardValue}" />
+                <Label Text="Quantity" Style="{DynamicResource ItemPropertyLabel}" />
+                <Label Text="{Binding Item.Quantity}" Style="{DynamicResource ItemProperty}" />
             </VerticalStackLayout>
             <Stepper Value="{Binding Item.Quantity}"
                      Grid.Column="1"
@@ -46,7 +46,7 @@
         <Grid Margin="5"
               RowDefinitions="1*">
             <VerticalStackLayout Padding="5">
-                <Label Text="From" Style="{StaticResource StandardValueLabel}" />
+                <Label Text="From" Style="{DynamicResource ItemPropertyLabel}" />
                 <Picker Title="Change store"
                         SelectedItem="{Binding CurrentStore, Mode=TwoWay}"
                         ItemsSource="{Binding Stores}"
@@ -58,11 +58,11 @@
         </Grid>
 
         <VerticalStackLayout Padding="5, 5, 5, 40" Margin="5" VerticalOptions="Center">
-            <Label Text="Added on" Style="{StaticResource StandardValueLabel}" />
-            <Label Text="{Binding Item.AddedOn}" Style="{StaticResource StandardValue}" />
+            <Label Text="Added on" Style="{DynamicResource ItemPropertyLabel}" />
+            <Label Text="{Binding Item.AddedOn}" Style="{DynamicResource ItemProperty}" />
         </VerticalStackLayout>
         <Button Text="Save changes"
-                Style="{StaticResource StandardButton}"
+                Style="{DynamicResource StandardButton}"
                 Command="{Binding GoBackCommand}" />
 
     </VerticalStackLayout>
