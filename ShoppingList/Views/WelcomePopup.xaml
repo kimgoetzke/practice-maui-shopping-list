@@ -13,18 +13,18 @@
         Height="300"
         VerticalOptions="Center"
         HorizontalOptions="Center">
-        <Border BackgroundColor="{StaticResource OffWhite}"
+        <Border BackgroundColor="{DynamicResource BackgroundColorAccent}"
                 StrokeThickness="{DynamicResource ThickLineHeight}"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
                 Margin="20"
                 Padding="20"
-                Stroke="{StaticResource StandardGradient}">
+                Stroke="{DynamicResource StandardGradient}">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="8,8,8,8" />
             </Border.StrokeShape>
             <Border.Shadow>
-                <Shadow Brush="{StaticResource OffBlack}"
+                <Shadow Brush="{DynamicResource ShadowColor}"
                         Radius="20"
                         Offset="10,10"
                         Opacity="0.8" />
@@ -35,11 +35,10 @@
                 <Label Text="Welcome!"
                        Grid.Row="0"
                        Padding="0,0,0,10"
-                       Style="{StaticResource Headline}"
+                       Style="{DynamicResource Headline}"
                        VerticalOptions="Start"
                        HorizontalOptions="Center" />
                 <Label Grid.Row="1"
-                       Style="{StaticResource Standard}"
                        VerticalOptions="Center"
                        HorizontalOptions="Center">
                     <Label.FormattedText>
@@ -51,7 +50,6 @@
                     </Label.FormattedText>
                 </Label>
                 <Label Grid.Row="2"
-                       Style="{StaticResource Standard}"
                        VerticalOptions="Center"
                        HorizontalOptions="Center"
                        Padding="0,0,0,20">

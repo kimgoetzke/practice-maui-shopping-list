@@ -22,7 +22,7 @@
                 <!-- Title -->
                 <CollectionView.Header>
                     <Grid RowDefinitions="Auto,Auto">
-                        <Label Grid.Row="0" Text="Your stores" Style="{StaticResource Headline}"
+                        <Label Grid.Row="0" Text="Your stores" Style="{DynamicResource Headline}"
                                Padding="0, 10, 0,10" />
                         <BoxView Grid.Row="1" Style="{DynamicResource ThinLineSeparator}" />
                     </Grid>
@@ -39,7 +39,7 @@
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoresViewModel}}, Path=RemoveStoreCommand}"
                                             CommandParameter="{Binding .}"
                                             HeightRequest="{DynamicResource StandardSwipeItemHeight}">
-                                            <Frame BackgroundColor="{StaticResource Pink}"
+                                            <Frame BackgroundColor="{DynamicResource Pink}"
                                                    BorderColor="Transparent"
                                                    Padding="0"
                                                    VerticalOptions="Center"

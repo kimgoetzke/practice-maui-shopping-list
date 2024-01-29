@@ -7,10 +7,18 @@ public partial class App
     public App()
     {
         InitializeComponent();
+        SetThemeToSystemThemeOnFirstRun();
+        var theme = Settings.CurrentTheme;
+        Settings.LoadTheme(theme);
         MainPage = new AppShell();
+    }
 
-        var systemTheme = Application.Current?.RequestedTheme;
+    private static void SetThemeToSystemThemeOnFirstRun()
+    {
+        if (!Settings.FirstRun)
+            return;
+        Logger.Log("Setting current theme to system theme on first run");
+        var systemTheme = Current?.RequestedTheme;
         Settings.SetCurrentThemeFromSystem(systemTheme);
-        Logger.Log($"Current app theme is: {Settings.CurrentTheme}");
     }
 }

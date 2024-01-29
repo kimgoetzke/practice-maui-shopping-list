@@ -10,7 +10,7 @@
     <VerticalStackLayout Padding="40, 10">
 
         <Entry Text="{Binding Item.Title, Mode=TwoWay}"
-               Style="{StaticResource Headline}"
+               Style="{DynamicResource Headline}"
                VerticalOptions="Center"
                HorizontalOptions="Center" />
 
@@ -50,8 +50,8 @@
                 <Picker Title="Change store"
                         SelectedItem="{Binding CurrentStore, Mode=TwoWay}"
                         ItemsSource="{Binding Stores}"
-                        TextColor="{AppThemeBinding Light={StaticResource OffBlack}, Dark={StaticResource OffWhite}}"
-                        TitleColor="{AppThemeBinding Light={StaticResource OffBlack}, Dark={StaticResource OffWhite}}"
+                        TextColor="{DynamicResource TextColor}"
+                        TitleColor="{DynamicResource TextColor}"
                         WidthRequest="290"
                         HorizontalOptions="Start" />
             </VerticalStackLayout>

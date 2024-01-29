@@ -34,7 +34,7 @@ public partial class MainPage
     {
         if (!Settings.FirstRun)
             return;
-        Logger.Log("Application ran for the first time");
+        Logger.Log("Showing welcome popup on first run");
         Settings.FirstRun = false;
         this.ShowPopup(new WelcomePopup());
     }
@@ -80,7 +80,10 @@ public partial class MainPage
 
     private async Task DarkModeTransitionToSettings()
     {
-        await PageContentGrid.TranslateTo(-Width * 0.5, 0, AnimationDuration);
+        var resize = PageContentGrid.TranslateTo(-Width * 0.25, 0, AnimationDuration);
+        var scaleDown = PageContentGrid.ScaleTo(0.75, AnimationDuration);
+        var rotate = PageContentGrid.RotateYTo(35, AnimationDuration, Easing.CubicIn);
+        await Task.WhenAll(resize, scaleDown, rotate);
     }
 
     private async Task CloseMenu()
@@ -103,24 +106,12 @@ public partial class MainPage
     {
         var picker = sender as Picker;
         var themeString = picker!.SelectedItem!.ToString();
-        var mergedDictionaries = Application.Current?.Resources.MergedDictionaries;
-        if (mergedDictionaries == null)
-            return;
-        mergedDictionaries.Clear();
         var isParsed = Enum.TryParse(themeString, out Settings.Theme theme);
         if (!isParsed)
-            return;
-        switch (theme)
         {
-            case Settings.Theme.Dark:
-                mergedDictionaries.Add(new DarkTheme());
-                break;
-            case Settings.Theme.Light:
-            default:
-                mergedDictionaries.Add(new LightTheme());
-                break;
+            Logger.Log($"Failed to parse {themeString} to {nameof(Settings.Theme)}");
+            return;
         }
-
-        Settings.CurrentTheme = theme;
+        Settings.LoadTheme(theme);
     }
 }

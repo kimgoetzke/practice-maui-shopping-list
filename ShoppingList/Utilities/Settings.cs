@@ -1,3 +1,5 @@
+using ShoppingList.Resources.Styles;
+
 namespace ShoppingList.Utilities;
 
 public static class Settings
@@ -28,5 +30,27 @@ public static class Settings
     {
         Light,
         Dark
+    }
+
+    public static void LoadTheme(Theme theme)
+    {
+        var mergedDictionaries = Application.Current?.Resources.MergedDictionaries;
+        if (mergedDictionaries == null)
+            return;
+        mergedDictionaries.Clear();
+        switch (theme)
+        {
+            case Theme.Dark:
+                mergedDictionaries.Add(new DarkTheme());
+                break;
+            case Theme.Light:
+            default:
+                mergedDictionaries.Add(new LightTheme());
+                break;
+        }
+        mergedDictionaries.Add(new Styles());
+
+        CurrentTheme = theme;
+        Logger.Log($"Current app theme is: {CurrentTheme}");
     }
 }

@@ -38,6 +38,19 @@ public partial class MainViewModel : ObservableObject
         NewItem = new Item();
     }
 
+    public string SelectedTheme
+    {
+        get
+        {
+            return Settings.CurrentTheme switch
+            {
+                Settings.Theme.Light => "Light",
+                Settings.Theme.Dark => "Dark",
+                _ => "Light"
+            };
+        }
+    }
+
     [RelayCommand]
     private async Task AddItem()
     {
