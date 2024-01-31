@@ -5,6 +5,18 @@ namespace ShoppingList.Utilities;
 
 public static partial class StringProcessor
 {
+    [GeneratedRegex(@"\[(.*)\]:")]
+    private static partial Regex StoreRegex();
+
+    [GeneratedRegex(@"^(.*?)(?=\s*\(\d+|\s*!|$)")]
+    private static partial Regex ItemNameRegex();
+
+    [GeneratedRegex(@"(\d+)")]
+    private static partial Regex ItemQuantityRegex();
+
+    [GeneratedRegex(@"!")]
+    private static partial Regex ItemIsImportantRegex();
+
     public static string TrimAndCapitaliseFirstChar(string s)
     {
         var trimmed = s.Trim();
@@ -18,9 +30,15 @@ public static partial class StringProcessor
             ? itemNameMatch.Groups[1].Value.Trim()
             : "<Failed to extract>";
         var quantityMatch = ItemQuantityRegex().Match(input);
-        int.TryParse(quantityMatch.Value, out var quantity);
+        var quantity = ParseMatchToIntOr1(quantityMatch);
         var isImportant = ItemIsImportantRegex().IsMatch(input);
-        return (itemName, quantity == 0 ? 1 : quantity, isImportant);
+        return (itemName, quantity, isImportant);
+    }
+
+    private static int ParseMatchToIntOr1(Capture match)
+    {
+        var success = int.TryParse(match.Value, out var number);
+        return success ? number : 1;
     }
 
     public static bool IsStoreName(string input)
@@ -34,16 +52,4 @@ public static partial class StringProcessor
         var match = StoreRegex().Match(input);
         return match.Success ? match.Groups[1].Value.Trim() : IStoreService.DefaultStoreName;
     }
-
-    [GeneratedRegex(@"\[(.*)\]:")]
-    private static partial Regex StoreRegex();
-
-    [GeneratedRegex(@"^(.*?)(?=\s*\(\d+|\s*!|$)")]
-    private static partial Regex ItemNameRegex();
-
-    [GeneratedRegex(@"(\d+)")]
-    private static partial Regex ItemQuantityRegex();
-
-    [GeneratedRegex(@"!")]
-    private static partial Regex ItemIsImportantRegex();
 }
