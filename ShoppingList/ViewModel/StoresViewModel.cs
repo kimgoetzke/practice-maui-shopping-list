@@ -31,17 +31,16 @@ public partial class StoresViewModel : ObservableObject
         // Don't add empty items
         if (string.IsNullOrWhiteSpace(NewStore.Name))
             return;
-
+        
+        // Pre-process store
+        NewStore.Name = StringProcessor.TrimAndCapitaliseFirstChar(NewStore.Name);
+        
         // Only allow unique store names
         if (Stores.Any(store => store.Name == NewStore.Name))
         {
             await Notifier.AwaitShowToast($"Cannot add '{NewStore.Name}' - it already exists");
             return;
         }
-
-        // Capitalise first letter of each word
-        var textInfo = new CultureInfo("en-US", false).TextInfo;
-        NewStore.Name = textInfo.ToTitleCase(NewStore.Name.ToLower());
 
         // Add to list and database
         Stores.Add(NewStore);

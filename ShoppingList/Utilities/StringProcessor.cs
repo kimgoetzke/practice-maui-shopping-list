@@ -5,10 +5,10 @@ namespace ShoppingList.Utilities;
 
 public static partial class StringProcessor
 {
-    public static string ProcessItemTitle(string itemTitle)
+    public static string TrimAndCapitaliseFirstChar(string s)
     {
-        var trimmed = itemTitle.Trim();
-        return itemTitle.Length > 1 ? trimmed[..1].ToUpper() + trimmed[1..] : trimmed.ToUpper();
+        var trimmed = s.Trim();
+        return s.Length > 1 ? trimmed[..1].ToUpper() + trimmed[1..] : trimmed.ToUpper();
     }
 
     public static (string, int, bool) ExtractItem(string input)

@@ -86,7 +86,7 @@ public class ClipboardService(IStoreService storeService, IItemService itemServi
     )
     {
         var (title, quantity, isImportant) = StringProcessor.ExtractItem(substring);
-        var processedTitle = StringProcessor.ProcessItemTitle(title);
+        var processedTitle = StringProcessor.TrimAndCapitaliseFirstChar(title);
         var item = new Item
         {
             Title = processedTitle,

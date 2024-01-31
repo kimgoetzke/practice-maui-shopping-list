@@ -58,8 +58,8 @@ public partial class MainViewModel : ObservableObject
         if (string.IsNullOrWhiteSpace(NewItem.Title))
             return;
 
-        // Capitalise first letter of each word
-        NewItem.Title = StringProcessor.ProcessItemTitle(NewItem.Title);
+        // Pre-process item
+        NewItem.Title = StringProcessor.TrimAndCapitaliseFirstChar(NewItem.Title);
         NewItem.StoreName = CurrentStore!.Name;
 
         // Add to list and database
