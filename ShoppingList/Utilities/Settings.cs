@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using ShoppingList.Resources.Styles;
 
 namespace ShoppingList.Utilities;
@@ -31,6 +32,9 @@ public static class Settings
         Light,
         Dark
     }
+
+    public static ObservableCollection<Theme> GetAllThemesAsCollection() =>
+        [Theme.Light, Theme.Dark];
 
     public static void LoadTheme(Theme theme)
     {

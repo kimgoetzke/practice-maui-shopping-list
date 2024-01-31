@@ -22,6 +22,13 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     private ConfigurableStore? _currentStore;
+
+    [ObservableProperty]
+    private ObservableCollection<Settings.Theme> _themes = [];
+
+    [ObservableProperty]
+    private Settings.Theme _currentTheme;
+
     private readonly IStoreService _storeService;
     private readonly IItemService _itemService;
     private readonly IClipboardService _clipboardService;
