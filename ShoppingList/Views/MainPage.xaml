@@ -19,7 +19,7 @@
 
     <!-- The color has to be static for some reason. It will be white if any DynamicResource is used. -->
     <ContentPage.Behaviors>
-        <toolkit:StatusBarBehavior 
+        <toolkit:StatusBarBehavior
             StatusBarColor="{StaticResource StatusBarColor}"
             StatusBarStyle="LightContent" />
     </ContentPage.Behaviors>
@@ -48,7 +48,7 @@
     <Grid IgnoreSafeArea="True">
 
         <!-- Settings menu -->
-        <Grid x:Name="SettingsMenuGrid" IgnoreSafeArea="True">
+        <Grid IgnoreSafeArea="True">
             <!-- Settings menu: Configuration -->
             <Grid.Background>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
@@ -72,28 +72,64 @@
                 <Button Style="{DynamicResource MenuButton}"
                         Text="Manage stores"
                         HorizontalOptions="End"
-                        x:Name="ManageStoresButton"
                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=ManageStoresCommand}"
                         CommandParameter="{Binding .}" />
                 <Button Style="{DynamicResource MenuButton}"
                         Text="Clear list"
                         HorizontalOptions="End"
-                        x:Name="RemoveStoreButton"
                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=RemoveAllItemsCommand}"
                         CommandParameter="{Binding .}" />
-                <Picker x:Name="ThemePicker"
-                        Title="Select theme"
-                        SelectedItem="{Binding SelectedTheme}"
-                        Margin="0, 20, 0, 0"
-                        HorizontalOptions="Center"
-                        SelectedIndexChanged="OnPickerSelectionChanged">
-                    <Picker.ItemsSource>
-                        <x:Array Type="{x:Type x:String}">
-                            <x:String>Light</x:String>
-                            <x:String>Dark</x:String>
-                        </x:Array>
-                    </Picker.ItemsSource>
-                </Picker>
+                <Label Style="{DynamicResource SubHeadline}"
+                       Text="Theme"
+                       Padding="0,30,20,10"
+                       HorizontalOptions="End" />
+                <CollectionView SelectedItem="{Binding CurrentTheme}"
+                                ItemsSource="{Binding Themes}"
+                                VerticalScrollBarVisibility="Never"
+                                SelectionMode="Single"
+                                SelectionChangedCommand="{Binding ChangeThemeCommand}"
+                                SelectionChangedCommandParameter="{Binding Path=SelectedItem, Source={RelativeSource Self}}"
+                                BackgroundColor="Transparent"
+                                Margin="0,0,5,0"
+                                HorizontalOptions="End">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border x:Name="BorderElement"
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="30"
+                                    Margin="3"
+                                    WidthRequest="65"
+                                    StrokeThickness="1.5"
+                                    StrokeShape="RoundRectangle 8,8,8,8">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="Transparent" />
+                                                <Setter Property="Stroke" Value="{DynamicResource SwitchOnColor}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="{DynamicResource Primary}" />
+                                                <Setter Property="Stroke" Value="{DynamicResource ShadowColor}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Grid>
+                                    <Label TextColor="White"
+                                           HorizontalTextAlignment="Center"
+                                           VerticalTextAlignment="Center"
+                                           Text="{Binding .}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </VerticalStackLayout>
         </Grid>
 
@@ -225,8 +261,8 @@
 
                                     <!-- Contents of list -->
                                     <Grid Padding="0" RowDefinitions="Auto, Auto">
-                                        <Frame CornerRadius="0" HeightRequest="44" 
-                                               BorderColor="{DynamicResource BackgroundColor}" 
+                                        <Frame CornerRadius="0" HeightRequest="44"
+                                               BorderColor="{DynamicResource BackgroundColor}"
                                                BackgroundColor="{DynamicResource BackgroundColor}">
 
                                             <!-- Contents of list: Settings -->

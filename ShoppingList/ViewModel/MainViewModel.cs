@@ -43,19 +43,8 @@ public partial class MainViewModel : ObservableObject
         _itemService = itemService;
         _clipboardService = clipboardService;
         NewItem = new Item();
-    }
-
-    public string SelectedTheme
-    {
-        get
-        {
-            return Settings.CurrentTheme switch
-            {
-                Settings.Theme.Light => "Light",
-                Settings.Theme.Dark => "Dark",
-                _ => "Light"
-            };
-        }
+        CurrentTheme = Settings.CurrentTheme;
+        Themes = Settings.GetAllThemesAsCollection();
     }
 
     [RelayCommand]
@@ -137,6 +126,29 @@ public partial class MainViewModel : ObservableObject
     internal void InsertFromClipboard()
     {
         _clipboardService.InsertFromClipboardAsync(Stores, Items);
+    }
+
+    [RelayCommand]
+    private async Task ChangeTheme(Settings.Theme theme)
+    {
+        Logger.Log($"Changing theme to: {theme}");
+        Settings.LoadTheme(theme);
+        CurrentTheme = theme;
+        if (await IsRestartConfirmed())
+        {
+            Logger.Log("Restarting app");
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
+        }
+    }
+
+    private static async Task<bool> IsRestartConfirmed()
+    {
+        return await Shell.Current.DisplayAlert(
+            "Restart required",
+            $"For the theme change to take full effect, you'll need to restart the application. Would you like to close the application now or later?",
+            "Now",
+            "Later"
+        );
     }
 
     public void SortItems()

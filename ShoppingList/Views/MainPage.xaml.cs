@@ -1,7 +1,4 @@
 ﻿using CommunityToolkit.Maui.Views;
-using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.Mvvm.Messaging.Messages;
-using ShoppingList.Resources.Styles;
 using ShoppingList.Utilities;
 using ShoppingList.ViewModel;
 
@@ -100,18 +97,5 @@ public partial class MainPage
     {
         // TODO: Give user feedback through particles or animation
         Logger.Log("OnInvokedSwipeItem");
-    }
-
-    private void OnPickerSelectionChanged(object sender, EventArgs e)
-    {
-        var picker = sender as Picker;
-        var themeString = picker!.SelectedItem!.ToString();
-        var isParsed = Enum.TryParse(themeString, out Settings.Theme theme);
-        if (!isParsed)
-        {
-            Logger.Log($"Failed to parse {themeString} to {nameof(Settings.Theme)}");
-            return;
-        }
-        Settings.LoadTheme(theme);
     }
 }
