@@ -24,10 +24,10 @@ public partial class MainViewModel : ObservableObject
     private ConfigurableStore? _currentStore;
 
     [ObservableProperty]
-    private ObservableCollection<Settings.Theme> _themes = [];
+    private ObservableCollection<Theme> _themes = [];
 
     [ObservableProperty]
-    private Settings.Theme _currentTheme;
+    private Theme _currentTheme;
 
     private readonly IStoreService _storeService;
     private readonly IItemService _itemService;
@@ -43,8 +43,8 @@ public partial class MainViewModel : ObservableObject
         _itemService = itemService;
         _clipboardService = clipboardService;
         NewItem = new Item();
-        CurrentTheme = Settings.CurrentTheme;
         Themes = Settings.GetAllThemesAsCollection();
+        CurrentTheme = Themes.First(t => t.Name == Settings.CurrentTheme);
     }
 
     [RelayCommand]
@@ -129,15 +129,19 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task ChangeTheme(Settings.Theme theme)
+    private async Task ChangeTheme(Theme theme)
     {
         Logger.Log($"Changing theme to: {theme}");
-        Settings.LoadTheme(theme);
+        Settings.LoadTheme(theme.Name);
         CurrentTheme = theme;
         if (await IsRestartConfirmed())
         {
             Logger.Log("Restarting app");
+#if __IOS__
+
+#else
             System.Diagnostics.Process.GetCurrentProcess().Kill();
+#endif
         }
     }
 

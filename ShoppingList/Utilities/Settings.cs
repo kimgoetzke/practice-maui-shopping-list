@@ -33,8 +33,15 @@ public static class Settings
         Dark
     }
 
-    public static ObservableCollection<Theme> GetAllThemesAsCollection() =>
-        [Theme.Light, Theme.Dark];
+    public static ObservableCollection<ShoppingList.Models.Theme> GetAllThemesAsCollection()
+    {
+        var themes = new ObservableCollection<ShoppingList.Models.Theme>
+        {
+            new() { Name = Theme.Light },
+            new() { Name = Theme.Dark }
+        };
+        return themes;
+    }
 
     public static void LoadTheme(Theme theme)
     {

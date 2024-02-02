@@ -80,7 +80,7 @@
                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=RemoveAllItemsCommand}"
                         CommandParameter="{Binding .}" />
                 <Label Style="{DynamicResource SubHeadline}"
-                       Text="Theme"
+                       Text="Select theme"
                        Padding="0,30,20,10"
                        HorizontalOptions="End" />
                 <CollectionView SelectedItem="{Binding CurrentTheme}"
@@ -96,7 +96,7 @@
                         <LinearItemsLayout Orientation="Horizontal" />
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="models:Theme">
                             <Border x:Name="BorderElement"
                                     BackgroundColor="Transparent"
                                     HeightRequest="30"
@@ -121,10 +121,10 @@
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
                                 <Grid>
-                                    <Label TextColor="White"
+                                    <Label TextColor="{DynamicResource TextColor}"
                                            HorizontalTextAlignment="Center"
                                            VerticalTextAlignment="Center"
-                                           Text="{Binding .}" />
+                                           Text="{Binding Name}" />
                                 </Grid>
                             </Border>
                         </DataTemplate>
