@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ShoppingList.Models;
@@ -134,13 +135,25 @@ public partial class MainViewModel : ObservableObject
         Logger.Log($"Changing theme to: {theme}");
         Settings.LoadTheme(theme.Name);
         CurrentTheme = theme;
+        OnPropertyChanged(nameof(CurrentTheme));
+
+        // The below is only necessary until GradientStops support DynamicResource which is a known bug.
+        // However, attempting to start the process is optional and is unlikely to work on most devices.
         if (await IsRestartConfirmed())
         {
             Logger.Log("Restarting app");
+            var currentProcess = Process.GetCurrentProcess();
+            var filename = currentProcess.MainModule?.FileName;
+            Logger.Log("Main module name: " + filename);
 #if __IOS__
-
+            Application.Current?.Quit();
 #else
-            System.Diagnostics.Process.GetCurrentProcess().Kill();
+            if (filename != null)
+            {
+                Process.Start(filename);
+            }
+
+            currentProcess.Kill();
 #endif
         }
     }
