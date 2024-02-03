@@ -172,7 +172,7 @@
                 <Grid Margin="5" Grid.Row="1" Grid.Column="0" RowDefinitions="Auto, Auto" ColumnDefinitions="1*"
                       RowSpacing="0">
                     <Label Text="From" Grid.Row="0" FontSize="10" HorizontalTextAlignment="Start" Padding="3, 0 " />
-                    <Picker Title="From"
+                    <Picker Title="{OnPlatform Default='From', WinUI=''}"
                             SelectedItem="{Binding CurrentStore}"
                             ItemsSource="{Binding Stores}"
                             Grid.Row="1"
@@ -185,17 +185,16 @@
                            Grid.Row="0"
                            FontSize="10"
                            HorizontalTextAlignment="Center" />
-                    <Stepper Minimum="1"
-                             Maximum="99"
-                             Increment="1"
+                    <Stepper Minimum="1" Maximum="99" Increment="1" Grid.Row="1"
                              Value="{Binding NewItem.Quantity}"
-                             Grid.Row="1" />
+                             HorizontalOptions="Center" />
                 </Grid>
 
                 <Grid Margin="5" Grid.Row="1" Grid.Column="2" RowDefinitions="Auto, Auto" ColumnDefinitions="1*"
                       RowSpacing="0">
                     <Label Text="Important" Grid.Row="0" FontSize="10" HorizontalTextAlignment="Center" />
-                    <CheckBox IsChecked="{Binding NewItem.IsImportant}" Grid.Row="1" Scale="1.3" />
+                    <CheckBox IsChecked="{Binding NewItem.IsImportant}" Grid.Row="1" Scale="1.3"
+                              HorizontalOptions="Center"/>
                 </Grid>
             </Grid>
 

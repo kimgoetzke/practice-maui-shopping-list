@@ -8,8 +8,8 @@ public partial class App
     {
         InitializeComponent();
         SetThemeToSystemThemeOnFirstRun();
-        var theme = Settings.CurrentTheme;
-        Settings.LoadTheme(theme);
+        var currentTheme = Settings.CurrentTheme;
+        Settings.LoadTheme(currentTheme);
         MainPage = new AppShell();
     }
 
