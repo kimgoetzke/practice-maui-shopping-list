@@ -4,13 +4,13 @@ using ShoppingList.ViewModel;
 
 namespace ShoppingList.Views;
 
-public partial class MainPage
+public partial class MainPageWindows
 {
     private const uint AnimationDuration = 400u;
     private bool _isMenuOpen;
     private readonly MainViewModel _viewModel;
 
-    public MainPage(MainViewModel viewModel)
+    public MainPageWindows(MainViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;
@@ -50,37 +50,14 @@ public partial class MainPage
     {
         if (!_isMenuOpen)
         {
-            if (Settings.CurrentTheme == Settings.Theme.Dark)
-            {
-                await DarkModeTransitionToSettings();
-            }
-            else
-            {
-                await LightModeTransitionToSettings();
-            }
+            var resize = PageContentGrid.TranslateTo(-Width, 0, AnimationDuration);
+            await resize;
 
             _isMenuOpen = true;
             return;
         }
 
         await CloseMenu();
-    }
-
-    private async Task LightModeTransitionToSettings()
-    {
-        var resize = PageContentGrid.TranslateTo(-Width * 0.25, 0, AnimationDuration);
-        var scaleDown = PageContentGrid.ScaleTo(0.75, AnimationDuration);
-        var fadeOut = PageContentGrid.FadeTo(0.8, AnimationDuration);
-        var rotate = PageContentGrid.RotateYTo(35, AnimationDuration, Easing.CubicIn);
-        await Task.WhenAll(resize, scaleDown, fadeOut, rotate);
-    }
-
-    private async Task DarkModeTransitionToSettings()
-    {
-        var resize = PageContentGrid.TranslateTo(-Width * 0.25, 0, AnimationDuration);
-        var scaleDown = PageContentGrid.ScaleTo(0.75, AnimationDuration);
-        var rotate = PageContentGrid.RotateYTo(35, AnimationDuration, Easing.CubicIn);
-        await Task.WhenAll(resize, scaleDown, rotate);
     }
 
     private async Task CloseMenu()

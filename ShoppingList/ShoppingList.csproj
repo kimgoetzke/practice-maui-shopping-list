@@ -80,10 +80,13 @@
         <MauiXaml Update="Views\StoresPage.xaml">
             <SubType>Designer</SubType>
         </MauiXaml>
-        <MauiXaml Update="Views\MainPage.xaml">
+        <MauiXaml Update="Views\MainPageAndroid.xaml">
             <SubType>Designer</SubType>
         </MauiXaml>
         <MauiXaml Update="Resources\Styles\LightTheme.xaml">
+          <SubType>Designer</SubType>
+        </MauiXaml>
+        <MauiXaml Update="Views\MainPageWindows.xaml">
           <SubType>Designer</SubType>
         </MauiXaml>
     </ItemGroup>
@@ -97,12 +100,16 @@
             <DependentUpon>StoresPage.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\MainPage.xaml.cs">
+        <Compile Update="Views\MainPageAndroid.xaml.cs">
             <DependentUpon>MainPage.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Resources\Styles\LightTheme.xaml.cs">
           <DependentUpon>LightTheme.xaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\MainPageWindows.xaml.cs">
+          <DependentUpon>MainPageWindows.xaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
