@@ -129,14 +129,21 @@ public partial class MainViewModel : ObservableObject
         _clipboardService.InsertFromClipboardAsync(Stores, Items);
     }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
     [RelayCommand]
-    private async Task ChangeTheme(Theme theme)
+    private async Task ChangeTheme(Theme? theme)
     {
+        if (theme == null)
+        {
+            return;
+        }
+
         Logger.Log($"Changing theme to: {theme}");
         Settings.LoadTheme(theme.Name);
         CurrentTheme = theme;
         OnPropertyChanged(nameof(CurrentTheme));
 
+#if __ANDROID__ || __IOS__
         // The below is only necessary until GradientStops support DynamicResource which is a known bug.
         // However, attempting to start the process is optional and is unlikely to work on most devices.
         if (await IsRestartConfirmed())
@@ -156,7 +163,9 @@ public partial class MainViewModel : ObservableObject
             currentProcess.Kill();
 #endif
         }
+#endif
     }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
     private static async Task<bool> IsRestartConfirmed()
     {
