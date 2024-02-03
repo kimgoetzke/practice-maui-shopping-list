@@ -7,7 +7,10 @@
              x:DataType="viewModel:DetailViewModel"
              Title="Item details">
 
-    <VerticalStackLayout Padding="40, 10">
+    <VerticalStackLayout Padding="40, 10" 
+                         MinimumWidthRequest="400" MaximumWidthRequest="850"  
+                         VerticalOptions="Start"
+                         HorizontalOptions="Fill">
 
         <Entry Text="{Binding Item.Title, Mode=TwoWay}"
                Style="{DynamicResource Headline}"
@@ -24,7 +27,7 @@
             <Switch IsToggled="{Binding Item.IsImportant, Mode=TwoWay}"
                     Grid.Column="1"
                     VerticalOptions="Center"
-                    HorizontalOptions="Center" />
+                    HorizontalOptions="{OnPlatform WinUI='Start', Default='Center'}" />
         </Grid>
 
         <Grid Margin="5"
@@ -36,24 +39,22 @@
             </VerticalStackLayout>
             <Stepper Value="{Binding Item.Quantity}"
                      Grid.Column="1"
-                     Minimum="1"
-                     Maximum="99"
-                     Increment="1"
+                     Minimum="1" Maximum="99" Increment="1"
                      VerticalOptions="Center"
-                     HorizontalOptions="Center" />
+                     HorizontalOptions="{OnPlatform WinUI='Start', Default='Center'}" />
         </Grid>
 
         <Grid Margin="5"
               RowDefinitions="1*">
             <VerticalStackLayout Padding="5">
                 <Label Text="From" Style="{DynamicResource ItemPropertyLabel}" />
-                <Picker Title="Change store"
+                <Picker Title="{OnPlatform WinUI='', Default='Select store'}"
                         SelectedItem="{Binding CurrentStore, Mode=TwoWay}"
                         ItemsSource="{Binding Stores}"
                         TextColor="{DynamicResource TextColor}"
                         TitleColor="{DynamicResource TextColor}"
-                        WidthRequest="290"
-                        HorizontalOptions="Start" />
+                        MinimumWidthRequest="400" MaximumWidthRequest="850"
+                        HorizontalOptions="Fill" />
             </VerticalStackLayout>
         </Grid>
 
