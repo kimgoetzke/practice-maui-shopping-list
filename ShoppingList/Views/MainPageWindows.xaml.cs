@@ -1,5 +1,4 @@
-﻿using Android.Icu.Text;
-using CommunityToolkit.Maui.Views;
+﻿using CommunityToolkit.Maui.Views;
 using ShoppingList.Utilities;
 using ShoppingList.ViewModel;
 
