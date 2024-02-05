@@ -1,5 +1,10 @@
 using System.Collections.ObjectModel;
 using ShoppingList.Resources.Styles;
+#if __ANDROID__
+using Android.OS;
+using Microsoft.Maui.Controls.Compatibility.Platform.Android;
+using AndroidPlatform = Microsoft.Maui.ApplicationModel.Platform;
+#endif
 
 namespace ShoppingList.Utilities;
 
@@ -45,7 +50,17 @@ public static class Settings
 
     public static void LoadTheme(Theme theme)
     {
-        var mergedDictionaries = Application.Current?.Resources.MergedDictionaries;
+        var application = Application.Current!;
+        ArgumentNullException.ThrowIfNull(application);
+        UpdateDictionaries(application, theme);
+        SetStatusBarColorOnAndroid(application);
+        CurrentTheme = theme;
+        Logger.Log($"Current app theme is: {CurrentTheme}");
+    }
+
+    private static void UpdateDictionaries(Application application, Theme theme)
+    {
+        var mergedDictionaries = application.Resources.MergedDictionaries;
         if (mergedDictionaries == null)
             return;
         mergedDictionaries.Clear();
@@ -60,8 +75,26 @@ public static class Settings
                 break;
         }
         mergedDictionaries.Add(new Styles());
+    }
 
-        CurrentTheme = theme;
-        Logger.Log($"Current app theme is: {CurrentTheme}");
+    private static void SetStatusBarColorOnAndroid(Application application)
+    {
+#if __ANDROID__
+        if (!application.Resources.TryGetValue("StatusBarColor", out var colorValue))
+        {
+            Logger.Log("StatusBarColor not found in MergedDictionaries");
+            return;
+        }
+        var statusBarColor = (Color)colorValue;
+
+        if (
+            AndroidPlatform.CurrentActivity?.Window == null
+            || Build.VERSION.SdkInt < BuildVersionCodes.O
+        )
+        {
+            return;
+        }
+        AndroidPlatform.CurrentActivity.Window.SetStatusBarColor(statusBarColor.ToAndroid());
+#endif
     }
 }
