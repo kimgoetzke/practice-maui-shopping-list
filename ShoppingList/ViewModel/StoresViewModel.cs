@@ -21,7 +21,7 @@ public partial class StoresViewModel : ObservableObject
     public StoresViewModel(IStoreService storeService)
     {
         Stores = [];
-        _newStore = new ConfigurableStore();
+        NewStore = new ConfigurableStore();
         _storeService = storeService;
     }
 
