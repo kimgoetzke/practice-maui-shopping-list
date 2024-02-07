@@ -51,7 +51,7 @@ public partial class MainPageWindows
         if (!_isMenuOpen)
         {
             var x = (Width - 250) / Width;
-            var resize = PageContentGrid.ScaleXTo(x,  AnimationDuration);
+            var resize = PageContentGrid.ScaleTo(x,  AnimationDuration);
             var move = PageContentGrid.TranslateTo(-Width * ((1 - x) / 2), 0, AnimationDuration);
             await Task.WhenAll(move, resize);
 
@@ -66,7 +66,7 @@ public partial class MainPageWindows
     {
         await PageContentGrid.RotateYTo(0, AnimationDuration / 2);
         var fadeIn = PageContentGrid.FadeTo(1, AnimationDuration / 2);
-        var scaleBack = PageContentGrid.ScaleXTo(1, AnimationDuration / 2);
+        var scaleBack = PageContentGrid.ScaleTo(1, AnimationDuration / 2);
         var resize = PageContentGrid.TranslateTo(0, 0, AnimationDuration / 2);
         await Task.WhenAll(fadeIn, scaleBack, resize);
         _isMenuOpen = false;
