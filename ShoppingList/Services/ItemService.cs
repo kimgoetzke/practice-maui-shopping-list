@@ -8,8 +8,7 @@ public class ItemService(IDatabaseProvider db) : IItemService
     public async Task<List<Item>> GetAsync()
     {
         var connection = await db.GetConnection();
-        var items = await connection.Table<Item>().ToListAsync();
-        return items;
+        return await connection.Table<Item>().ToListAsync();
     }
 
     public async Task CreateOrUpdateAsync(Item item)
