@@ -21,12 +21,12 @@ public partial class App
         var systemTheme = Current?.RequestedTheme;
         Settings.SetCurrentThemeFromSystem(systemTheme);
     }
-    
+
     protected override Window CreateWindow(IActivationState? activationState)
     {
         var window = base.CreateWindow(activationState);
-        window.MinimumHeight = 400; 
-        window.MinimumWidth = 850; 
+        window.MinimumHeight = 400;
+        window.MinimumWidth = 850;
         return window;
     }
 }

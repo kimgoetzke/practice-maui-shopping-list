@@ -51,7 +51,7 @@ public partial class MainPageWindows
         if (!_isMenuOpen)
         {
             var x = (Width - 250) / Width;
-            var resize = PageContentGrid.ScaleTo(x,  AnimationDuration);
+            var resize = PageContentGrid.ScaleTo(x, AnimationDuration);
             var move = PageContentGrid.TranslateTo(-Width * ((1 - x) / 2), 0, AnimationDuration);
             await Task.WhenAll(move, resize);
 
