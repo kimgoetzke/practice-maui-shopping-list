@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Globalization;
 using CommunityToolkit.Maui.Core.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -106,7 +105,9 @@ public partial class StoresViewModel : ObservableObject
         var loadedItems = await _storeService.GetAllAsync();
         Stores.Clear();
         foreach (var i in loadedItems)
+        {
             Stores.Add(i);
+        }
     }
 
     // Used to toggle on/off the line separator between stores list and buttons

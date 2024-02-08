@@ -17,13 +17,12 @@ public partial class MainPageAndroid
         _viewModel = viewModel;
     }
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
         var loadItems = _viewModel.LoadItemsFromDatabase();
-        var loadStores = _viewModel.LoadStoresFromService();
-        await Task.WhenAll(loadItems, loadStores);
-        _viewModel.SortItems();
+        var loadStores = _viewModel.LoadStoresFromDatabase();
+        Task.Run(async () => await Task.WhenAll(loadItems, loadStores));
         DisplayPopUpOnFirstRun();
     }
 

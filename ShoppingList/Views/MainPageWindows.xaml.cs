@@ -15,16 +15,14 @@ public partial class MainPageWindows
         InitializeComponent();
         BindingContext = viewModel;
         _viewModel = viewModel;
+        Task.Run(async () => await _viewModel.LoadItemsFromDatabase());
     }
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
-        var loadItems = _viewModel.LoadItemsFromDatabase();
-        var loadStores = _viewModel.LoadStoresFromService();
-        await Task.WhenAll(loadItems, loadStores);
-        _viewModel.SortItems();
         DisplayPopUpOnFirstRun();
+        _viewModel.LoadStoresFromDatabase().ConfigureAwait(ConfigureAwaitOptions.SuppressThrowing);
     }
 
     private void DisplayPopUpOnFirstRun()

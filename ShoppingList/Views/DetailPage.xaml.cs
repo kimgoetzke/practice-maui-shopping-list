@@ -1,6 +1,5 @@
 ﻿using ShoppingList.Models;
 using ShoppingList.Services;
-using ShoppingList.Utilities;
 using ShoppingList.ViewModel;
 
 namespace ShoppingList.Views;
@@ -15,11 +14,5 @@ public partial class DetailPage
         if (itemService is null || storeService is null)
             throw new NullReferenceException("ItemService or StoreService is null");
         BindingContext = new DetailViewModel(item, storeService, itemService);
-    }
-
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-        Logger.Log($"{((DetailViewModel)BindingContext).Item.ToLoggableString()}");
     }
 }

@@ -8,12 +8,7 @@ public partial class StoresPage
     {
         InitializeComponent();
         BindingContext = viewModel;
-    }
-
-    protected override async void OnNavigatedTo(NavigatedToEventArgs args)
-    {
-        base.OnNavigatedTo(args);
-        await ((StoresViewModel)BindingContext).LoadStoresFromDatabase();
+        Task.Run(async () => await viewModel.LoadStoresFromDatabase());
     }
 
     private void OnEntryUnfocused(object sender, FocusEventArgs e)

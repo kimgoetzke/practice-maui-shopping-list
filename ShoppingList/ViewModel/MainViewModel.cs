@@ -57,7 +57,8 @@ public partial class MainViewModel : ObservableObject
 
         // Pre-process item
         NewItem.Title = StringProcessor.TrimAndCapitaliseFirstChar(NewItem.Title);
-        NewItem.StoreName = CurrentStore!.Name;
+        NewItem.StoreName =
+            CurrentStore != null ? CurrentStore.Name : IStoreService.DefaultStoreName;
 
         // Add to list and database
         Items.Add(NewItem);
@@ -144,7 +145,7 @@ public partial class MainViewModel : ObservableObject
         OnPropertyChanged(nameof(CurrentTheme));
 
 #if __ANDROID__ || __IOS__
-        // The below is only necessary until GradientStops support DynamicResource which is a known bug.
+        // The below is only necessary until GradientStops support DynamicResource which is a known problem.
         // However, attempting to start the process is optional and is unlikely to work on most devices.
         if (await IsRestartConfirmed())
         {
@@ -167,6 +168,7 @@ public partial class MainViewModel : ObservableObject
     }
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
+    // ReSharper disable once UnusedMember.Local
     private static async Task<bool> IsRestartConfirmed()
     {
         return await Shell.Current.DisplayAlert(
@@ -177,7 +179,7 @@ public partial class MainViewModel : ObservableObject
         );
     }
 
-    public void SortItems()
+    private void SortItems()
     {
         Items = new ObservableCollection<Item>(
             Items.OrderBy(i => i.StoreName).ThenByDescending(i => i.AddedOn)
@@ -190,9 +192,10 @@ public partial class MainViewModel : ObservableObject
         Items.Clear();
         foreach (var i in loadedItems)
             Items.Add(i);
+        SortItems();
     }
 
-    public async Task LoadStoresFromService()
+    public async Task LoadStoresFromDatabase()
     {
         var loadedStores = await _storeService.GetAllAsync();
         Stores.Clear();
