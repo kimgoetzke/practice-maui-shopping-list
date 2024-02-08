@@ -25,7 +25,7 @@ public class StoreService(IDatabaseProvider db) : IStoreService
         return _defaultStore;
     }
 
-    public async Task<List<ConfigurableStore>> GetAllAsync()
+    public async Task<IEnumerable<ConfigurableStore>> GetAllAsync()
     {
         var connection = await db.GetConnection();
         return await connection.Table<ConfigurableStore>().ToListAsync();
@@ -42,24 +42,6 @@ public class StoreService(IDatabaseProvider db) : IStoreService
         }
 
         await connection.InsertAsync(store);
-    }
-
-    public async Task CreateIfNotExistAsync(string name)
-    {
-        var connection = await db.GetConnection();
-        Logger.Log($"Attempting to find store '{name}'");
-        var item = await connection
-            .Table<ConfigurableStore>()
-            .Where(store => store.Name == name)
-            .FirstOrDefaultAsync();
-        if (item != null)
-        {
-            Logger.Log($"Found store {name} - no need to add it");
-            return;
-        }
-
-        await connection.InsertAsync(new ConfigurableStore { Name = name });
-        Logger.Log($"Added store {name}");
     }
 
     public async Task DeleteAsync(ConfigurableStore store)

@@ -6,9 +6,8 @@ public interface IStoreService
 {
     const string DefaultStoreName = "Anywhere";
     Task<ConfigurableStore> GetDefaultStore();
-    Task<List<ConfigurableStore>> GetAllAsync();
+    Task<IEnumerable<ConfigurableStore>> GetAllAsync();
     Task CreateOrUpdateAsync(ConfigurableStore store);
-    Task CreateIfNotExistAsync(string name);
     Task DeleteAsync(ConfigurableStore store);
     Task DeleteAllAsync();
 }
