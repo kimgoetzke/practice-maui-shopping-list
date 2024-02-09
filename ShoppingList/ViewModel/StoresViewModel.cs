@@ -37,7 +37,7 @@ public partial class StoresViewModel : ObservableObject
         // Only allow unique store names
         if (Stores.Any(store => store.Name == NewStore.Name))
         {
-            await Notifier.AwaitShowToast($"Cannot add '{NewStore.Name}' - it already exists");
+            Notifier.ShowToast($"Cannot add '{NewStore.Name}' - it already exists");
             return;
         }
 
@@ -45,14 +45,12 @@ public partial class StoresViewModel : ObservableObject
         Stores.Add(NewStore);
         await _storeService.CreateOrUpdateAsync(NewStore);
 
-        // Show toast on success
-        await Notifier.AwaitShowToast($"Added: {NewStore.Name}");
-
         // Make sure the UI is reset/updated
 #pragma warning disable CA1416
         var isKeyboardHidden = view.HideKeyboardAsync(CancellationToken.None);
 #pragma warning restore CA1416
         Logger.Log("Keyboard hidden: " + isKeyboardHidden);
+        Notifier.ShowToast($"Added: {NewStore.Name}");
         NewStore = new ConfigurableStore();
         OnPropertyChanged(nameof(NewStore));
         OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
@@ -108,6 +106,7 @@ public partial class StoresViewModel : ObservableObject
         {
             Stores.Add(store);
         }
+        OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
     }
 
     // Used to toggle on/off the line separator between stores list and buttons
