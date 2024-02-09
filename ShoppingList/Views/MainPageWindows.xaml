@@ -83,7 +83,6 @@
                        Padding="0,30,20,10"
                        HorizontalOptions="End" />
                 <CollectionView x:Name="ThemeCollectionView"
-                                Loaded="ThemeCollectionView_Loaded"
                                 SelectedItem="{Binding CurrentTheme}"
                                 ItemsSource="{Binding Themes}"
                                 VerticalScrollBarVisibility="Never"

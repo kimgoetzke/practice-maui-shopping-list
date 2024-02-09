@@ -23,6 +23,9 @@ public partial class MainPageWindows
         base.OnAppearing();
         DisplayPopUpOnFirstRun();
         _viewModel.LoadStoresFromDatabase().ConfigureAwait(ConfigureAwaitOptions.SuppressThrowing);
+#if WINDOWS // To handle issue: https://github.com/dotnet/maui/issues/8573
+        ThemeCollectionView.SelectedItem = _viewModel.CurrentTheme;
+#endif
     }
 
     private void DisplayPopUpOnFirstRun()
