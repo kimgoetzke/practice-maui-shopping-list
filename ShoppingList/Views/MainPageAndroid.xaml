@@ -121,7 +121,7 @@
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
                                 <Grid>
-                                    <Label TextColor="{DynamicResource TextColor}"
+                                    <Label TextColor="{DynamicResource ButtonTextColor}"
                                            HorizontalTextAlignment="Center"
                                            VerticalTextAlignment="Center"
                                            Text="{Binding Name}" />
