@@ -47,14 +47,13 @@ public class StoreService(IDatabaseProvider db) : IStoreService
     public async Task DeleteAsync(ConfigurableStore store)
     {
         var connection = await db.GetConnection();
-        await SetStoresToDefaultOnMatchingItems(store.Name);
+        await SetStoresToDefaultOnMatchingItems(connection, store.Name);
         await connection.DeleteAsync(store);
         Logger.Log($"Removing store: {store.ToLoggableString()}");
     }
 
-    private async Task SetStoresToDefaultOnMatchingItems(string storeName)
+    private static async Task SetStoresToDefaultOnMatchingItems(SQLiteAsyncConnection connection, string storeName)
     {
-        var connection = await db.GetConnection();
         var items = await connection.Table<Item>().ToListAsync();
         foreach (var item in items.Where(item => item.StoreName == storeName))
         {
