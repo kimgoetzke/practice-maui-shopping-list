@@ -102,11 +102,11 @@ public partial class StoresViewModel : ObservableObject
 
     public async Task LoadStoresFromDatabase()
     {
-        var loadedItems = await _storeService.GetAllAsync();
+        var loadedStores = await _storeService.GetAllAsync();
         Stores.Clear();
-        foreach (var i in loadedItems)
+        foreach (var store in loadedStores)
         {
-            Stores.Add(i);
+            Stores.Add(store);
         }
     }
 
