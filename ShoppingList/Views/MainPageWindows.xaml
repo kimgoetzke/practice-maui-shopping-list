@@ -160,13 +160,13 @@
                        Unfocused="OnEntryUnfocused"
                        Completed="OnItemAdded"
                        ReturnCommand="{Binding AddItemCommand}" />
-                
-                    <Picker Grid.Column="1" Title=""
-                            HeightRequest="{DynamicResource StandardSwipeItemHeight}"
-                            SelectedItem="{Binding CurrentStore}"
-                            ItemsSource="{Binding Stores}"/>
-                
-                <Grid Grid.Column="2"  Margin="5" ColumnDefinitions=".5*, .5*" ColumnSpacing="0">
+
+                <Picker Grid.Column="1" Title=""
+                        HeightRequest="{DynamicResource StandardSwipeItemHeight}"
+                        SelectedItem="{Binding CurrentStore}"
+                        ItemsSource="{Binding Stores}" />
+
+                <Grid Grid.Column="2" Margin="5" ColumnDefinitions=".5*, .5*" ColumnSpacing="0">
                     <Label Text="{Binding NewItem.Quantity, StringFormat='Quantity: {0}'}"
                            Grid.Column="0"
                            FontSize="10"
@@ -177,12 +177,12 @@
                              HorizontalOptions="Center" />
                 </Grid>
                 <Grid Margin="5" Grid.Column="3" ColumnDefinitions="Auto, *" ColumnSpacing="0">
-                    <Label Text="Important:" Grid.Column="0" 
-                           FontSize="10" 
-                           HorizontalTextAlignment="Start" 
-                           VerticalTextAlignment="Center"/>
+                    <Label Text="Important:" Grid.Column="0"
+                           FontSize="10"
+                           HorizontalTextAlignment="Start"
+                           VerticalTextAlignment="Center" />
                     <CheckBox IsChecked="{Binding NewItem.IsImportant}" Grid.Column="1"
-                              HorizontalOptions="Start"/>
+                              HorizontalOptions="Start" />
                 </Grid>
                 <Button x:Name="AddButton"
                         HorizontalOptions="End"
@@ -204,7 +204,7 @@
                     SelectionMode="None"
                     VerticalOptions="Fill">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="{x:Type models:Item}" >
+                        <DataTemplate x:DataType="{x:Type models:Item}">
                             <Grid RowDefinitions="Auto, Auto" Margin="0,0,0,0" VerticalOptions="Center">
                                 <SwipeView Margin="0,0,0,0" Grid.Row="0">
 
@@ -255,10 +255,11 @@
                                     </SwipeView.RightItems>
 
                                     <!-- Contents of list -->
-                                    <Grid Padding="0" RowDefinitions="Auto, Auto" HeightRequest="50" VerticalOptions="Fill">
-                                        <Frame CornerRadius="0" 
+                                    <Grid Padding="0" RowDefinitions="Auto, Auto" HeightRequest="50"
+                                          VerticalOptions="Fill">
+                                        <Frame CornerRadius="0"
                                                HeightRequest="50"
-                                               Margin="0" 
+                                               Margin="0"
                                                Padding="0"
                                                VerticalOptions="Fill"
                                                BorderColor="{DynamicResource BackgroundColor}"
@@ -273,7 +274,8 @@
 
                                             <!-- Contents of list: Content -->
                                             <Grid ColumnDefinitions="*,*" HeightRequest="50" VerticalOptions="Center">
-                                                <StackLayout Orientation="Horizontal" Grid.Column="0" VerticalOptions="Center"
+                                                <StackLayout Orientation="Horizontal" Grid.Column="0"
+                                                             VerticalOptions="Center"
                                                              Padding="15, 0">
                                                     <Label Text="{Binding Title}"
                                                            FontSize="16"
@@ -352,9 +354,8 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                     <CollectionView.EmptyView>
-                        <ContentView>
-                            <StackLayout HorizontalOptions="CenterAndExpand"
-                                         VerticalOptions="CenterAndExpand">
+                        <ContentView VerticalOptions="Fill">
+                            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="30">
                                 <Label Text=":)"
                                        FontSize="48"
                                        TextColor="{DynamicResource LightTextColor}"
@@ -371,7 +372,7 @@
                                        HorizontalOptions="Fill"
                                        TextColor="{DynamicResource LightTextColor}"
                                        HorizontalTextAlignment="Center" />
-                            </StackLayout>
+                            </VerticalStackLayout>
                         </ContentView>
                     </CollectionView.EmptyView>
                 </CollectionView>
