@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace ShoppingList.Utilities;
 
 public static class Logger
@@ -10,6 +12,7 @@ public static class Logger
         Android.Util.Log.Info(LoggerTag, $"[XXX] {message}");
 #elif DEBUG
         Console.WriteLine($"[XXX] {message}");
+        Trace.WriteLine($"[XXX] {message}");
 #endif
     }
 }
