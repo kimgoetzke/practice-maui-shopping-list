@@ -25,7 +25,7 @@ public class StoreService(IDatabaseProvider db) : IStoreService
         return _defaultStore;
     }
 
-    public async Task<IEnumerable<ConfigurableStore>> GetAllAsync()
+    public async Task<List<ConfigurableStore>> GetAllAsync()
     {
         var connection = await db.GetConnection();
         return await connection.Table<ConfigurableStore>().ToListAsync();
@@ -34,7 +34,6 @@ public class StoreService(IDatabaseProvider db) : IStoreService
     public async Task CreateOrUpdateAsync(ConfigurableStore store)
     {
         var connection = await db.GetConnection();
-        Logger.Log($"Adding or updating store: {store.ToLoggableString()}");
         if (store.Id != 0)
         {
             await connection.UpdateAsync(store);
@@ -42,42 +41,21 @@ public class StoreService(IDatabaseProvider db) : IStoreService
         }
 
         await connection.InsertAsync(store);
+        Logger.Log($"Added or updated store: {store.ToLoggableString()}");
     }
 
     public async Task DeleteAsync(ConfigurableStore store)
     {
-        var connection = await db.GetConnection();
-        await SetStoresToDefaultOnMatchingItems(connection, store.Name);
-        await connection.DeleteAsync(store);
         Logger.Log($"Removing store: {store.ToLoggableString()}");
-    }
-
-    private static async Task SetStoresToDefaultOnMatchingItems(SQLiteAsyncConnection connection, string storeName)
-    {
-        var items = await connection.Table<Item>().ToListAsync();
-        foreach (var item in items.Where(item => item.StoreName == storeName))
-        {
-            item.StoreName = IStoreService.DefaultStoreName;
-            await connection.UpdateAsync(item);
-        }
+        var connection = await db.GetConnection();
+        await connection.DeleteAsync(store);
     }
 
     public async Task DeleteAllAsync()
     {
         var connection = await db.GetConnection();
-        await SetStoresToDefaultOnAllItems(connection);
         await RemoveAllExceptDefaultStore(connection);
-        Logger.Log("Removing all stores");
-    }
-
-    private static async Task SetStoresToDefaultOnAllItems(SQLiteAsyncConnection connection)
-    {
-        var items = await connection.Table<Item>().ToListAsync();
-        foreach (var item in items.Where(item => item.StoreName != IStoreService.DefaultStoreName))
-        {
-            item.StoreName = IStoreService.DefaultStoreName;
-            await connection.UpdateAsync(item);
-        }
+        Logger.Log($"Reset all stores");
     }
 
     private static async Task RemoveAllExceptDefaultStore(SQLiteAsyncConnection connection)

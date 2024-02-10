@@ -8,7 +8,6 @@ public partial class StoresPage
     {
         InitializeComponent();
         BindingContext = viewModel;
-        Task.Run(async () => await viewModel.LoadStoresFromDatabase());
     }
 
     private void OnEntryUnfocused(object sender, FocusEventArgs e)

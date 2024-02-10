@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using AsyncAwaitBestPractices;
 using CommunityToolkit.Maui.Core.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -16,12 +17,23 @@ public partial class StoresViewModel : ObservableObject
     [ObservableProperty]
     private ConfigurableStore _newStore;
     private readonly IStoreService _storeService;
+    private readonly IItemService _itemService;
 
-    public StoresViewModel(IStoreService storeService)
+    public StoresViewModel(IStoreService storeService, IItemService itemService)
     {
         Stores = [];
         NewStore = new ConfigurableStore();
         _storeService = storeService;
+        _itemService = itemService;
+        UpdateCollectionFromDatabase()
+            .SafeFireAndForget<Exception>(ex => Logger.Log($"Failed to load stores: {ex}"));
+    }
+
+    private async Task UpdateCollectionFromDatabase()
+    {
+        var loadedStores = await _storeService.GetAllAsync().ConfigureAwait(false);
+        Stores = new ObservableCollection<ConfigurableStore>(loadedStores);
+        OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
     }
 
     [RelayCommand]
@@ -46,10 +58,10 @@ public partial class StoresViewModel : ObservableObject
         await _storeService.CreateOrUpdateAsync(NewStore);
 
         // Make sure the UI is reset/updated
-#pragma warning disable CA1416
+#if __ANDROID__
         var isKeyboardHidden = view.HideKeyboardAsync(CancellationToken.None);
-#pragma warning restore CA1416
         Logger.Log("Keyboard hidden: " + isKeyboardHidden);
+#endif
         Notifier.ShowToast($"Added: {NewStore.Name}");
         NewStore = new ConfigurableStore();
         OnPropertyChanged(nameof(NewStore));
@@ -66,6 +78,7 @@ public partial class StoresViewModel : ObservableObject
         }
 
         Stores.Remove(s);
+        await _itemService.UpdateAllUsingStoreAsync(s.Name);
         await _storeService.DeleteAsync(s);
         OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
         Notifier.ShowToast($"Removed: {s.Name}");
@@ -76,15 +89,16 @@ public partial class StoresViewModel : ObservableObject
     {
         if (!await IsRequestConfirmedByUser())
             return;
-        await _storeService.DeleteAllAsync();
-        await LoadStoresFromDatabase();
-        OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
+
+        await _itemService.UpdateAllToDefaultStoreAsync().ConfigureAwait(false);
+        await _storeService.DeleteAllAsync().ConfigureAwait(false);
+        await UpdateCollectionFromDatabase().ConfigureAwait(false);
         Notifier.ShowToast("Reset stores");
     }
 
-    private static async Task<bool> IsRequestConfirmedByUser()
+    private static Task<bool> IsRequestConfirmedByUser()
     {
-        return await Shell.Current.DisplayAlert(
+        return Shell.Current.DisplayAlert(
             "Reset stores",
             $"This will remove all stores, except the 'Anywhere' store. Are you sure you want to continue?",
             "Yes",
@@ -96,17 +110,6 @@ public partial class StoresViewModel : ObservableObject
     private static async Task GoBack()
     {
         await Shell.Current.GoToAsync("..", true);
-    }
-
-    public async Task LoadStoresFromDatabase()
-    {
-        var loadedStores = await _storeService.GetAllAsync();
-        Stores.Clear();
-        foreach (var store in loadedStores)
-        {
-            Stores.Add(store);
-        }
-        OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
     }
 
     // Used to toggle on/off the line separator between stores list and buttons

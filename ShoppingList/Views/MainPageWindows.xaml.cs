@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Views;
+﻿using AsyncAwaitBestPractices;
+using CommunityToolkit.Maui.Views;
 using ShoppingList.Utilities;
 using ShoppingList.ViewModel;
 
@@ -15,17 +16,29 @@ public partial class MainPageWindows
         InitializeComponent();
         BindingContext = viewModel;
         _viewModel = viewModel;
-        Task.Run(async () => await _viewModel.LoadItemsFromDatabase());
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
         DisplayPopUpOnFirstRun();
-        _viewModel.LoadStoresFromDatabase().ConfigureAwait(ConfigureAwaitOptions.SuppressThrowing);
 #if WINDOWS // To handle issue: https://github.com/dotnet/maui/issues/8573
         ThemeCollectionView.SelectedItem = _viewModel.CurrentTheme;
 #endif
+        _viewModel
+            .LoadStoresFromDatabase()
+            .SafeFireAndForget<Exception>(ex =>
+            {
+                Logger.Log($"Failed to load stores: {ex}");
+                Notifier.ShowToast("Failed to load stores");
+            });
+        _viewModel
+            .LoadItemsFromDatabase()
+            .SafeFireAndForget<Exception>(ex =>
+            {
+                Logger.Log($"Failed to load items: {ex}");
+                Notifier.ShowToast("Failed to load items");
+            });
     }
 
     private void DisplayPopUpOnFirstRun()

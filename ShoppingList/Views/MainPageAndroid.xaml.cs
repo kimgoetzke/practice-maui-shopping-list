@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Views;
+﻿using AsyncAwaitBestPractices;
+using CommunityToolkit.Maui.Views;
 using ShoppingList.Utilities;
 using ShoppingList.ViewModel;
 
@@ -20,9 +21,20 @@ public partial class MainPageAndroid
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        var loadItems = _viewModel.LoadItemsFromDatabase();
-        var loadStores = _viewModel.LoadStoresFromDatabase();
-        Task.Run(async () => await Task.WhenAll(loadItems, loadStores));
+        _viewModel
+            .LoadStoresFromDatabase()
+            .SafeFireAndForget<Exception>(ex =>
+            {
+                Logger.Log($"Failed to load stores: {ex}");
+                Notifier.ShowToast("Failed to load stores");
+            });
+        _viewModel
+            .LoadItemsFromDatabase()
+            .SafeFireAndForget<Exception>(ex =>
+            {
+                Logger.Log($"Failed to load items: {ex}");
+                Notifier.ShowToast("Failed to load items");
+            });
         DisplayPopUpOnFirstRun();
     }
 
@@ -30,7 +42,7 @@ public partial class MainPageAndroid
     {
         if (!Settings.FirstRun)
             return;
-        Logger.Log("Showing welcome popup on first run");
+        Logger.Log("First time running this application");
         Settings.FirstRun = false;
         this.ShowPopup(new WelcomePopup());
     }

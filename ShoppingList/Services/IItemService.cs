@@ -8,4 +8,6 @@ public interface IItemService
     Task CreateOrUpdateAsync(Item item);
     Task DeleteAsync(Item item);
     Task DeleteAllAsync();
+    Task UpdateAllToDefaultStoreAsync();
+    Task UpdateAllUsingStoreAsync(string storeName);
 }
