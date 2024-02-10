@@ -54,35 +54,40 @@ public partial class MainPageWindows
 
     private void OnItemAdded(object? sender, EventArgs e) => EntryField.Focus();
 
-    private async void OnTapGridArea(object sender, EventArgs e) => await CloseMenu();
-
     private void CopyOnClicked(object? sender, EventArgs e) => _viewModel.CopyToClipboard();
 
     private void ImportOnClicked(object? sender, EventArgs e) => _viewModel.InsertFromClipboard();
 
+    private async void OnTapGridArea(object sender, EventArgs e)
+    {
+        var cancellationTokenSource = new CancellationTokenSource();
+        await CloseMenu(cancellationTokenSource);
+    }
+
     private async void OnTapSettings(object sender, EventArgs e)
     {
+        var cancellationTokenSource = new CancellationTokenSource();
         if (!_isMenuOpen)
         {
             var x = (Width - 250) / Width;
             var resize = PageContentGrid.ScaleTo(x, AnimationDuration);
             var move = PageContentGrid.TranslateTo(-Width * ((1 - x) / 2), 0, AnimationDuration);
-            await Task.WhenAll(move, resize);
-
+            await Task.WhenAll(move, resize)
+                .WaitAsync(cancellationTokenSource.Token)
+                .ConfigureAwait(false);
             _isMenuOpen = true;
             return;
         }
-
-        await CloseMenu();
+        CloseMenu(cancellationTokenSource).SafeFireAndForget();
     }
 
-    private async Task CloseMenu()
+    private async Task CloseMenu(CancellationTokenSource cancellationTokenSource)
     {
-        await PageContentGrid.RotateYTo(0, AnimationDuration / 2);
-        var fadeIn = PageContentGrid.FadeTo(1, AnimationDuration / 2);
         var scaleBack = PageContentGrid.ScaleTo(1, AnimationDuration / 2);
         var resize = PageContentGrid.TranslateTo(0, 0, AnimationDuration / 2);
-        await Task.WhenAll(fadeIn, scaleBack, resize);
+        await Task.WhenAll(scaleBack, resize)
+            .WaitAsync(cancellationTokenSource.Token)
+            .ConfigureAwait(false);
         _isMenuOpen = false;
     }
 
