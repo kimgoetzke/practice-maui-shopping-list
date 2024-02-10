@@ -354,8 +354,9 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                     <CollectionView.EmptyView>
-                        <ContentView VerticalOptions="Fill">
-                            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="30">
+                        <ContentView>
+                            <StackLayout HorizontalOptions="CenterAndExpand"
+                                         VerticalOptions="CenterAndExpand">
                                 <Label Text=":)"
                                        FontSize="48"
                                        TextColor="{DynamicResource LightTextColor}"
@@ -372,7 +373,7 @@
                                        HorizontalOptions="Fill"
                                        TextColor="{DynamicResource LightTextColor}"
                                        HorizontalTextAlignment="Center" />
-                            </VerticalStackLayout>
+                            </StackLayout>
                         </ContentView>
                     </CollectionView.EmptyView>
                 </CollectionView>

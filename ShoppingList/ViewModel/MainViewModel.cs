@@ -193,6 +193,7 @@ public partial class MainViewModel : ObservableObject
         foreach (var i in loadedItems)
             Items.Add(i);
         SortItems();
+        Logger.Log($"Loaded {loadedItems.Count} items from database, new collection size is {Items.Count}");
     }
 
     public async Task LoadStoresFromDatabase()
@@ -207,5 +208,6 @@ public partial class MainViewModel : ObservableObject
                 CurrentStore = s;
             }
         }
+        Logger.Log($"Loaded {loadedStores.Count} items from database, new collection size is {Stores.Count}");
     }
 }

@@ -34,6 +34,7 @@ public partial class StoresViewModel : ObservableObject
         var loadedStores = await _storeService.GetAllAsync().ConfigureAwait(false);
         Stores = new ObservableCollection<ConfigurableStore>(loadedStores);
         OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
+        Logger.Log($"Loaded {loadedStores.Count} items from database, new collection size is {Stores.Count}");
     }
 
     [RelayCommand]
