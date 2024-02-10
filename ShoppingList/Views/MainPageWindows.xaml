@@ -190,7 +190,6 @@
                         Text="Add"
                         Pressed="OnItemAdded"
                         Style="{DynamicResource StandardButton}"
-                        Command="{Binding AddItemCommand}"
                         Grid.Column="4" />
             </Grid>
 
@@ -277,6 +276,16 @@
                                                 <StackLayout Orientation="Horizontal" Grid.Column="0"
                                                              VerticalOptions="Center"
                                                              Padding="15, 0">
+                                                    <CheckBox IsChecked="False"
+                                                              CheckedChanged="CheckBox_OnCheckedChanged"
+                                                              BindingContext="{Binding .}">
+                                                        <CheckBox.IsVisible>
+                                                            <OnPlatform x:TypeArguments="x:Boolean">
+                                                                <On Platform="WinUI" Value="True" />
+                                                                <On Platform="iOS, Android, macOS" Value="False" />
+                                                            </OnPlatform>
+                                                        </CheckBox.IsVisible>
+                                                    </CheckBox>
                                                     <Label Text="{Binding Title}"
                                                            FontSize="16"
                                                            HeightRequest="50"
@@ -355,25 +364,29 @@
                     </CollectionView.ItemTemplate>
                     <CollectionView.EmptyView>
                         <ContentView>
-                            <StackLayout HorizontalOptions="CenterAndExpand"
-                                         VerticalOptions="CenterAndExpand">
-                                <Label Text=":)"
-                                       FontSize="48"
-                                       TextColor="{DynamicResource LightTextColor}"
-                                       HorizontalOptions="Fill"
-                                       HorizontalTextAlignment="Center" />
-                                <Label Text="Nothing to buy"
-                                       Margin="10"
-                                       FontSize="18"
-                                       TextColor="{DynamicResource LightTextColor}"
-                                       HorizontalOptions="Fill"
-                                       HorizontalTextAlignment="Center" />
-                                <Label Text="Add items to populate your list"
-                                       FontSize="12"
-                                       HorizontalOptions="Fill"
-                                       TextColor="{DynamicResource LightTextColor}"
-                                       HorizontalTextAlignment="Center" />
-                            </StackLayout>
+                            <Grid Padding="30">
+                                <StackLayout HorizontalOptions="Center"
+                                             VerticalOptions="Center">
+
+                                    <Label Text=":)"
+                                           FontSize="48"
+                                           TextColor="{DynamicResource LightTextColor}"
+                                           HorizontalOptions="Fill"
+                                           HorizontalTextAlignment="Center" />
+                                    <Label Text="Nothing to buy"
+                                           Margin="10"
+                                           FontSize="18"
+                                           TextColor="{DynamicResource LightTextColor}"
+                                           HorizontalOptions="Fill"
+                                           HorizontalTextAlignment="Center" />
+                                    <Label Text="Add items to populate your list"
+                                           FontSize="12"
+                                           HorizontalOptions="Fill"
+                                           TextColor="{DynamicResource LightTextColor}"
+                                           HorizontalTextAlignment="Center" />
+
+                                </StackLayout>
+                            </Grid>
                         </ContentView>
                     </CollectionView.EmptyView>
                 </CollectionView>

@@ -1,5 +1,6 @@
 ﻿using AsyncAwaitBestPractices;
 using CommunityToolkit.Maui.Views;
+using ShoppingList.Models;
 using ShoppingList.Utilities;
 using ShoppingList.ViewModel;
 
@@ -52,7 +53,11 @@ public partial class MainPageWindows
 
     private void OnEntryUnfocused(object sender, FocusEventArgs e) => AddButton.Focus();
 
-    private void OnItemAdded(object? sender, EventArgs e) => EntryField.Focus();
+    private void OnItemAdded(object? sender, EventArgs e)
+    {
+        Logger.Log("Pressed 'Add' button");
+        EntryField.Focus();
+    }
 
     private void CopyOnClicked(object? sender, EventArgs e) => _viewModel.CopyToClipboard();
 
@@ -78,6 +83,7 @@ public partial class MainPageWindows
             _isMenuOpen = true;
             return;
         }
+
         CloseMenu(cancellationTokenSource).SafeFireAndForget();
     }
 
@@ -95,5 +101,17 @@ public partial class MainPageWindows
     {
         // TODO: Give user feedback through particles or animation
         Logger.Log("OnInvokedSwipeItem");
+    }
+
+    private async void CheckBox_OnCheckedChanged(object? sender, CheckedChangedEventArgs e)
+    {
+        if (sender is not CheckBox { IsChecked: true } checkBox)
+            return;
+
+        if (checkBox.BindingContext is not Item item)
+            return;
+        
+        await _viewModel.RemoveItem(item);
+        await Task.Delay(200);
     }
 }

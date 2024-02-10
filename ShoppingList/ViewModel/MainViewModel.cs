@@ -61,10 +61,11 @@ public partial class MainViewModel : ObservableObject
             CurrentStore != null ? CurrentStore.Name : IStoreService.DefaultStoreName;
 
         // Add to list and database
-        Items.Add(NewItem);
         await _itemService.CreateOrUpdateAsync(NewItem);
+        Items.Add(NewItem);
         Notifier.ShowToast($"Added: {NewItem.Title}");
-
+        Logger.Log($"Added item: {NewItem.ToLoggableString()}");
+        
         // Make sure the UI is reset/updated
         NewItem = new Item();
         SortItems();
@@ -72,7 +73,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task RemoveItem(Item i)
+    public async Task RemoveItem(Item i)
     {
         Items.Remove(i);
         await _itemService.DeleteAsync(i);
@@ -189,25 +190,15 @@ public partial class MainViewModel : ObservableObject
     public async Task LoadItemsFromDatabase()
     {
         var loadedItems = await _itemService.GetAsync();
-        Items.Clear();
-        foreach (var i in loadedItems)
-            Items.Add(i);
+        Items = new ObservableCollection<Item>(loadedItems);
         SortItems();
-        Logger.Log($"Loaded {loadedItems.Count} items from database, new collection size is {Items.Count}");
+        Logger.Log($"Loaded {loadedItems.Count} items, new collection size: {Items.Count}");
     }
 
     public async Task LoadStoresFromDatabase()
     {
         var loadedStores = await _storeService.GetAllAsync();
-        Stores.Clear();
-        foreach (var s in loadedStores)
-        {
-            Stores.Add(s);
-            if (s.Name == IStoreService.DefaultStoreName)
-            {
-                CurrentStore = s;
-            }
-        }
-        Logger.Log($"Loaded {loadedStores.Count} items from database, new collection size is {Stores.Count}");
+        Stores = new ObservableCollection<ConfigurableStore>(loadedStores);
+        Logger.Log($"Loaded {loadedStores.Count} stores, new collection size: {Stores.Count}");
     }
 }

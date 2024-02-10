@@ -25,16 +25,16 @@ public partial class StoresViewModel : ObservableObject
         NewStore = new ConfigurableStore();
         _storeService = storeService;
         _itemService = itemService;
-        UpdateCollectionFromDatabase()
+        LoadStoresFromDatabase()
             .SafeFireAndForget<Exception>(ex => Logger.Log($"Failed to load stores: {ex}"));
     }
 
-    private async Task UpdateCollectionFromDatabase()
+    private async Task LoadStoresFromDatabase()
     {
         var loadedStores = await _storeService.GetAllAsync().ConfigureAwait(false);
         Stores = new ObservableCollection<ConfigurableStore>(loadedStores);
         OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
-        Logger.Log($"Loaded {loadedStores.Count} items from database, new collection size is {Stores.Count}");
+        Logger.Log($"Loaded {loadedStores.Count} items, new collection size: {Stores.Count}");
     }
 
     [RelayCommand]
@@ -93,7 +93,7 @@ public partial class StoresViewModel : ObservableObject
 
         await _itemService.UpdateAllToDefaultStoreAsync().ConfigureAwait(false);
         await _storeService.DeleteAllAsync().ConfigureAwait(false);
-        await UpdateCollectionFromDatabase().ConfigureAwait(false);
+        await LoadStoresFromDatabase().ConfigureAwait(false);
         Notifier.ShowToast("Reset stores");
     }
 

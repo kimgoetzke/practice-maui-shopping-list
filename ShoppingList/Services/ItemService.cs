@@ -26,8 +26,8 @@ public class ItemService(IDatabaseProvider db) : IItemService
 
     public async Task DeleteAsync(Item item)
     {
-        var connection = await db.GetConnection();
         Logger.Log($"Removing item: {item.Title} #{item.Id}");
+        var connection = await db.GetConnection();
         await connection.DeleteAsync(item);
     }
 
