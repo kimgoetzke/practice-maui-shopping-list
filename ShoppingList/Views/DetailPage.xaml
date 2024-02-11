@@ -7,10 +7,10 @@
              xmlns:converters="clr-namespace:ShoppingList.Converters"
              x:DataType="viewModel:DetailViewModel"
              Title="Item details">
-    
+
     <ContentPage.Resources>
         <ResourceDictionary>
-            <converters:BoolToTextConverter x:Key="BoolToTextConverter" />
+            <converters:BoolToYesNoConverter x:Key="BoolToTextConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
 

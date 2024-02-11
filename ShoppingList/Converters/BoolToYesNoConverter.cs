@@ -2,7 +2,7 @@
 
 namespace ShoppingList.Converters;
 
-public class BoolToTextConverter : IValueConverter
+public class BoolToYesNoConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -11,7 +11,7 @@ public class BoolToTextConverter : IValueConverter
             return boolean ? "Yes" : "No";
         }
 
-        throw new NotImplementedException("Converter must not be used with a non-boolean value");
+        throw new ArgumentException("Converter must not be used with a non-boolean value");
     }
 
     public object ConvertBack(
