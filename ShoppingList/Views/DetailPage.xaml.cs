@@ -1,4 +1,5 @@
-﻿using ShoppingList.Models;
+﻿using System.Globalization;
+using ShoppingList.Models;
 using ShoppingList.Services;
 using ShoppingList.ViewModel;
 
@@ -14,5 +15,21 @@ public partial class DetailPage
         if (itemService is null || storeService is null)
             throw new NullReferenceException("ItemService or StoreService is null");
         BindingContext = new DetailViewModel(item, storeService, itemService);
+    }
+
+    private void QuantityStepper_OnValueChanged(object? sender, ValueChangedEventArgs e)
+    {
+        if (sender is not Stepper)
+            return;
+        
+        QuantityProperty.Text = e.NewValue.ToString(CultureInfo.CurrentCulture);
+    }
+
+    private void IsImportantSwitch_OnToggled(object? sender, ToggledEventArgs toggledEventArgs)
+    {
+        if (sender is not Switch toggle)
+            return;
+        
+        IsImportantProperty.Text = toggle.IsToggled ? "Yes" : "No";
     }
 }
