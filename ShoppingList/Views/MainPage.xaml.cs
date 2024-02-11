@@ -4,6 +4,8 @@ using ShoppingList.Models;
 using ShoppingList.Utilities;
 using ShoppingList.ViewModel;
 
+// ReSharper disable UnusedMember.Local
+
 namespace ShoppingList.Views;
 
 public partial class MainPage
@@ -11,8 +13,8 @@ public partial class MainPage
     private const uint AnimationDuration = 400u;
     private bool _isMenuOpen;
     private readonly MainViewModel _viewModel;
-    private Entry EntryField { get; set; }
-    private Button AddButton { get; set; }
+    private Entry EntryField { get; set; } = null!;
+    private Button AddButton { get; set; } = null!;
 
     public MainPage(MainViewModel viewModel)
     {
@@ -142,7 +144,7 @@ public partial class MainPage
         PageContentGrid.Add(menuGrid, 0, 1);
     }
 
-    private Grid CreateGridOnDesktop(Picker storePicker, Grid quantityGrid, Grid importantGrid)
+    private Grid CreateGridOnDesktop(IView storePicker, IView quantityGrid, IView importantGrid)
     {
         var menuGrid = new Grid
         {
@@ -167,7 +169,7 @@ public partial class MainPage
         return menuGrid;
     }
 
-    private Grid CreateGridOnMobile(Picker storePicker, Grid quantityGrid, Grid importantGrid)
+    private Grid CreateGridOnMobile(IView storePicker, IView quantityGrid, IView importantGrid)
     {
         var menuGrid = new Grid
         {
@@ -285,6 +287,7 @@ public partial class MainPage
             Title = "Select store",
 #endif
             HeightRequest = (double)Application.Current!.Resources["StandardSwipeItemHeight"],
+            Margin = new Thickness(5)
         };
         storePicker.SetBinding(Picker.SelectedItemProperty, "CurrentStore");
         storePicker.SetBinding(Picker.ItemsSourceProperty, "Stores");
@@ -310,7 +313,7 @@ public partial class MainPage
             Text = _viewModel.NewItem.Title,
             Margin = new Thickness(5),
             FontSize = 16,
-            ReturnCommand = _viewModel.AddItemCommand,
+            ReturnCommand = _viewModel.AddItemCommand
         };
         entryField.SetBinding(Entry.TextProperty, "NewItem.Title");
         entryField.Unfocused += (_, _) => AddButton.Focus();
