@@ -226,9 +226,11 @@ public partial class MainPage
     {
         return new Button
         {
-            HorizontalOptions = LayoutOptions.End,
 #if WINDOWS || __MACOS__
+            HorizontalOptions = LayoutOptions.End,
             WidthRequest = 140,
+#elif __ANDROID__ || __IOS__
+            HorizontalOptions = LayoutOptions.Fill,
 #endif
             Text = "Add",
             Style = (Style)Application.Current!.Resources["StandardButton"],
@@ -286,6 +288,8 @@ public partial class MainPage
 #elif __ANDROID__ || __IOS__
             Title = "Select store",
 #endif
+            TextColor = (Color)Application.Current!.Resources["TextColor"],
+            TitleColor = (Color)Application.Current!.Resources["TextColor"],
             HeightRequest = (double)Application.Current!.Resources["StandardSwipeItemHeight"],
             Margin = new Thickness(5)
         };
