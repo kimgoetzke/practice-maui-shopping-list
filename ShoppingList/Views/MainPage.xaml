@@ -237,8 +237,8 @@
                                                               BindingContext="{Binding .}">
                                                         <CheckBox.IsVisible>
                                                             <OnPlatform x:TypeArguments="x:Boolean">
-                                                                <On Platform="WinUI" Value="True" />
-                                                                <On Platform="iOS, Android, macOS" Value="False" />
+                                                                <On Platform="WinUI, macOS" Value="True" />
+                                                                <On Platform="iOS, Android" Value="False" />
                                                             </OnPlatform>
                                                         </CheckBox.IsVisible>
                                                     </CheckBox>
