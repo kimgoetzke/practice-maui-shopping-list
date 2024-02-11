@@ -86,6 +86,12 @@
                                                         <Setter Property="IsVisible" Value="False" />
                                                     </DataTrigger>
                                                 </ImageButton.Triggers>
+                                                <ImageButton.IsVisible>
+                                                    <OnPlatform x:TypeArguments="x:Boolean">
+                                                        <On Platform="WinUI, macOS" Value="True" />
+                                                        <On Platform="iOS, Android" Value="False" />
+                                                    </OnPlatform>
+                                                </ImageButton.IsVisible>
                                             </ImageButton>
                                         </Grid>
                                         <BoxView Style="{DynamicResource ThinLineSeparator}" />
