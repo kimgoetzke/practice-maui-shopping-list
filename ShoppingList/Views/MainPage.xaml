@@ -2,11 +2,12 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ShoppingList.Views.MainPageWindows"
+             x:Class="ShoppingList.Views.MainPage"
              xmlns:viewmodel="clr-namespace:ShoppingList.ViewModel"
              xmlns:models="clr-namespace:ShoppingList.Models"
              xmlns:converters="clr-namespace:ShoppingList.Converters"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
              x:DataType="viewmodel:MainViewModel"
              Title="">
 
@@ -29,19 +30,19 @@
             Text="Insert from clipboard"
             IconImageSource="import_white.png"
             Order="Primary"
-            Clicked="ImportOnClicked" />
+            Clicked="ToolbarItem_ImportOnClicked" />
 
         <ToolbarItem
             Text="Copy to clipboard"
             IconImageSource="export_white.png"
             Order="Primary"
-            Clicked="CopyOnClicked" />
+            Clicked="ToolbarItem_CopyOnClicked" />
 
         <ToolbarItem
             Text="Open settings"
             IconImageSource="settings_white.png"
             Order="Primary"
-            Clicked="OnTapSettings" />
+            Clicked="ToolbarItem_OnTapSettings" />
     </ContentPage.ToolbarItems>
 
     <Grid IgnoreSafeArea="True">
@@ -56,7 +57,7 @@
                 </LinearGradientBrush>
             </Grid.Background>
             <Grid.GestureRecognizers>
-                <TapGestureRecognizer Tapped="OnTapGridArea" />
+                <TapGestureRecognizer Tapped="SettingsGrid_OnTapGridArea" />
             </Grid.GestureRecognizers>
 
             <!-- Settings menu: Content -->
@@ -146,52 +147,7 @@
                      BackgroundColor="Transparent" />
 
             <!-- Menu to add items -->
-            <Grid Grid.Row="1"
-                  ColumnDefinitions="250, 150, 180, *, 150"
-                  RowDefinitions="Auto"
-                  Padding="5"
-                  RowSpacing="5">
-                <Entry x:Name="EntryField"
-                       Placeholder="Enter item name"
-                       Text="{Binding NewItem.Title}"
-                       Grid.Column="0"
-                       Margin="5"
-                       FontSize="16"
-                       Unfocused="OnEntryUnfocused"
-                       Completed="OnItemAdded"
-                       ReturnCommand="{Binding AddItemCommand}" />
-
-                <Picker Grid.Column="1" Title=""
-                        HeightRequest="{DynamicResource StandardSwipeItemHeight}"
-                        SelectedItem="{Binding CurrentStore}"
-                        ItemsSource="{Binding Stores}" />
-
-                <Grid Grid.Column="2" Margin="5" ColumnDefinitions=".5*, .5*" ColumnSpacing="0">
-                    <Label Text="{Binding NewItem.Quantity, StringFormat='Quantity: {0}'}"
-                           Grid.Column="0"
-                           FontSize="10"
-                           VerticalTextAlignment="Center"
-                           HorizontalTextAlignment="Center" />
-                    <Stepper Minimum="1" Maximum="99" Increment="1" Grid.Column="1"
-                             Value="{Binding NewItem.Quantity}"
-                             HorizontalOptions="Center" />
-                </Grid>
-                <Grid Margin="5" Grid.Column="3" ColumnDefinitions="Auto, *" ColumnSpacing="0">
-                    <Label Text="Important:" Grid.Column="0"
-                           FontSize="10"
-                           HorizontalTextAlignment="Start"
-                           VerticalTextAlignment="Center" />
-                    <CheckBox IsChecked="{Binding NewItem.IsImportant}" Grid.Column="1"
-                              HorizontalOptions="Start" />
-                </Grid>
-                <Button x:Name="AddButton"
-                        HorizontalOptions="End"
-                        WidthRequest="140"
-                        Text="Add"
-                        Pressed="OnItemAdded"
-                        Style="{DynamicResource StandardButton}"
-                        Grid.Column="4" />
-            </Grid>
+            <!-- (Inserted via code behind) -->
 
             <!-- Horizontal line below menu to add items -->
             <BoxView Grid.Row="2" Style="{DynamicResource ThickLineSeparator}" HorizontalOptions="FillAndExpand" />
@@ -205,7 +161,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="{x:Type models:Item}">
                             <Grid RowDefinitions="Auto, Auto" Margin="0,0,0,0" VerticalOptions="Center">
-                                <SwipeView Margin="0,0,0,0" Grid.Row="0">
+                                <SwipeView Margin="0,0,0,0" Grid.Row="0" android:SwipeView.SwipeTransitionMode="Reveal">
 
                                     <!-- Swipe from left to right to complete task -->
                                     <SwipeView.LeftItems>
@@ -277,7 +233,7 @@
                                                              VerticalOptions="Center"
                                                              Padding="15, 0">
                                                     <CheckBox IsChecked="False"
-                                                              CheckedChanged="CheckBox_OnCheckedChanged"
+                                                              CheckedChanged="CheckBox_OnTaskCompleted"
                                                               BindingContext="{Binding .}">
                                                         <CheckBox.IsVisible>
                                                             <OnPlatform x:TypeArguments="x:Boolean">

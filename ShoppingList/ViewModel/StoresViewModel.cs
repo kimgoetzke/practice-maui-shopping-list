@@ -59,7 +59,7 @@ public partial class StoresViewModel : ObservableObject
         await _storeService.CreateOrUpdateAsync(NewStore);
 
         // Make sure the UI is reset/updated
-#if __ANDROID__
+#if __ANDROID__ || __IOS__
         var isKeyboardHidden = view.HideKeyboardAsync(CancellationToken.None);
         Logger.Log("Keyboard hidden: " + isKeyboardHidden);
 #endif
@@ -91,10 +91,10 @@ public partial class StoresViewModel : ObservableObject
         if (!await IsRequestConfirmedByUser())
             return;
 
+        Notifier.ShowToast("Reset stores");
         await _itemService.UpdateAllToDefaultStoreAsync().ConfigureAwait(false);
         await _storeService.DeleteAllAsync().ConfigureAwait(false);
         await LoadStoresFromDatabase().ConfigureAwait(false);
-        Notifier.ShowToast("Reset stores");
     }
 
     private static Task<bool> IsRequestConfirmedByUser()

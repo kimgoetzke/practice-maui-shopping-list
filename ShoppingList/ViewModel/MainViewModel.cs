@@ -51,6 +51,8 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task AddItem()
     {
+        Logger.Log($"Adding item: {NewItem.ToLoggableString()}");
+
         // Don't add empty items
         if (string.IsNullOrWhiteSpace(NewItem.Title))
             return;
@@ -62,10 +64,10 @@ public partial class MainViewModel : ObservableObject
 
         // Add to list and database
         await _itemService.CreateOrUpdateAsync(NewItem);
-        Items.Add(NewItem);
+        await Application.Current!.Dispatcher.DispatchAsync(() => Items.Add(NewItem));
         Notifier.ShowToast($"Added: {NewItem.Title}");
         Logger.Log($"Added item: {NewItem.ToLoggableString()}");
-        
+
         // Make sure the UI is reset/updated
         NewItem = new Item();
         SortItems();
@@ -75,7 +77,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     public async Task RemoveItem(Item i)
     {
-        Items.Remove(i);
+        await Application.Current!.Dispatcher.DispatchAsync(() => Items.Remove(i));
         await _itemService.DeleteAsync(i);
     }
 
@@ -185,6 +187,7 @@ public partial class MainViewModel : ObservableObject
         Items = new ObservableCollection<Item>(
             Items.OrderBy(i => i.StoreName).ThenByDescending(i => i.AddedOn)
         );
+        OnPropertyChanged(nameof(Items));
     }
 
     public async Task LoadItemsFromDatabase()
@@ -200,5 +203,15 @@ public partial class MainViewModel : ObservableObject
         var loadedStores = await _storeService.GetAllAsync();
         Stores = new ObservableCollection<ConfigurableStore>(loadedStores);
         Logger.Log($"Loaded {loadedStores.Count} stores, new collection size: {Stores.Count}");
+        foreach (var store in Stores)
+        {
+            if (store.Name != IStoreService.DefaultStoreName) 
+                continue;
+            
+            CurrentStore = store;
+            OnPropertyChanged(nameof(CurrentStore));
+        }
+        OnPropertyChanged(nameof(Stores));
+        Logger.Log("Current store set to: " + CurrentStore?.Name);
     }
 }

@@ -86,7 +86,7 @@
         <MauiXaml Update="Resources\Styles\LightTheme.xaml">
           <SubType>Designer</SubType>
         </MauiXaml>
-        <MauiXaml Update="Views\MainPageWindows.xaml">
+        <MauiXaml Update="Views\MainPage.xaml">
           <SubType>Designer</SubType>
         </MauiXaml>
     </ItemGroup>
@@ -108,7 +108,7 @@
           <DependentUpon>LightTheme.xaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\MainPageWindows.xaml.cs">
+        <Compile Update="Views\MainPage.xaml.cs">
           <DependentUpon>MainPageWindows.xaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
