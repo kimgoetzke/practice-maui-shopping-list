@@ -289,8 +289,8 @@ public partial class MainPage
             Title = "Select store",
 #endif
             TextColor = (Color)Application.Current!.Resources["TextColor"],
-            TitleColor = (Color)Application.Current!.Resources["TextColor"],
-            HeightRequest = (double)Application.Current!.Resources["StandardSwipeItemHeight"],
+            TitleColor = (Color)Application.Current.Resources["PickerTitleColor"],
+            HeightRequest = (double)Application.Current.Resources["StandardSwipeItemHeight"],
             Margin = new Thickness(5)
         };
         storePicker.SetBinding(Picker.SelectedItemProperty, "CurrentStore");

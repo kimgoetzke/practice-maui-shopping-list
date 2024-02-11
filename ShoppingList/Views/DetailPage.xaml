@@ -64,7 +64,7 @@
                         SelectedItem="{Binding CurrentStore, Mode=TwoWay}"
                         ItemsSource="{Binding Stores}"
                         TextColor="{DynamicResource TextColor}"
-                        TitleColor="{DynamicResource TextColor}"
+                        TitleColor="{DynamicResource PickerTitleColor}"
                         MinimumWidthRequest="400" MaximumWidthRequest="850"
                         HorizontalOptions="Fill" />
             </VerticalStackLayout>
