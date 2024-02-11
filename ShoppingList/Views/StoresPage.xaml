@@ -55,13 +55,39 @@
                                         </SwipeItemView>
                                     </SwipeItems>
                                 </SwipeView.RightItems>
-                                <Grid HeightRequest="{DynamicResource StandardSwipeItemHeightPlusLineHeight}" VerticalOptions="Start">
-                                    <VerticalStackLayout HeightRequest="{DynamicResource StandardSwipeItemHeightPlusLineHeight}">
-                                        <Label Text="{Binding Name}"
-                                               Style="{DynamicResource StoreSwipeItem}"
-                                               VerticalOptions="Fill"
-                                               VerticalTextAlignment="Center"
-                                               HorizontalTextAlignment="Center" />
+                                <Grid HeightRequest="{DynamicResource StandardSwipeItemHeightPlusLineHeight}"
+                                      VerticalOptions="Start">
+                                    <VerticalStackLayout
+                                        HeightRequest="{DynamicResource StandardSwipeItemHeightPlusLineHeight}">
+                                        <Grid ColumnDefinitions="*">
+                                            <Label Text="{Binding Name}"
+                                                   Style="{DynamicResource StoreSwipeItem}"
+                                                   VerticalOptions="Fill"
+                                                   VerticalTextAlignment="Center"
+                                                   HorizontalTextAlignment="Center" />
+                                            <ImageButton x:Name="BinImageButton"
+                                                         Source="bin_neutral.png"
+                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoresViewModel}}, Path=RemoveStoreCommand}"
+                                                         CommandParameter="{Binding .}"
+                                                         Aspect="AspectFit"
+                                                         HorizontalOptions="End"
+                                                         Padding="3"
+                                                         BorderWidth="1"
+                                                         Pressed="ImageButton_OnPressed"
+                                                         Released="ImageButton_OnReleased"
+                                                         WidthRequest="34"
+                                                         HeightRequest="34"
+                                                         Margin="5, 5, 25 ,5"
+                                                         VerticalOptions="Center">
+                                                <ImageButton.Triggers>
+                                                    <DataTrigger TargetType="ImageButton"
+                                                                 Binding="{Binding Name}"
+                                                                 Value="{x:Static viewmodel:StoresViewModel.DefaultStoreName}">
+                                                        <Setter Property="IsVisible" Value="False" />
+                                                    </DataTrigger>
+                                                </ImageButton.Triggers>
+                                            </ImageButton>
+                                        </Grid>
                                         <BoxView Style="{DynamicResource ThinLineSeparator}" />
                                     </VerticalStackLayout>
                                 </Grid>

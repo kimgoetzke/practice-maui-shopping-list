@@ -14,4 +14,20 @@ public partial class StoresPage
     {
         AddStoreButton.Focus();
     }
+
+    private void ImageButton_OnPressed(object? sender, EventArgs e)
+    {
+        if (sender is not ImageButton button)
+            return;
+        
+        button.Source = "bin_pink.png";
+    }
+
+    private void ImageButton_OnReleased(object? sender, EventArgs e)
+    {
+        if (sender is not ImageButton button)
+            return;
+        
+        button.Source = "bin_neutral.png";
+    }
 }

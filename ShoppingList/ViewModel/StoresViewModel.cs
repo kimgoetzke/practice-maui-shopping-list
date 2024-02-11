@@ -18,6 +18,7 @@ public partial class StoresViewModel : ObservableObject
     private ConfigurableStore _newStore;
     private readonly IStoreService _storeService;
     private readonly IItemService _itemService;
+    public static string DefaultStoreName => IStoreService.DefaultStoreName;
 
     public StoresViewModel(IStoreService storeService, IItemService itemService)
     {
@@ -59,7 +60,7 @@ public partial class StoresViewModel : ObservableObject
         await _storeService.CreateOrUpdateAsync(NewStore);
 
         // Make sure the UI is reset/updated
-#if __ANDROID__ || __IOS__
+#if __ANDROID__ 
         var isKeyboardHidden = view.HideKeyboardAsync(CancellationToken.None);
         Logger.Log("Keyboard hidden: " + isKeyboardHidden);
 #endif
