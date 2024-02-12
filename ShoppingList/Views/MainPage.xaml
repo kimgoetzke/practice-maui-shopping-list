@@ -31,13 +31,11 @@
             IconImageSource="import_white.png"
             Order="Primary"
             Clicked="ToolbarItem_ImportOnClicked" />
-
         <ToolbarItem
             Text="Copy to clipboard"
             IconImageSource="export_white.png"
             Order="Primary"
             Clicked="ToolbarItem_CopyOnClicked" />
-
         <ToolbarItem
             Text="Open settings"
             IconImageSource="settings_white.png"
@@ -49,6 +47,7 @@
 
         <!-- Settings menu -->
         <Grid IgnoreSafeArea="True">
+
             <!-- Settings menu: Configuration -->
             <Grid.Background>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
@@ -140,19 +139,19 @@
               VerticalOptions="Fill"
               IgnoreSafeArea="True">
 
-            <!-- Background for first two rows -->
+            <!-- Main page content: Background for first two rows -->
             <BoxView Grid.Row="1"
                      Grid.RowSpan="2"
                      Color="{DynamicResource BackgroundColorAccent}"
                      BackgroundColor="Transparent" />
 
-            <!-- Menu to add items -->
+            <!-- Main page content: Menu to add items -->
             <!-- (Inserted via code behind) -->
 
-            <!-- Horizontal line below menu to add items -->
+            <!-- Main page content: Horizontal line below menu to add items -->
             <BoxView Grid.Row="2" Style="{DynamicResource ThickLineSeparator}" HorizontalOptions="FillAndExpand" />
 
-            <!-- List of added items -->
+            <!-- Main page content: List of added items -->
             <Grid Grid.Row="3" Padding="0">
                 <CollectionView
                     ItemsSource="{Binding Items}"
@@ -163,7 +162,7 @@
                             <Grid RowDefinitions="Auto, Auto" Margin="0,0,0,0" VerticalOptions="Center">
                                 <SwipeView Margin="0,0,0,0" Grid.Row="0" android:SwipeView.SwipeTransitionMode="Reveal">
 
-                                    <!-- Swipe from left to right to complete task -->
+                                    <!-- List of added items: Swipe from left to right to complete task -->
                                     <SwipeView.LeftItems>
                                         <SwipeItems Mode="Execute">
                                             <SwipeItemView
@@ -185,7 +184,7 @@
                                         </SwipeItems>
                                     </SwipeView.LeftItems>
 
-                                    <!-- Swipe from right to left to reveal prioritisation button -->
+                                    <!-- List of added items: Swipe from right to left to reveal prioritisation button -->
                                     <SwipeView.RightItems>
                                         <SwipeItems SwipeBehaviorOnInvoked="Close">
                                             <SwipeItemView
@@ -209,7 +208,7 @@
                                         </SwipeItems>
                                     </SwipeView.RightItems>
 
-                                    <!-- Contents of list -->
+                                    <!-- List of added items: Contents of list -->
                                     <Grid Padding="0" RowDefinitions="Auto, Auto" HeightRequest="50"
                                           VerticalOptions="Fill">
                                         <Frame CornerRadius="0"
@@ -233,15 +232,9 @@
                                                              VerticalOptions="Center"
                                                              Padding="15, 0">
                                                     <CheckBox IsChecked="False"
+                                                              IsVisible="{OnPlatform WinUI=True, Default=False}"
                                                               CheckedChanged="CheckBox_OnTaskCompleted"
-                                                              BindingContext="{Binding .}">
-                                                        <CheckBox.IsVisible>
-                                                            <OnPlatform x:TypeArguments="x:Boolean">
-                                                                <On Platform="WinUI, macOS" Value="True" />
-                                                                <On Platform="iOS, Android" Value="False" />
-                                                            </OnPlatform>
-                                                        </CheckBox.IsVisible>
-                                                    </CheckBox>
+                                                              BindingContext="{Binding .}" />
                                                     <Label Text="{Binding Title}"
                                                            FontSize="16"
                                                            HeightRequest="50"
