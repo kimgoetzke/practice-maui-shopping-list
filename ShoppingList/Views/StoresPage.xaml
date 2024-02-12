@@ -75,6 +75,7 @@
                                                          BorderWidth="1"
                                                          Pressed="ImageButton_OnPressed"
                                                          Released="ImageButton_OnReleased"
+                                                         IsVisible="{OnPlatform WinUI=True, Default=False}"
                                                          WidthRequest="34"
                                                          HeightRequest="34"
                                                          Margin="5, 5, 25 ,5"
@@ -86,12 +87,6 @@
                                                         <Setter Property="IsVisible" Value="False" />
                                                     </DataTrigger>
                                                 </ImageButton.Triggers>
-                                                <ImageButton.IsVisible>
-                                                    <OnPlatform x:TypeArguments="x:Boolean">
-                                                        <On Platform="WinUI, macOS" Value="True" />
-                                                        <On Platform="iOS, Android" Value="False" />
-                                                    </OnPlatform>
-                                                </ImageButton.IsVisible>
                                             </ImageButton>
                                         </Grid>
                                         <BoxView Style="{DynamicResource ThinLineSeparator}" />
