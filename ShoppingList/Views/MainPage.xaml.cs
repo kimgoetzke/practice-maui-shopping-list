@@ -28,7 +28,8 @@ public partial class MainPage
     {
         base.OnAppearing();
         DisplayPopUpOnFirstRun();
-#if WINDOWS // To handle issue: https://github.com/dotnet/maui/issues/8573
+#if WINDOWS // Attempting to handle issue: https://github.com/dotnet/maui/issues/8573
+        _viewModel.CurrentTheme = _viewModel.Themes.First(t => t.Name == Settings.CurrentTheme);
         ThemeCollectionView.SelectedItem = _viewModel.CurrentTheme;
 #endif
         try
@@ -69,24 +70,29 @@ public partial class MainPage
         var cancellationTokenSource = new CancellationTokenSource();
         if (!_isMenuOpen)
         {
-#if WINDOWS || __MACOS__
-            var x = (Width - 250) / Width;
-            var resize = PageContentGrid.ScaleTo(x, AnimationDuration);
-            var move = PageContentGrid.TranslateTo(-Width * ((1 - x) / 2), 0, AnimationDuration);
-            await Task.WhenAll(move, resize)
-                .WaitAsync(cancellationTokenSource.Token)
-                .ConfigureAwait(false);
-#elif __ANDROID__ || __IOS__
-            var resize = PageContentGrid.TranslateTo(-Width * 0.25, 0, AnimationDuration);
-            var scaleDown = PageContentGrid.ScaleTo(0.75, AnimationDuration);
-            var rotate = PageContentGrid.RotateYTo(35, AnimationDuration, Easing.CubicIn);
-            await Task.WhenAll(resize, scaleDown, rotate);
-#endif
+            await OpenSettings(cancellationTokenSource);
             _isMenuOpen = true;
             return;
         }
 
-        CloseMenu(cancellationTokenSource).SafeFireAndForget();
+        await CloseMenu(cancellationTokenSource);
+        _isMenuOpen = false;
+    }
+
+    private async Task OpenSettings(CancellationTokenSource cancellationTokenSource)
+    {
+#if WINDOWS || __MACOS__
+        var x = (Width - 250) / Width;
+        var resize = PageContentGrid.ScaleTo(x, AnimationDuration);
+        var move = PageContentGrid.TranslateTo(-Width * ((1 - x) / 2), 0, AnimationDuration);
+        var tasks = new List<Task> { resize, move };
+#elif __ANDROID__ || __IOS__
+        var resize = PageContentGrid.TranslateTo(-Width * 0.25, 0, AnimationDuration);
+        var scaleDown = PageContentGrid.ScaleTo(0.75, AnimationDuration);
+        var rotate = PageContentGrid.RotateYTo(35, AnimationDuration, Easing.CubicIn);
+        var tasks = new List<Task> { resize, scaleDown, rotate };
+#endif
+        await Task.WhenAll(tasks).WaitAsync(cancellationTokenSource.Token).ConfigureAwait(false);
     }
 
     private async Task CloseMenu(CancellationTokenSource cancellationTokenSource)
@@ -94,19 +100,15 @@ public partial class MainPage
 #if WINDOWS || __MACOS__
         var scaleBack = PageContentGrid.ScaleTo(1, AnimationDuration / 2);
         var resize = PageContentGrid.TranslateTo(0, 0, AnimationDuration / 2);
-        await Task.WhenAll(scaleBack, resize)
-            .WaitAsync(cancellationTokenSource.Token)
-            .ConfigureAwait(false);
+        var tasks = new List<Task> { scaleBack, resize };
 #elif __ANDROID__ || __IOS__
         await PageContentGrid.RotateYTo(0, AnimationDuration / 2);
         var fadeIn = PageContentGrid.FadeTo(1, AnimationDuration / 2);
         var scaleBack = PageContentGrid.ScaleTo(1, AnimationDuration / 2);
         var resize = PageContentGrid.TranslateTo(0, 0, AnimationDuration / 2);
-        await Task.WhenAll(fadeIn, scaleBack, resize)
-            .WaitAsync(cancellationTokenSource.Token)
-            .ConfigureAwait(false);
+        var tasks = new List<Task> { fadeIn, scaleBack, resize };
 #endif
-        _isMenuOpen = false;
+        await Task.WhenAll(tasks).WaitAsync(cancellationTokenSource.Token).ConfigureAwait(false);
     }
 
     private void SwipeItemView_OnInvoked(object? sender, EventArgs e)
