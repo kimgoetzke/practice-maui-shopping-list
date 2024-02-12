@@ -32,7 +32,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type models:ConfigurableStore}">
                         <Grid RowDefinitions="Auto">
-                            <SwipeView android:SwipeView.SwipeTransitionMode="Reveal" MaximumHeightRequest="200">
+                            <SwipeView android:SwipeView.SwipeTransitionMode="Reveal">
                                 <SwipeView.RightItems>
                                     <SwipeItems SwipeBehaviorOnInvoked="Close">
                                         <SwipeItemView
@@ -55,13 +55,40 @@
                                         </SwipeItemView>
                                     </SwipeItems>
                                 </SwipeView.RightItems>
-                                <Grid>
-                                    <VerticalStackLayout HeightRequest="{DynamicResource StandardSwipeItemHeightPlusLineHeight}">
-                                        <Label Text="{Binding Name}"
-                                               Style="{DynamicResource StoreSwipeItem}"
-                                               VerticalOptions="Fill"
-                                               VerticalTextAlignment="Center"
-                                               HorizontalTextAlignment="Center" />
+                                <Grid HeightRequest="{DynamicResource StandardSwipeItemHeightPlusLineHeight}"
+                                      VerticalOptions="Start">
+                                    <VerticalStackLayout
+                                        HeightRequest="{DynamicResource StandardSwipeItemHeightPlusLineHeight}">
+                                        <Grid ColumnDefinitions="*">
+                                            <Label Text="{Binding Name}"
+                                                   Style="{DynamicResource StoreSwipeItem}"
+                                                   VerticalOptions="Fill"
+                                                   VerticalTextAlignment="Center"
+                                                   HorizontalTextAlignment="Center" />
+                                            <ImageButton x:Name="BinImageButton"
+                                                         Source="bin_neutral.png"
+                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StoresViewModel}}, Path=RemoveStoreCommand}"
+                                                         CommandParameter="{Binding .}"
+                                                         Aspect="AspectFit"
+                                                         HorizontalOptions="End"
+                                                         Padding="3"
+                                                         BorderWidth="1"
+                                                         Pressed="ImageButton_OnPressed"
+                                                         Released="ImageButton_OnReleased"
+                                                         IsVisible="{OnPlatform WinUI=True, Default=False}"
+                                                         WidthRequest="34"
+                                                         HeightRequest="34"
+                                                         Margin="5, 5, 25 ,5"
+                                                         VerticalOptions="Center">
+                                                <ImageButton.Triggers>
+                                                    <DataTrigger TargetType="ImageButton"
+                                                                 Binding="{Binding Name}"
+                                                                 Value="{x:Static viewmodel:StoresViewModel.DefaultStoreName}">
+                                                        <Setter Property="IsVisible" Value="False" />
+                                                    </DataTrigger>
+                                                </ImageButton.Triggers>
+                                            </ImageButton>
+                                        </Grid>
                                         <BoxView Style="{DynamicResource ThinLineSeparator}" />
                                     </VerticalStackLayout>
                                 </Grid>
@@ -88,13 +115,14 @@
             </BoxView>
 
             <!-- Buttons -->
-            <VerticalStackLayout Grid.Row="2" Padding="50,20">
+            <VerticalStackLayout Grid.Row="2" Padding="50,20" MinimumWidthRequest="200" MaximumWidthRequest="850">
                 <Grid ColumnDefinitions="*, Auto" Margin="0, 20">
                     <Entry Placeholder="Enter store name"
                            Grid.Column="0"
                            Text="{Binding NewStore.Name}"
                            Margin="5"
                            FontSize="16"
+                           VerticalOptions="Fill"
                            x:Name="StoreNameEntry"
                            Unfocused="OnEntryUnfocused" />
                     <Button Text="Add Store"

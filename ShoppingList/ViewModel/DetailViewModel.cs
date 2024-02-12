@@ -36,11 +36,7 @@ public partial class DetailViewModel : ObservableObject
     {
         Item.StoreName = CurrentStore.Name;
         await _itemService.CreateOrUpdateAsync(Item);
-
-#pragma warning disable CS4014
-        Notifier.AwaitShowToast($"Updated: {Item.Title}");
-#pragma warning restore CS4014
-
+        Notifier.ShowToast($"Updated: {Item.Title}");
         await Shell.Current.GoToAsync("..", true);
     }
 

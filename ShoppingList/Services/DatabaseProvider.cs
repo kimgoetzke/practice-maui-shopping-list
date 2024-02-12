@@ -6,6 +6,14 @@ namespace ShoppingList.Services;
 
 public class DatabaseProvider : IDatabaseProvider
 {
+    private const SQLiteOpenFlags Flags =
+        SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create | SQLiteOpenFlags.SharedCache;
+
+    private const string DatabaseFilename = "ShoppingList.db3";
+
+    private static string DatabasePath =>
+        Path.Combine(FileSystem.AppDataDirectory, DatabaseFilename);
+
     private SQLiteAsyncConnection? _connection;
 
     public async Task<SQLiteAsyncConnection> GetConnection()
@@ -14,21 +22,22 @@ public class DatabaseProvider : IDatabaseProvider
         return _connection!;
     }
 
-    private async Task InitialiseDatabase()
+    private async ValueTask InitialiseDatabase()
     {
         if (_connection is not null)
             return;
 
-        _connection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
-        Logger.Log($"Connected to: {Constants.DatabasePath}");
+        Logger.Log($"Initialising database");
+        _connection = new SQLiteAsyncConnection(DatabasePath, Flags);
+        Logger.Log($"Connected to: {DatabasePath}");
         var itemTable = InitialiseItemTable(_connection);
         var storeTable = InitialiseStoreTable(_connection);
-        await Task.WhenAll(itemTable, storeTable);
+        await Task.WhenAll(itemTable, storeTable).ConfigureAwait(false);
     }
 
-    private static async Task InitialiseItemTable(SQLiteAsyncConnection connection)
+    private static Task<CreateTableResult> InitialiseItemTable(SQLiteAsyncConnection connection)
     {
-        await connection.CreateTableAsync<Item>();
+        return connection.CreateTableAsync<Item>();
     }
 
     private static async Task InitialiseStoreTable(SQLiteAsyncConnection connection)
@@ -37,11 +46,9 @@ public class DatabaseProvider : IDatabaseProvider
         if (await connection.Table<ConfigurableStore>().CountAsync() != 0)
             return;
 
-        await connection.InsertAsync(
-            new ConfigurableStore { Name = IStoreService.DefaultStoreName }
-        );
-        var stores = await connection.Table<ConfigurableStore>().ToListAsync();
-        Logger.Log($"Added default stores:");
-        stores.ForEach(store => Logger.Log($" - {store.Name}"));
+        await connection
+            .InsertAsync(new ConfigurableStore { Name = IStoreService.DefaultStoreName })
+            .ConfigureAwait(false);
+        Logger.Log($"Added default store(s): {IStoreService.DefaultStoreName}");
     }
 }

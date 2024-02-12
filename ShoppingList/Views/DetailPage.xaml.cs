@@ -1,6 +1,6 @@
-﻿using ShoppingList.Models;
+﻿using System.Globalization;
+using ShoppingList.Models;
 using ShoppingList.Services;
-using ShoppingList.Utilities;
 using ShoppingList.ViewModel;
 
 namespace ShoppingList.Views;
@@ -17,9 +17,19 @@ public partial class DetailPage
         BindingContext = new DetailViewModel(item, storeService, itemService);
     }
 
-    protected override void OnAppearing()
+    private void QuantityStepper_OnValueChanged(object? sender, ValueChangedEventArgs e)
     {
-        base.OnAppearing();
-        Logger.Log($"{((DetailViewModel)BindingContext).Item.ToLoggableString()}");
+        if (sender is not Stepper)
+            return;
+        
+        QuantityProperty.Text = e.NewValue.ToString(CultureInfo.CurrentCulture);
+    }
+
+    private void IsImportantSwitch_OnToggled(object? sender, ToggledEventArgs toggledEventArgs)
+    {
+        if (sender is not Switch toggle)
+            return;
+        
+        IsImportantProperty.Text = toggle.IsToggled ? "Yes" : "No";
     }
 }

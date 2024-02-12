@@ -1,15 +1,12 @@
-using CommunityToolkit.Mvvm.ComponentModel;
 using SQLite;
 
 namespace ShoppingList.Models;
 
-public partial class ConfigurableStore : ObservableObject
+public class ConfigurableStore
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-
-    [ObservableProperty]
-    private string _name = string.Empty;
+    public string Name { get; set; } = string.Empty;
 
     public override string ToString()
     {

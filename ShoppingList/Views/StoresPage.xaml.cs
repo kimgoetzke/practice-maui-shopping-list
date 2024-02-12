@@ -10,14 +10,24 @@ public partial class StoresPage
         BindingContext = viewModel;
     }
 
-    protected override async void OnNavigatedTo(NavigatedToEventArgs args)
-    {
-        base.OnNavigatedTo(args);
-        await ((StoresViewModel)BindingContext).LoadStoresFromDatabase();
-    }
-
     private void OnEntryUnfocused(object sender, FocusEventArgs e)
     {
         AddStoreButton.Focus();
+    }
+
+    private void ImageButton_OnPressed(object? sender, EventArgs e)
+    {
+        if (sender is not ImageButton button)
+            return;
+        
+        button.Source = "bin_pink.png";
+    }
+
+    private void ImageButton_OnReleased(object? sender, EventArgs e)
+    {
+        if (sender is not ImageButton button)
+            return;
+        
+        button.Source = "bin_neutral.png";
     }
 }

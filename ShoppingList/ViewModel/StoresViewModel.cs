@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using System.Globalization;
+using AsyncAwaitBestPractices;
 using CommunityToolkit.Maui.Core.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -17,12 +17,25 @@ public partial class StoresViewModel : ObservableObject
     [ObservableProperty]
     private ConfigurableStore _newStore;
     private readonly IStoreService _storeService;
+    private readonly IItemService _itemService;
+    public static string DefaultStoreName => IStoreService.DefaultStoreName;
 
-    public StoresViewModel(IStoreService storeService)
+    public StoresViewModel(IStoreService storeService, IItemService itemService)
     {
         Stores = [];
-        _newStore = new ConfigurableStore();
+        NewStore = new ConfigurableStore();
         _storeService = storeService;
+        _itemService = itemService;
+        LoadStoresFromDatabase()
+            .SafeFireAndForget<Exception>(ex => Logger.Log($"Failed to load stores: {ex}"));
+    }
+
+    private async Task LoadStoresFromDatabase()
+    {
+        var loadedStores = await _storeService.GetAllAsync().ConfigureAwait(false);
+        Stores = new ObservableCollection<ConfigurableStore>(loadedStores);
+        OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
+        Logger.Log($"Loaded {loadedStores.Count} items, new collection size: {Stores.Count}");
     }
 
     [RelayCommand]
@@ -38,7 +51,7 @@ public partial class StoresViewModel : ObservableObject
         // Only allow unique store names
         if (Stores.Any(store => store.Name == NewStore.Name))
         {
-            await Notifier.AwaitShowToast($"Cannot add '{NewStore.Name}' - it already exists");
+            Notifier.ShowToast($"Cannot add '{NewStore.Name}' - it already exists");
             return;
         }
 
@@ -46,14 +59,12 @@ public partial class StoresViewModel : ObservableObject
         Stores.Add(NewStore);
         await _storeService.CreateOrUpdateAsync(NewStore);
 
-        // Show toast on success
-        await Notifier.AwaitShowToast($"Added: {NewStore.Name}");
-
         // Make sure the UI is reset/updated
-#pragma warning disable CA1416
+#if __ANDROID__ 
         var isKeyboardHidden = view.HideKeyboardAsync(CancellationToken.None);
-#pragma warning restore CA1416
         Logger.Log("Keyboard hidden: " + isKeyboardHidden);
+#endif
+        Notifier.ShowToast($"Added: {NewStore.Name}");
         NewStore = new ConfigurableStore();
         OnPropertyChanged(nameof(NewStore));
         OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
@@ -69,6 +80,7 @@ public partial class StoresViewModel : ObservableObject
         }
 
         Stores.Remove(s);
+        await _itemService.UpdateAllUsingStoreAsync(s.Name);
         await _storeService.DeleteAsync(s);
         OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
         Notifier.ShowToast($"Removed: {s.Name}");
@@ -79,15 +91,16 @@ public partial class StoresViewModel : ObservableObject
     {
         if (!await IsRequestConfirmedByUser())
             return;
-        await _storeService.DeleteAllAsync();
-        await LoadStoresFromDatabase();
-        OnPropertyChanged(nameof(IsCollectionViewLargerThanThreshold));
+
         Notifier.ShowToast("Reset stores");
+        await _itemService.UpdateAllToDefaultStoreAsync().ConfigureAwait(false);
+        await _storeService.DeleteAllAsync().ConfigureAwait(false);
+        await LoadStoresFromDatabase().ConfigureAwait(false);
     }
 
-    private static async Task<bool> IsRequestConfirmedByUser()
+    private static Task<bool> IsRequestConfirmedByUser()
     {
-        return await Shell.Current.DisplayAlert(
+        return Shell.Current.DisplayAlert(
             "Reset stores",
             $"This will remove all stores, except the 'Anywhere' store. Are you sure you want to continue?",
             "Yes",
@@ -99,14 +112,6 @@ public partial class StoresViewModel : ObservableObject
     private static async Task GoBack()
     {
         await Shell.Current.GoToAsync("..", true);
-    }
-
-    public async Task LoadStoresFromDatabase()
-    {
-        var loadedItems = await _storeService.GetAllAsync();
-        Stores.Clear();
-        foreach (var i in loadedItems)
-            Stores.Add(i);
     }
 
     // Used to toggle on/off the line separator between stores list and buttons

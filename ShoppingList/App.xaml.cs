@@ -8,8 +8,8 @@ public partial class App
     {
         InitializeComponent();
         SetThemeToSystemThemeOnFirstRun();
-        var theme = Settings.CurrentTheme;
-        Settings.LoadTheme(theme);
+        var currentTheme = Settings.CurrentTheme;
+        Settings.LoadTheme(currentTheme);
         MainPage = new AppShell();
     }
 
@@ -20,5 +20,13 @@ public partial class App
         Logger.Log("Setting current theme to system theme on first run");
         var systemTheme = Current?.RequestedTheme;
         Settings.SetCurrentThemeFromSystem(systemTheme);
+    }
+
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        var window = base.CreateWindow(activationState);
+        window.MinimumHeight = 400;
+        window.MinimumWidth = 850;
+        return window;
     }
 }

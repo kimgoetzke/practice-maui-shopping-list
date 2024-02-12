@@ -51,18 +51,22 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task AddItem()
     {
+        Logger.Log($"Adding item: {NewItem.ToLoggableString()}");
+
         // Don't add empty items
         if (string.IsNullOrWhiteSpace(NewItem.Title))
             return;
 
         // Pre-process item
         NewItem.Title = StringProcessor.TrimAndCapitaliseFirstChar(NewItem.Title);
-        NewItem.StoreName = CurrentStore!.Name;
+        NewItem.StoreName =
+            CurrentStore != null ? CurrentStore.Name : IStoreService.DefaultStoreName;
 
         // Add to list and database
-        Items.Add(NewItem);
         await _itemService.CreateOrUpdateAsync(NewItem);
+        await Application.Current!.Dispatcher.DispatchAsync(() => Items.Add(NewItem));
         Notifier.ShowToast($"Added: {NewItem.Title}");
+        Logger.Log($"Added item: {NewItem.ToLoggableString()}");
 
         // Make sure the UI is reset/updated
         NewItem = new Item();
@@ -71,9 +75,9 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task RemoveItem(Item i)
+    public async Task RemoveItem(Item i)
     {
-        Items.Remove(i);
+        await Application.Current!.Dispatcher.DispatchAsync(() => Items.Remove(i));
         await _itemService.DeleteAsync(i);
     }
 
@@ -129,15 +133,22 @@ public partial class MainViewModel : ObservableObject
         _clipboardService.InsertFromClipboardAsync(Stores, Items);
     }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
     [RelayCommand]
-    private async Task ChangeTheme(Theme theme)
+    private async Task ChangeTheme(Theme? theme)
     {
+        if (theme == null)
+        {
+            return;
+        }
+
         Logger.Log($"Changing theme to: {theme}");
         Settings.LoadTheme(theme.Name);
         CurrentTheme = theme;
         OnPropertyChanged(nameof(CurrentTheme));
 
-        // The below is only necessary until GradientStops support DynamicResource which is a known bug.
+#if __ANDROID__ || __IOS__
+        // The below is only necessary until GradientStops support DynamicResource which is a known problem.
         // However, attempting to start the process is optional and is unlikely to work on most devices.
         if (await IsRestartConfirmed())
         {
@@ -156,8 +167,11 @@ public partial class MainViewModel : ObservableObject
             currentProcess.Kill();
 #endif
         }
+#endif
     }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
+    // ReSharper disable once UnusedMember.Local
     private static async Task<bool> IsRestartConfirmed()
     {
         return await Shell.Current.DisplayAlert(
@@ -168,32 +182,36 @@ public partial class MainViewModel : ObservableObject
         );
     }
 
-    public void SortItems()
+    private void SortItems()
     {
         Items = new ObservableCollection<Item>(
             Items.OrderBy(i => i.StoreName).ThenByDescending(i => i.AddedOn)
         );
+        OnPropertyChanged(nameof(Items));
     }
 
     public async Task LoadItemsFromDatabase()
     {
         var loadedItems = await _itemService.GetAsync();
-        Items.Clear();
-        foreach (var i in loadedItems)
-            Items.Add(i);
+        Items = new ObservableCollection<Item>(loadedItems);
+        SortItems();
+        Logger.Log($"Loaded {loadedItems.Count} items, new collection size: {Items.Count}");
     }
 
-    public async Task LoadStoresFromService()
+    public async Task LoadStoresFromDatabase()
     {
         var loadedStores = await _storeService.GetAllAsync();
-        Stores.Clear();
-        foreach (var s in loadedStores)
+        Stores = new ObservableCollection<ConfigurableStore>(loadedStores);
+        Logger.Log($"Loaded {loadedStores.Count} stores, new collection size: {Stores.Count}");
+        foreach (var store in Stores)
         {
-            Stores.Add(s);
-            if (s.Name == IStoreService.DefaultStoreName)
-            {
-                CurrentStore = s;
-            }
+            if (store.Name != IStoreService.DefaultStoreName) 
+                continue;
+            
+            CurrentStore = store;
+            OnPropertyChanged(nameof(CurrentStore));
         }
+        OnPropertyChanged(nameof(Stores));
+        Logger.Log("Current store set to: " + CurrentStore?.Name);
     }
 }

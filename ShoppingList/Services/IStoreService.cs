@@ -8,7 +8,6 @@ public interface IStoreService
     Task<ConfigurableStore> GetDefaultStore();
     Task<List<ConfigurableStore>> GetAllAsync();
     Task CreateOrUpdateAsync(ConfigurableStore store);
-    Task CreateIfNotExistAsync(string name);
     Task DeleteAsync(ConfigurableStore store);
     Task DeleteAllAsync();
 }

@@ -20,7 +20,7 @@ public class ClipboardService(IStoreService storeService, IItemService itemServi
         if (
             !WasAbleToConvertToItemList(
                 import!,
-                stores,
+                stores.ToList(),
                 out var itemCount,
                 out var storeCount,
                 out var itemList,

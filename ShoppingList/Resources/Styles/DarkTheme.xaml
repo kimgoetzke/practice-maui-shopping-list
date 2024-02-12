@@ -34,6 +34,7 @@
     <Color x:Key="TextColor">White</Color>
     <Color x:Key="TextColorVariant">#F4F4F4</Color>
     <Color x:Key="TextColorInverted">Black</Color>
+    <Color x:Key="TextHighlightColor">#C62191</Color>
     <Color x:Key="LightTextColor">#C8C8C8</Color>
     <Color x:Key="PlaceholderColor">#919191</Color>
     <Color x:Key="ButtonTextColor">White</Color>

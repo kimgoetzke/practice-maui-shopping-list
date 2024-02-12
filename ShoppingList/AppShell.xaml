@@ -4,14 +4,14 @@
     x:Class="ShoppingList.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views="clr-namespace:ShoppingList.Views"
+    xmlns:views="using:ShoppingList.Views"
     Title="Shopping List"
     Shell.FlyoutBehavior="Disabled">
 
-    <ShellContent IsVisible="True"
+    <ShellContent ContentTemplate="{DataTemplate views:MainPage}"
+                  IsVisible="True"
                   Title="List"
                   Icon="done_white.png"
-                  ContentTemplate="{DataTemplate views:MainPage}"
                   Route="MainPage" />
 
 </Shell>

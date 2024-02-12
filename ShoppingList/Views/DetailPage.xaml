@@ -4,10 +4,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ShoppingList.Views.DetailPage"
              xmlns:viewModel="clr-namespace:ShoppingList.ViewModel"
+             xmlns:converters="clr-namespace:ShoppingList.Converters"
              x:DataType="viewModel:DetailViewModel"
              Title="Item details">
 
-    <VerticalStackLayout Padding="40, 10">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToYesNoConverter x:Key="BoolToTextConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <VerticalStackLayout Padding="40, 10"
+                         MinimumWidthRequest="400" MaximumWidthRequest="850"
+                         VerticalOptions="Start"
+                         HorizontalOptions="Fill">
 
         <Entry Text="{Binding Item.Title, Mode=TwoWay}"
                Style="{DynamicResource Headline}"
@@ -19,12 +29,15 @@
               ColumnDefinitions=".5*, .5*">
             <VerticalStackLayout Grid.Column="0" Padding="5">
                 <Label Text="Important" Style="{DynamicResource ItemPropertyLabel}" />
-                <Label Text="{Binding Item.IsImportant}" Style="{DynamicResource ItemProperty}" />
+                <Label x:Name="IsImportantProperty"
+                       Text="{Binding Item.IsImportant, Converter={StaticResource BoolToTextConverter}}"
+                       Style="{DynamicResource ItemProperty}" />
             </VerticalStackLayout>
             <Switch IsToggled="{Binding Item.IsImportant, Mode=TwoWay}"
                     Grid.Column="1"
                     VerticalOptions="Center"
-                    HorizontalOptions="Center" />
+                    Toggled="IsImportantSwitch_OnToggled"
+                    HorizontalOptions="{OnPlatform WinUI='Start', Default='Center'}" />
         </Grid>
 
         <Grid Margin="5"
@@ -32,28 +45,28 @@
               ColumnDefinitions=".5*, .5*">
             <VerticalStackLayout Grid.Column="0" Padding="5" VerticalOptions="Center">
                 <Label Text="Quantity" Style="{DynamicResource ItemPropertyLabel}" />
-                <Label Text="{Binding Item.Quantity}" Style="{DynamicResource ItemProperty}" />
+                <Label x:Name="QuantityProperty"
+                       Text="{Binding Item.Quantity}" Style="{DynamicResource ItemProperty}" />
             </VerticalStackLayout>
             <Stepper Value="{Binding Item.Quantity}"
                      Grid.Column="1"
-                     Minimum="1"
-                     Maximum="99"
-                     Increment="1"
+                     Minimum="1" Maximum="99" Increment="1"
                      VerticalOptions="Center"
-                     HorizontalOptions="Center" />
+                     ValueChanged="QuantityStepper_OnValueChanged"
+                     HorizontalOptions="{OnPlatform WinUI='Start', Default='Center'}" />
         </Grid>
 
         <Grid Margin="5"
               RowDefinitions="1*">
             <VerticalStackLayout Padding="5">
                 <Label Text="From" Style="{DynamicResource ItemPropertyLabel}" />
-                <Picker Title="Change store"
+                <Picker Title="{OnPlatform WinUI='', Default='Select store'}"
                         SelectedItem="{Binding CurrentStore, Mode=TwoWay}"
                         ItemsSource="{Binding Stores}"
                         TextColor="{DynamicResource TextColor}"
-                        TitleColor="{DynamicResource TextColor}"
-                        WidthRequest="290"
-                        HorizontalOptions="Start" />
+                        TitleColor="{DynamicResource PickerTitleColor}"
+                        MinimumWidthRequest="400" MaximumWidthRequest="850"
+                        HorizontalOptions="Fill" />
             </VerticalStackLayout>
         </Grid>
 

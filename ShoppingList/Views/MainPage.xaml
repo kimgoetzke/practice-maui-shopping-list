@@ -2,12 +2,12 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
              x:Class="ShoppingList.Views.MainPage"
              xmlns:viewmodel="clr-namespace:ShoppingList.ViewModel"
              xmlns:models="clr-namespace:ShoppingList.Models"
              xmlns:converters="clr-namespace:ShoppingList.Converters"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:android="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;assembly=Microsoft.Maui.Controls"
              x:DataType="viewmodel:MainViewModel"
              Title="">
 
@@ -30,25 +30,24 @@
             Text="Insert from clipboard"
             IconImageSource="import_white.png"
             Order="Primary"
-            Clicked="ImportOnClicked" />
-
+            Clicked="ToolbarItem_ImportOnClicked" />
         <ToolbarItem
             Text="Copy to clipboard"
             IconImageSource="export_white.png"
             Order="Primary"
-            Clicked="CopyOnClicked" />
-
+            Clicked="ToolbarItem_CopyOnClicked" />
         <ToolbarItem
             Text="Open settings"
             IconImageSource="settings_white.png"
             Order="Primary"
-            Clicked="OnTapSettings" />
+            Clicked="ToolbarItem_OnTapSettings" />
     </ContentPage.ToolbarItems>
 
     <Grid IgnoreSafeArea="True">
 
         <!-- Settings menu -->
         <Grid IgnoreSafeArea="True">
+
             <!-- Settings menu: Configuration -->
             <Grid.Background>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
@@ -57,7 +56,7 @@
                 </LinearGradientBrush>
             </Grid.Background>
             <Grid.GestureRecognizers>
-                <TapGestureRecognizer Tapped="OnTapGridArea" />
+                <TapGestureRecognizer Tapped="SettingsGrid_OnTapGridArea" />
             </Grid.GestureRecognizers>
 
             <!-- Settings menu: Content -->
@@ -83,7 +82,8 @@
                        Text="Select theme"
                        Padding="0,30,20,10"
                        HorizontalOptions="End" />
-                <CollectionView SelectedItem="{Binding CurrentTheme}"
+                <CollectionView x:Name="ThemeCollectionView"
+                                SelectedItem="{Binding CurrentTheme}"
                                 ItemsSource="{Binding Themes}"
                                 VerticalScrollBarVisibility="Never"
                                 SelectionMode="Single"
@@ -121,7 +121,7 @@
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
                                 <Grid>
-                                    <Label TextColor="{DynamicResource TextColor}"
+                                    <Label TextColor="{DynamicResource ButtonTextColor}"
                                            HorizontalTextAlignment="Center"
                                            VerticalTextAlignment="Center"
                                            Text="{Binding Name}" />
@@ -139,70 +139,19 @@
               VerticalOptions="Fill"
               IgnoreSafeArea="True">
 
-            <!-- Background for first two rows -->
+            <!-- Main page content: Background for first two rows -->
             <BoxView Grid.Row="1"
                      Grid.RowSpan="2"
                      Color="{DynamicResource BackgroundColorAccent}"
                      BackgroundColor="Transparent" />
 
-            <!-- Menu to add items -->
-            <Grid Grid.Row="1"
-                  ColumnDefinitions=".375*, .375*, .25*"
-                  RowDefinitions="Auto, Auto"
-                  Padding="5"
-                  RowSpacing="5">
-                <Entry x:Name="EntryField"
-                       Placeholder="Enter item name"
-                       Text="{Binding NewItem.Title}"
-                       Grid.Row="0"
-                       Grid.Column="0"
-                       Grid.ColumnSpan="2"
-                       Margin="5"
-                       FontSize="16"
-                       Unfocused="OnEntryUnfocused"
-                       Completed="OnItemAdded"
-                       ReturnCommand="{Binding AddItemCommand}" />
-                <Button x:Name="AddButton"
-                        Text="Add"
-                        Pressed="OnItemAdded"
-                        Style="{DynamicResource StandardButton}"
-                        Command="{Binding AddItemCommand}"
-                        Grid.Row="0"
-                        Grid.Column="2" />
-                <Grid Margin="5" Grid.Row="1" Grid.Column="0" RowDefinitions="Auto, Auto" ColumnDefinitions="1*"
-                      RowSpacing="0">
-                    <Label Text="From" Grid.Row="0" FontSize="10" HorizontalTextAlignment="Start" Padding="3, 0 " />
-                    <Picker Title="From"
-                            SelectedItem="{Binding CurrentStore}"
-                            ItemsSource="{Binding Stores}"
-                            Grid.Row="1"
-                            Grid.Column="0" />
-                </Grid>
+            <!-- Main page content: Menu to add items -->
+            <!-- (Inserted via code behind) -->
 
-                <Grid Margin="5" Grid.Row="1" Grid.Column="1" RowDefinitions="Auto, Auto" ColumnDefinitions="1*"
-                      RowSpacing="0">
-                    <Label Text="{Binding NewItem.Quantity, StringFormat='Quantity: {0}'}"
-                           Grid.Row="0"
-                           FontSize="10"
-                           HorizontalTextAlignment="Center" />
-                    <Stepper Minimum="1"
-                             Maximum="99"
-                             Increment="1"
-                             Value="{Binding NewItem.Quantity}"
-                             Grid.Row="1" />
-                </Grid>
-
-                <Grid Margin="5" Grid.Row="1" Grid.Column="2" RowDefinitions="Auto, Auto" ColumnDefinitions="1*"
-                      RowSpacing="0">
-                    <Label Text="Important" Grid.Row="0" FontSize="10" HorizontalTextAlignment="Center" />
-                    <CheckBox IsChecked="{Binding NewItem.IsImportant}" Grid.Row="1" Scale="1.3" />
-                </Grid>
-            </Grid>
-
-            <!-- Horizontal line below menu to add items -->
+            <!-- Main page content: Horizontal line below menu to add items -->
             <BoxView Grid.Row="2" Style="{DynamicResource ThickLineSeparator}" HorizontalOptions="FillAndExpand" />
 
-            <!-- List of added items -->
+            <!-- Main page content: List of added items -->
             <Grid Grid.Row="3" Padding="0">
                 <CollectionView
                     ItemsSource="{Binding Items}"
@@ -210,10 +159,10 @@
                     VerticalOptions="Fill">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="{x:Type models:Item}">
-                            <Grid RowDefinitions="Auto, Auto">
+                            <Grid RowDefinitions="Auto, Auto" Margin="0,0,0,0" VerticalOptions="Center">
                                 <SwipeView Margin="0,0,0,0" Grid.Row="0" android:SwipeView.SwipeTransitionMode="Reveal">
 
-                                    <!-- Swipe from left to right to complete task -->
+                                    <!-- List of added items: Swipe from left to right to complete task -->
                                     <SwipeView.LeftItems>
                                         <SwipeItems Mode="Execute">
                                             <SwipeItemView
@@ -235,7 +184,7 @@
                                         </SwipeItems>
                                     </SwipeView.LeftItems>
 
-                                    <!-- Swipe from right to left to reveal prioritisation button -->
+                                    <!-- List of added items: Swipe from right to left to reveal prioritisation button -->
                                     <SwipeView.RightItems>
                                         <SwipeItems SwipeBehaviorOnInvoked="Close">
                                             <SwipeItemView
@@ -259,9 +208,14 @@
                                         </SwipeItems>
                                     </SwipeView.RightItems>
 
-                                    <!-- Contents of list -->
-                                    <Grid Padding="0" RowDefinitions="Auto, Auto">
-                                        <Frame CornerRadius="0" HeightRequest="44"
+                                    <!-- List of added items: Contents of list -->
+                                    <Grid Padding="0" RowDefinitions="Auto, Auto" HeightRequest="50"
+                                          VerticalOptions="Fill">
+                                        <Frame CornerRadius="0"
+                                               HeightRequest="50"
+                                               Margin="0"
+                                               Padding="0"
+                                               VerticalOptions="Fill"
                                                BorderColor="{DynamicResource BackgroundColor}"
                                                BackgroundColor="{DynamicResource BackgroundColor}">
 
@@ -273,12 +227,19 @@
                                             </Frame.GestureRecognizers>
 
                                             <!-- Contents of list: Content -->
-                                            <Grid ColumnDefinitions="*,*" HeightRequest="40">
-                                                <StackLayout Orientation="Horizontal" Grid.Column="0">
+                                            <Grid ColumnDefinitions="*,*" HeightRequest="50" VerticalOptions="Center">
+                                                <StackLayout Orientation="Horizontal" Grid.Column="0"
+                                                             VerticalOptions="Center"
+                                                             Padding="15, 0">
+                                                    <CheckBox IsChecked="False"
+                                                              IsVisible="{OnPlatform WinUI=True, Default=False}"
+                                                              CheckedChanged="CheckBox_OnTaskCompleted"
+                                                              BindingContext="{Binding .}" />
                                                     <Label Text="{Binding Title}"
                                                            FontSize="16"
+                                                           HeightRequest="50"
                                                            HorizontalOptions="Start"
-                                                           VerticalOptions="Center">
+                                                           VerticalTextAlignment="Center">
                                                         <Label.Triggers>
                                                             <DataTrigger TargetType="Label"
                                                                          Binding="{Binding IsImportant}"
@@ -290,8 +251,9 @@
                                                     </Label>
                                                     <Label x:Name="QuantityLabel"
                                                            FontSize="16"
+                                                           HeightRequest="50"
                                                            HorizontalOptions="Start"
-                                                           VerticalOptions="Center">
+                                                           VerticalTextAlignment="Center">
                                                         <Label.Triggers>
                                                             <DataTrigger TargetType="Label"
                                                                          Binding="{Binding Quantity, Converter={StaticResource QuantityGreaterThanOneConverter}}"
@@ -311,8 +273,9 @@
                                                            Source="important_pink.png"
                                                            Scale="0.5"
                                                            IsVisible="False"
-                                                           HorizontalOptions="Start"
-                                                           VerticalOptions="Center">
+                                                           HeightRequest="50"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Start">
                                                         <Image.Triggers>
                                                             <DataTrigger TargetType="Image"
                                                                          Binding="{Binding IsImportant}"
@@ -324,10 +287,11 @@
                                                 </StackLayout>
                                                 <Label Text="{Binding StoreName}"
                                                        FontSize="10"
+                                                       HeightRequest="50"
                                                        TextColor="{DynamicResource Neutral}"
                                                        HorizontalOptions="End"
-                                                       VerticalOptions="Center"
-                                                       Padding="0,0,5,0"
+                                                       VerticalTextAlignment="Center"
+                                                       Padding="0,0,15,0"
                                                        Grid.Column="1">
                                                     <Label.Triggers>
                                                         <DataTrigger TargetType="Label"
@@ -349,25 +313,29 @@
                     </CollectionView.ItemTemplate>
                     <CollectionView.EmptyView>
                         <ContentView>
-                            <StackLayout HorizontalOptions="CenterAndExpand"
-                                         VerticalOptions="CenterAndExpand">
-                                <Label Text=":)"
-                                       FontSize="48"
-                                       TextColor="{DynamicResource LightTextColor}"
-                                       HorizontalOptions="Fill"
-                                       HorizontalTextAlignment="Center" />
-                                <Label Text="Nothing to buy"
-                                       Margin="10"
-                                       FontSize="18"
-                                       TextColor="{DynamicResource LightTextColor}"
-                                       HorizontalOptions="Fill"
-                                       HorizontalTextAlignment="Center" />
-                                <Label Text="Add items to populate your list"
-                                       FontSize="12"
-                                       HorizontalOptions="Fill"
-                                       TextColor="{DynamicResource LightTextColor}"
-                                       HorizontalTextAlignment="Center" />
-                            </StackLayout>
+                            <Grid Padding="30">
+                                <StackLayout HorizontalOptions="Center"
+                                             VerticalOptions="Center">
+
+                                    <Label Text=":)"
+                                           FontSize="48"
+                                           TextColor="{DynamicResource LightTextColor}"
+                                           HorizontalOptions="Fill"
+                                           HorizontalTextAlignment="Center" />
+                                    <Label Text="Nothing to buy"
+                                           Margin="10"
+                                           FontSize="18"
+                                           TextColor="{DynamicResource LightTextColor}"
+                                           HorizontalOptions="Fill"
+                                           HorizontalTextAlignment="Center" />
+                                    <Label Text="Add items to populate your list"
+                                           FontSize="12"
+                                           HorizontalOptions="Fill"
+                                           TextColor="{DynamicResource LightTextColor}"
+                                           HorizontalTextAlignment="Center" />
+
+                                </StackLayout>
+                            </Grid>
                         </ContentView>
                     </CollectionView.EmptyView>
                 </CollectionView>

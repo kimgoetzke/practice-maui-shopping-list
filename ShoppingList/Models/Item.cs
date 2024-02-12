@@ -1,27 +1,16 @@
-using CommunityToolkit.Mvvm.ComponentModel;
 using SQLite;
 
 namespace ShoppingList.Models;
 
-public partial class Item : ObservableObject
+public class Item
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-
-    [ObservableProperty]
-    private string _title = string.Empty;
-
-    [ObservableProperty]
-    private int _quantity = 1;
-
-    [ObservableProperty]
-    private bool _isImportant;
-
-    [ObservableProperty]
-    private DateTime _addedOn = DateTime.Now;
-
-    [ObservableProperty]
-    private string _storeName = "<Not set>";
+    public string Title { get; set; } = string.Empty;
+    public int Quantity { get; set; } = 1;
+    public bool IsImportant { get; set; }
+    public DateTime AddedOn { get; set; } = DateTime.Now;
+    public string StoreName { get; set; } = "<Not set>";
 
     public override string ToString()
     {
@@ -30,6 +19,6 @@ public partial class Item : ObservableObject
 
     public string ToLoggableString()
     {
-        return $"Item.ToString() = {Title} #{Id} (store: {StoreName}, quantity: {Quantity}, important: {IsImportant})";
+        return $"{Title} #{Id} (store: {StoreName}, quantity: {Quantity}, important: {IsImportant})";
     }
 }
