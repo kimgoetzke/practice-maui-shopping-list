@@ -20,7 +20,7 @@
                          HorizontalOptions="Fill">
 
         <Entry Text="{Binding Item.Title, Mode=TwoWay}"
-               Style="{DynamicResource Headline}"
+               Style="{DynamicResource HeadlineEntry}"
                VerticalOptions="Center"
                HorizontalOptions="Center" />
 

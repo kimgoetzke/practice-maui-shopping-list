@@ -88,6 +88,12 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
+    <Style TargetType="Entry" x:Key="HeadlineEntry">
+        <Setter Property="TextColor" Value="{DynamicResource HeadlineColor}" />
+        <Setter Property="FontSize" Value="32" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
 
     <!-- Labels -->
     <Style TargetType="Label">
