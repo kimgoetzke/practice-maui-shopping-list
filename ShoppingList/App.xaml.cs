@@ -17,6 +17,7 @@ public partial class App
     {
         if (!Settings.FirstRun)
             return;
+
         Logger.Log("Setting current theme to system theme on first run");
         var systemTheme = Current?.RequestedTheme;
         Settings.SetCurrentThemeFromSystem(systemTheme);

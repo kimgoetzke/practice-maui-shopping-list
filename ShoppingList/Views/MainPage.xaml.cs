@@ -1,5 +1,4 @@
-﻿using AsyncAwaitBestPractices;
-using CommunityToolkit.Maui.Views;
+﻿using CommunityToolkit.Maui.Views;
 using ShoppingList.Models;
 using ShoppingList.Utilities;
 using ShoppingList.ViewModel;
@@ -136,13 +135,11 @@ public partial class MainPage
         var quantityGrid = GetQuantityGrid();
         var importantGrid = GetImportantGrid();
         AddButton = GetAddButton();
-
 #if WINDOWS || __MACOS__
         var menuGrid = CreateGridOnDesktop(storePicker, quantityGrid, importantGrid);
 #elif __IOS__ || __ANDROID__
         var menuGrid = CreateGridOnMobile(storePicker, quantityGrid, importantGrid);
 #endif
-
         PageContentGrid.Add(menuGrid, 0, 1);
     }
 

@@ -1,8 +1,6 @@
-using CommunityToolkit.Maui.Views;
-
 namespace ShoppingList.Views;
 
-public partial class WelcomePopup : Popup
+public partial class WelcomePopup
 {
     public WelcomePopup()
     {
