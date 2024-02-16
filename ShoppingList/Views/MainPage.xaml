@@ -30,16 +30,19 @@
             Text="Insert from clipboard"
             IconImageSource="import_white.png"
             Order="Primary"
+            AutomationId="MainPageImportButton"
             Clicked="ToolbarItem_ImportOnClicked" />
         <ToolbarItem
             Text="Copy to clipboard"
             IconImageSource="export_white.png"
             Order="Primary"
+            AutomationId="MainPageExportButton"
             Clicked="ToolbarItem_CopyOnClicked" />
         <ToolbarItem
             Text="Open settings"
             IconImageSource="settings_white.png"
             Order="Primary"
+            AutomationId="MainPageSettingsButton"
             Clicked="ToolbarItem_OnTapSettings" />
     </ContentPage.ToolbarItems>
 
@@ -237,6 +240,7 @@
                                                               BindingContext="{Binding .}" />
                                                     <Label Text="{Binding Title}"
                                                            FontSize="16"
+                                                           AutomationId="{Binding Id}"
                                                            HeightRequest="50"
                                                            HorizontalOptions="Start"
                                                            VerticalTextAlignment="Center">

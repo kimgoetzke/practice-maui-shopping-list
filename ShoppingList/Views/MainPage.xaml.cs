@@ -215,7 +215,11 @@ public partial class MainPage
             VerticalTextAlignment = TextAlignment.Center
         };
         importantGrid.Add(importantLabel, 0);
-        var importantCheckBox = new CheckBox { HorizontalOptions = LayoutOptions.Start };
+        var importantCheckBox = new CheckBox
+        {
+            HorizontalOptions = LayoutOptions.Start,
+            AutomationId = "MainPageIsImportantCheckBox",
+        };
         importantCheckBox.SetBinding(CheckBox.IsCheckedProperty, "NewItem.IsImportant");
         importantGrid.Add(importantCheckBox, 1);
         return importantGrid;
@@ -232,6 +236,7 @@ public partial class MainPage
             HorizontalOptions = LayoutOptions.Fill,
 #endif
             Text = "Add",
+            AutomationId = "MainPageAddButton",
             Style = (Style)Application.Current!.Resources["StandardButton"],
             Command = new Command(async () =>
             {
@@ -264,6 +269,7 @@ public partial class MainPage
         quantityGrid.Add(quantityLabel, 0);
         var quantityStepper = new Stepper
         {
+            AutomationId = "MainPageQuantityStepper",
             Minimum = 1,
             Maximum = 99,
             Increment = 1,
@@ -287,6 +293,7 @@ public partial class MainPage
 #elif __ANDROID__ || __IOS__
             Title = "Select store",
 #endif
+            AutomationId = "MainPageStorePicker",
             TextColor = (Color)Application.Current!.Resources["TextColor"],
             TitleColor = (Color)Application.Current.Resources["PickerTitleColor"],
             HeightRequest = (double)Application.Current.Resources["StandardSwipeItemHeight"],
@@ -313,6 +320,7 @@ public partial class MainPage
         var entryField = new Entry
         {
             Placeholder = "Enter item name",
+            AutomationId = "MainPageEntryField",
             Text = _viewModel.NewItem.Title,
             Margin = new Thickness(5),
             FontSize = 16,

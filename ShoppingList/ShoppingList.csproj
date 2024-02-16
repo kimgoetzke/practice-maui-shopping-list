@@ -13,7 +13,7 @@
         either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
         <!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
-        <OutputType Condition="'$(TargetFramework)' != 'net8.0'">Exe</OutputType>
+        <OutputType>Exe</OutputType>
         <RootNamespace>ShoppingList</RootNamespace>
         <UseMaui>true</UseMaui>
         <SingleProject>true</SingleProject>
@@ -65,12 +65,6 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
         <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
         <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.7" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Reference Include="Mono.Android">
-            <HintPath>C:\Program Files\dotnet\packs\Microsoft.Android.Ref.34\34.0.52\ref\net8.0\Mono.Android.dll</HintPath>
-        </Reference>
     </ItemGroup>
 
     <ItemGroup>

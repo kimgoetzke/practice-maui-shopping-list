@@ -5,7 +5,8 @@ using Android.OS;
 namespace ShoppingList;
 
 [Activity(
-    Theme = "@style/ShoppingListAndroidSplashScreen",
+    Label="Shopping List",
+    Theme = "@style/Maui.SplashTheme",
     MainLauncher = true,
     ConfigurationChanges = ConfigChanges.ScreenSize
         | ConfigChanges.Orientation
