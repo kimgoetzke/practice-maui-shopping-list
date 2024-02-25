@@ -5,7 +5,7 @@ CommunityToolkit, and SQLite. The project uses Appium and NUnit for UI testing. 
 app and use .NET MAUI. The goal was to learn about .NET MAUI cross-platform development, Android app development, and
 to build something semi-useful.
 
-See the [kimgoetzke/practice-maui-listem](https://github.com/kimgoetzke/practice-maui-listem) for a revamped design 
+See [kimgoetzke/practice-maui-listem](https://github.com/kimgoetzke/practice-maui-listem) for a revamped design 
 and conversion to a to-do list app, allowing for multiple lists and a little more configuration.
 
 ![Demo GIF](./assets/demo.gif)
