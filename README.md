@@ -23,7 +23,7 @@ and conversion to a to-do list app, allowing for multiple lists and a little mor
 * A dark theme is available
 * Icons used are CC0 from [iconsDB.com](https://www.iconsdb.com/)
 
-## How to build develop
+## How to configure for development
 
 1. Set environment variables for builds and running tests
     1. `ANDROID_HOME` - the absolute path of the Android SDK
